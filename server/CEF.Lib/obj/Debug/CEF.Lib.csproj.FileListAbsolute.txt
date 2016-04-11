@@ -39,3 +39,4 @@ D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Debug\Newtonsoft.Json.xml
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.csprojResolveAssemblyReference.cache
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.dll
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.pdb
+D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Debug\ServiceStack.Interfaces.dll
