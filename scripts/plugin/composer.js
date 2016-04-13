@@ -85,7 +85,7 @@ define(function(require, exports, module) {
     				method:method,
     				requesttype:contenttype,
     				requestheader:header,
-    				requestbody:body,
+    				requestbody:body
     			});
     			parsed_guid = msg.Result;
     		});
