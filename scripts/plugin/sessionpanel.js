@@ -3,8 +3,10 @@ define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
 	require("grid");
-
-	var prefixInteger = function (num, length) { return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); }
+	require('common');
+	var prefixInteger = function (num, length) { 
+		return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); 
+	}
 	var cols=[{title:'#',name:'Id',width:55,sortable:true,align:'center',renderer:function(val){return prefixInteger(val,5);}},{title:'Code',name:'ResponseCode',width:50,sortable:true,align:'center'},{title:'Prtcl',name:'UriScheme',width:45,sortable:true,align:'center'},{title:'Host',name:'Host',width:120,sortable:true,align:'right'},{title:'URL',name:'PathAndQuery',width:450,sortable:true,align:'left'}];
 	var $ssnpanel = $('#mmg').mmGrid({
 		height: '100%',

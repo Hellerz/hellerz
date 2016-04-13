@@ -13,8 +13,10 @@ requirejs.config({
 		jquery: 'lib/jquery-2.1.4',
 		bootstrap: 'lib/bootstrap',
 		bootstrapswitch: 'lib/bootstrap-switch',
+		bootstrapselect: 'lib/bootstrap-select',
+		bootstraptypeahead: 'lib/bootstrap-typeahead',
 		format:'lib/jquery.format',
-
+		qrcode:'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
 
@@ -27,7 +29,7 @@ requirejs.config({
 		file:'ssn/file',
 		directory:'ssn/directory',
 
-
+		common:'plugin/common',
 		autoresponser:'plugin/autoresponser',
 		composer:'plugin/composer',
 		setting:'plugin/setting',
@@ -38,9 +40,16 @@ requirejs.config({
 		'bootstrap': {
 			deps: ['jquery'],
 		},
+		'bootstrapselect': {
+			deps: ['jquery','bootstrap'],
+		},
 		'bootstrapswitch': {
 			deps: ['jquery','bootstrap'],
 		},
+		'bootstraptypeahead': {
+			deps: ['jquery','bootstrap'],
+		},
+		
 		'grid': {
 			deps: ['jquery'],
 		},
@@ -60,6 +69,10 @@ requirejs.config({
 		'format':{
 			deps: ['jquery'],
 		},
+		'qrcode':{
+			deps: ['jquery'],
+		},
+		
 	}
 });
 define(function(require, exports, module) {
@@ -70,14 +83,11 @@ define(function(require, exports, module) {
 
 	//load jQuery Plugin
 	require("bootstrap");
-	
+	require('qrcode');
 
 	$(document).ready(function() {
 		var $ssnpanel = require('sessionpanel').SessionPanel;
-		$.statusbar = function(content,mode){
-			mode = mode||'success';
-			$('#statusbar').removeClass('alert-success alert-info alert-warning alert-danger').addClass('alert-'+mode).html(content);
-		};
+		require('common');
 		//Calibur Plugin
 		require('inspector');
 		require('setting');

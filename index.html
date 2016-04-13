@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="content/normalize.css" /> 
     <link rel="stylesheet" href="content/bootstrap.css" /> 
     <link rel="stylesheet" href="content/bootstrap-switch.css" /> 
+    <link rel="stylesheet" href="content/bootstrap-select.css" /> 
     <link rel="stylesheet" href="content/bootstrap-theme.css" /> 
     <link rel="stylesheet" href="content/mmGrid.css" /> 
     <link rel="stylesheet" href="content/zTreeStyle.css" /> 
@@ -69,10 +70,11 @@
                 <li><a href="#reqform" data-toggle="tab">FormsView</a></li> 
                 <li><a href="#reqraw" data-toggle="tab">Raw</a></li> 
                 <li><a href="#reqformat" data-toggle="tab">Format</a></li> 
+                <li><a href="#urlqrcode" data-toggle="tab">QRCode</a></li> 
               </ul> 
             </nav> 
             <div class="panel-body panel-body-xs"> 
-              <div class="tab-content full-body_div"> 
+              <div class="tab-content full-body-div"> 
                 <div class="tab-pane fade in" id="statistics"></div> 
                 <div class="tab-pane fade in" id="reqheader"></div> 
                 <div class="tab-pane fade in" id="reqtext"></div> 
@@ -80,6 +82,7 @@
                 <div class="tab-pane fade in" id="reqform"></div> 
                 <div class="tab-pane fade in" id="reqraw"></div> 
                 <div class="tab-pane fade in" id="reqformat"></div> 
+                <div class="tab-pane fade in" no-ace="true" id="urlqrcode"></div> 
               </div> 
             </div> 
           </div> 
@@ -95,7 +98,7 @@
               </ul> 
             </nav> 
             <div class="panel-body panel-body-xs"> 
-              <div class="tab-content full-body_div"> 
+              <div class="tab-content full-body-div"> 
                 <div class="tab-pane fade in active" id="resheader"></div> 
                 <div class="tab-pane fade in " id="restext"></div> 
                 <div class="tab-pane fade in" id="reshex"></div> 
@@ -111,19 +114,17 @@
             <ul id="autoResponserTree" class="ztree "></ul>
           </div> 
           <div class="container-fluid full-y col-md-8 padding0">   
-              <div class="container-fluid full-body_div gold-y0"> 
+              <div class="container-fluid full-body-div gold-y0"> 
                 <div id="requester"></div> 
               </div> 
-              <div class="container-fluid full-body_div gold-y1">
+              <div class="container-fluid full-body-div gold-y1">
                 <div id="responser"></div> 
               </div> 
           </div> 
         </div> 
         <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <div class="col-lg-12">
-
-            <div class="input-group padding10">
-              <button type="button" id="exeInject" title="Ctrl+R" class="btn btn-primary">Run</button>
+          <div class="input-group input-group-sm margin10">
+              <button type="button" id="exeInject" title="Ctrl+R" class="btn btn-sm btn-primary">Run</button>
               <span class="input-group-addon">
                 <input  type="checkbox">
               </span>
@@ -135,11 +136,9 @@
                   <span class="sr-only">Proxy</span>
                 </button>
               <ul class="dropdown-menu pull-right">
-                <li><a href="javascript:void(0)">127.0.0.1</a></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
+                <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
                 <li class="divider"></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
+                <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
               </ul>
               </div>
               <input type="text" class="form-control">
@@ -150,44 +149,97 @@
                   <span class="sr-only">Bypass</span>
                 </button>
               <ul class="dropdown-menu pull-right">
-                <li><a href="javascript:void(0)">127.0.0.1</a></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
+                <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
                 <li class="divider"></li>
-                <li><a href="javascript:void(0)">http://www.hubwiz.com/class/555affba679bcc934a68bb92</a></li>
+                <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
               </ul>
               </div>
-            </div>
           </div>
-
-          <div id ="requestRaw" class ="full-body gold-y0"></div>
-          <div id ="responseRaw" class ="full-body gold-y1"></div>
+          <nav> 
+            <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+              <li><a href="#parsed" data-toggle="tab">Parsed</a></li>
+              <li><a href="#composerraw" data-toggle="tab">Raw</a></li> 
+            </ul> 
+          </nav> 
+          <div class="composer-content rest-body"> 
+            <div class="tab-content full-body-div"> 
+              <div class="tab-pane fade in" id="parsed">
+                <div class="parsed-title rest-body">
+                  <div class="col-md-1 padding0">
+                    <select id="cmpsr_method" name="type" class="selectpicker">
+                      <option>GET</option>
+                      <option>POST</option>
+                      <option>OPTION</option>
+                      <option>PUT</option>
+                      <option>DELETE</option>
+                      <option>COPY</option>
+                      <option>HEAD</option>
+                      <option>LINK</option>
+                      <option>UNLINK</option>
+                      <option>LOCK</option>
+                      <option>UNLOCK</option>
+                      <option>PROPFIND</option>
+                      <option>VIEW</option>
+                    </select>
+                  </div>
+                  <div class="col-md-9 paddingx5">
+                    <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://">
+                  </div>
+                  <div class="col-md-2 padding0">
+                    <select id="cmpsr_type" name="type" class="selectpicker">
+                      <option value="" mode="">Raw</option>
+                      <option value="text/plain" mode="text">Text</option>
+                      <option value="application/json" mode="json">JSON</option>
+                      <option value="application/javascript" mode="javascript">Javascript</option>
+                      <option value="application/xml" mode="xml">XML</option>
+                      <option value="text/html" mode="html">HTML</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="parsed-content rest-body">
+                  <div id ="cmpsr_reqhd" class ="full-body row-1"></div>
+                  <div id ="cmpsr_reqbd" class ="full-body row-4"></div>
+                  <div id ="cmpsr_resbd" class ="full-body row-7"></div>
+                </div>
+              </div> 
+              <div class="tab-pane fade in" id="composerraw">
+                <div id ="cmpsr_reqraw" class ="full-body gold-y0"></div>
+                <div id ="cmpsr_resraw" class ="full-body gold-y1"></div>
+              </div> 
+            </div> 
+          </div> 
         </div>   
         <div id="setting" class="padding10 col-md-7 col-md-offset-5 sidebar tab-pane fade in">
-            <h4>Reset HTTPS/SSL</h4>
-              <div id="status" type="button" class="btn btn-sm btn-primary">Reset your Root Certificate</div>
-            <hr>
-            <h4>HTTPS/SSL</h4>
-              <div id="certManager" type="button" class="btn btn-sm btn-primary">Certificates Manager</div>
-            <hr>
-            <h4>Network</h4>
-              <div id="proxyoption" type="button" class="btn btn-sm btn-primary">Change Network Proxy Settings</div>
-            <hr>
-            <h4>Proxy Port</h4>
-              <div class="input-group input-group-sm">
-                <input id="portno" type="text" class="form-control" placeholder="port">
-                <span class="input-group-btn">
-                  <div id="setport" type="button" class="btn btn-primary">OK</div>
-                </span>
-              </div>
-            <hr>
-            <h4>HTTPS Proxy?</h4>
-              <div class="input-group input-group-sm">
-                <input id="sethttps" type="checkbox" checked>
-              </div>
-            <hr>
-          </div>
+          <h4>Reset HTTPS/SSL</h4>
+            <div id="status" type="button" class="btn btn-sm btn-primary">Reset your Root Certificate</div>
+          <hr>
+          <h4>HTTPS/SSL</h4>
+            <div id="certManager" type="button" class="btn btn-sm btn-primary">Certificates Manager</div>
+          <hr>
+          <h4>Network</h4>
+            <div id="proxyoption" type="button" class="btn btn-sm btn-primary">Change Network Proxy Settings</div>
+          <hr>
+          <h4>Open IIS</h4>
+            <div id="inetmgr" type="button" class="btn btn-sm btn-primary">Open IIS</div>
+          <hr>
+          <h4>Calculator</h4>
+            <div id="calc" type="button" class="btn btn-sm btn-primary">Calculator</div>
+          <hr>
+          <h4>Proxy Port</h4>
+            <div class="input-group input-group-sm">
+              <input id="portno" type="text" class="form-control" placeholder="port">
+              <span class="input-group-btn">
+                <div id="setport" type="button" class="btn btn-primary">OK</div>
+              </span>
+            </div>
+          <hr>
+          <h4>HTTPS Proxy?</h4>
+            <div class="input-group input-group-sm">
+              <input id="sethttps" type="checkbox" checked>
+            </div>
+          <hr>
         </div>
+      </div>
     </div>  
     <div id="statusbar" class="statusbar navbar navbar-fixed-bottom"></div>
   </body>

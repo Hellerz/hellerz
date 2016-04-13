@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 using System.Xml;
 using CEF.Lib.Attributes;
 using Newtonsoft.Json;
+using Gma.QrCodeNet.Encoding;
 
 namespace CEF.Lib.Helper
 {
    public static class UtilsHelper
    {
-       
-
        private readonly static Regex ReJson = new Regex(@"^\s*\{");
-        private readonly static Regex ReXml = new Regex(@"^\s*\<");
+       private readonly static Regex ReXml = new Regex(@"^\s*\<");
 
        [JSchema]
         public static string FormatMessage(string unformatted)

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using CEF.Lib.Attributes;
 using Fiddler;
@@ -16,6 +19,9 @@ namespace CEF.Lib.Helper
         private static int _port = Common.ConvertToStruct(StorageHelper.AchiveValue("fiddlerport", "5389"),5389);
         private const string AppName = "Calibur";
         private readonly static MethodInfo ThreadPauseMethod = typeof(Session).GetMethod("ThreadPause", BindingFlags.Instance | BindingFlags.NonPublic);
+        private readonly static Regex SplitLine = new Regex(@"[\r\n]+", RegexOptions.Compiled);
+        private readonly static Regex HasPrtl = new Regex(@"^http(s)?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly static Regex SplitHdBd = new Regex(@"\r\n\r\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         static FiddlerHelper()
         {
             FiddlerApplication.SetAppDisplayName(AppName);
@@ -83,17 +89,13 @@ namespace CEF.Lib.Helper
         {
             if (ThreadPauseMethod != null)
             {
-                Debug.WriteLine("BeforePause —— ID:{0}, Time:{1},Thread:{2} Url:{3}", session.id, DateTime.Now,Thread.CurrentThread.ManagedThreadId,session.fullUrl);
                 ThreadPauseMethod.Invoke(session, null);
-                Debug.WriteLine("AfterPause —— ID:{0}, Time:{1},Thread:{2} Url:{3}", session.id, DateTime.Now, Thread.CurrentThread.ManagedThreadId, session.fullUrl);
             }
         }
 
         public static void Resume(this Session session)
         {
-            Debug.WriteLine("BeforeResume —— ID:{0}, Time:{1},Thread:{2} Url:{3}", session.id, DateTime.Now, Thread.CurrentThread.ManagedThreadId, session.fullUrl);
             session.ThreadResume();
-            Debug.WriteLine("AfterResume —— ID:{0}, Time:{1},Thread:{2} Url:{3}", session.id, DateTime.Now, Thread.CurrentThread.ManagedThreadId, session.fullUrl);
         }
         [JSchema]
         public static void ReStart()
@@ -113,9 +115,68 @@ namespace CEF.Lib.Helper
         }
 
          [JSchema]
-         public static void Inject(string rawRequest)
+         public static string InjectRaw(string rawRequest)
          {
-             FiddlerApplication.oProxy.InjectCustomRequest(rawRequest);
+             var guid = Guid.NewGuid().ToString();
+             var hdbd = SplitHdBd.Split(rawRequest,2);
+             
+             if (hdbd.Length == 2)
+             {
+                 var httpheaders = new HTTPRequestHeaders();
+                 httpheaders.AssignFromString(hdbd[0]);
+                 httpheaders["Calibur-Composer"] = guid;
+                 if (!string.IsNullOrWhiteSpace(hdbd[1]))
+                 {
+                     httpheaders["Content-Length"] = Encoding.UTF8.GetBytes(hdbd[1]).Length.ToString();
+                 }
+                 var headerstr = httpheaders.ToString(true, true, false);
+                 FiddlerApplication.oProxy.InjectCustomRequest(headerstr + hdbd[1]);
+                 return guid;
+             }
+             else
+             {
+                 throw new ArgumentException("Raw request is invalid.");
+             }
+             
+         }
+        
+         [JSchema]
+         public static string Inject(string url, string method, string contenttype, string headers, string body)
+         {
+             if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(method))
+             {
+                 var guid = Guid.NewGuid().ToString();
+                 if (!HasPrtl.IsMatch(url))
+                 {
+                     url = "http://" + url;
+                 }
+                 var uri = new Uri(url);
+                 var headerList = SplitLine.Split(headers).Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+                 var httpheaders = new HTTPRequestHeaders(uri.AbsoluteUri, headerList) { HTTPMethod = method };
+                 httpheaders["Connection"] = "keep-alive";
+                 httpheaders["Calibur-Composer"] = guid;
+                 httpheaders["Host"] = uri.Host;
+                 if (!string.IsNullOrWhiteSpace(contenttype))
+                 {
+                     httpheaders["Content-Type"] = contenttype;
+                 }
+                 if (!string.IsNullOrWhiteSpace(body))
+                 {
+                     httpheaders["Content-Length"] = Encoding.UTF8.GetBytes(body).Length.ToString();
+                 }
+                 else
+                 {
+                     body = string.Empty;
+                 }
+                 var headerstr = httpheaders.ToString(true, true, false);
+                 FiddlerApplication.oProxy.InjectCustomRequest(headerstr + body);
+                 return guid;
+             }
+             else
+             {
+                 throw new ArgumentException("url or method is empty.");
+             }
+             
          }
 
         [JSchema]
@@ -131,7 +192,12 @@ namespace CEF.Lib.Helper
         [JSchema]
         public static void OpenCertManager()
         {
-            Utilities.RunExecutable("certmgr.msc","");
+            Utilities.RunExecutable("certmgr.msc", "");
+        }
+        [JSchema]
+        public static void RunExecutable(string executable,string arg)
+        {
+            Utilities.RunExecutable(executable, arg);
         }
         
 

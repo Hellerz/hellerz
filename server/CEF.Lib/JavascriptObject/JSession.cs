@@ -498,12 +498,12 @@ namespace CEF.Lib.JavascriptObject
 
         
         [CodeDescription("Re-Send a message by proxy of socksv5 ")]        [JSchema]
-        public string ProxySocksV5(string proxyServer, bool bypassOnlocal, string bypasss, string headers, string body)
+        public static string ProxySocksV5(string proxyServer, bool bypassOnlocal, string bypasss,string url, string headers, string body)
         {
-            var request = (HttpWebRequest)WebRequest.Create(this.InnerSession.fullUrl);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.Proxy = new WebProxy(proxyServer, bypassOnlocal, bypasss.Split(';'));
             BuildHeader(request, headers);
-            var bytes = (this.InnerSession.GetRequestBodyEncoding() ?? Encoding.UTF8).GetBytes(body);
+            var bytes = Encoding.UTF8.GetBytes(body);
             using (var stream = request.GetRequestStream())
             {
                 stream.Write(bytes, 0, bytes.Length);

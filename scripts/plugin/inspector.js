@@ -5,42 +5,22 @@ define(function(require, exports, module) {
 	var Renderer = require("ace/virtual_renderer").VirtualRenderer;
 
 	var Fiddler = require("fiddler");
+	var Calibur = require("calibur");
 	var Utils = require("utils");
 	var $ = require("jquery");
-	require("format");
+			require('common');
+			require("format");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 
 	var showHeader=function(oheaders,wapper){
 		var headers = JSON.stringify(oheaders);
 		Utils.FormatMessage(headers).promise.then(function(msg){
-			show_editor(wapper,msg.Result,'javascript');
+			$.showEditor(wapper,msg.Result,'javascript');
 		});
-	};
-
-	var show_editor = function(editor,content,mode){
-		editor.getSession().setMode("ace/mode/" + mode);
-		editor.setValue(content);
-		editor.selection.moveCursorTo(0,0)
 	};
 	
 	var hastext = function(contentType){
-		return !!getBrush(contentType);
-	};
-
-	var re_html = /^text\/(.+?)?html/;
-	var re_js = /^(text|application)\/(.+?)?(json|javascript)/;
-	var re_css = /^text\/css/;
-	var re_xml = /^(text|application)\/(.+?)?xml/;
-	var re_text = /^text\//;
-
-	var getBrush = function(contentType){
-		if(!contentType)return "text";
-		if(re_html.test(contentType))return "html";
-		if(re_js.test(contentType))return "javascript";
-		if(re_xml.test(contentType))return "xml";
-		if(re_css.test(contentType))return "css";
-		if(re_text.test(contentType))return "text";
-		return "text";
+		return !! $.getMode(contentType);
 	};
 
 	var shownStatus = {
@@ -62,27 +42,27 @@ define(function(require, exports, module) {
 		reqtext:function(wapper){
 			if(hastext(this.session.RequestHeaders['Content-Type'])){
 				this.session.GetRequestBodyAsString(function(msg){
-					show_editor(wapper,msg.Result.Return,'text');
+					$.showEditor(wapper,msg.Result.Return,'text');
 				});
 			}else{
-				show_editor(wapper,"Empty",'text');
+				$.showEditor(wapper,"Empty",'text');
 			}
 		},
 		restext:function(wapper){
 			if(hastext(this.session.ResponseHeaders['Content-Type'])){
 				this.session.GetResponseBodyAsString(function(msg){
-					show_editor(wapper,msg.Result.Return,'text');
+					$.showEditor(wapper,msg.Result.Return,'text');
 				});
 			}else{
-				show_editor(wapper,"Empty",'text');
+				$.showEditor(wapper,"Empty",'text');
 			}
 		},
 
 		reqhex:function(wapper){
-			show_editor(wapper,"Empty",'text');
+			$.showEditor(wapper,"Empty",'text');
 		},
 		reshex:function(wapper){
-			show_editor(wapper,"Empty",'text');
+			$.showEditor(wapper,"Empty",'text');
 		},
 		
 		resweb:function(wapper){
@@ -102,27 +82,34 @@ define(function(require, exports, module) {
 
 		reqraw:function(wapper){
 			this.session.GetRequest(function(msg){
-				show_editor(wapper,msg.Result.Return,'text');
+				$.showEditor(wapper,msg.Result.Return,'text');
 			});
 		},
+
+
+
 		resraw:function(wapper){
 			this.session.GetResponse(function(msg){
-				show_editor(wapper,msg.Result.Return,'text');
+				$.showEditor(wapper,msg.Result.Return,'text');
 			});
 		},
 
 		reqformat:function(wapper){
-			var brush = getBrush(this.session.RequestHeaders['Content-Type']);
+			var brush = $.getMode(this.session.RequestHeaders['Content-Type']);
 			this.session.GetRequestBodyAsString(function(msg){
-				show_editor(wapper,$.format(msg.Result.Return,{method: brush}),brush);
+				$.showEditor(wapper,$.format(msg.Result.Return,{method: brush}),brush);
 			});
 		},
 		resformat:function(wapper){
-			var brush = getBrush(this.session.ResponseHeaders['Content-Type']);
+			var brush = $.getMode(this.session.ResponseHeaders['Content-Type']);
 			this.session.GetResponseBodyAsString(function(msg){
 				var fmt = $.format(msg.Result.Return,{method: brush});
-				show_editor(wapper,fmt,brush);
+				$.showEditor(wapper,fmt,brush);
 			});
+		},
+
+		urlqrcode:function(wapper){
+			wapper.html($('<div>').addClass('qrcode').qrcode(Calibur.UTF16to8(this.session.FullUrl)));
 		},
 
 		showSession:function(){
@@ -170,10 +157,7 @@ define(function(require, exports, module) {
 		var $el = $(e.target.hash);
 		if(!$el.data('editor')){
 			if(!$el.attr('no-ace')){
-				var editor = new Editor(new Renderer($el.get(0)));
-				editor.getSession().setUndoManager(new UndoManager());
-				//editor.setTheme("ace/theme/idle_fingers");
-				$el.data('editor',editor)
+				$el.data('editor',$.CreateEditor($el))
 			}else{
 				$el.data('editor',$el)
 			}

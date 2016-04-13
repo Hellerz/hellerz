@@ -1,14 +1,11 @@
 define(function(require, exports, module) {
-	var EditSession = require("ace/edit_session").EditSession;
-	var UndoManager = require("ace/undomanager").UndoManager;
-	var Editor = require("ace/editor").Editor;
-	var Renderer = require("ace/virtual_renderer").VirtualRenderer;
-
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
+	require('common');
 	require("ztreecore");
 	require("ztreeexcheck");
 	require("ztreeexedit");
+
 	var autoAction=function(scriptName,context){
 		var setting =zTree.getNodes();
 		var resper =  setting[0];
@@ -41,6 +38,7 @@ define(function(require, exports, module) {
 	var setting = {
         view: {
             addHoverDom: function (treeId, treeNode) {
+            	localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
             	if(treeNode.level === 0){
             		$("#"+treeNode.tId+"_edit").hide();
             		$("#"+treeNode.tId+"_remove").hide();
@@ -58,8 +56,6 @@ define(function(require, exports, module) {
 	                zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
 	                return false;
 	            });
-
-				localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
 	        },
             removeHoverDom: function (treeId, treeNode) {
 	            $("#addBtn_"+treeNode.tId).unbind().remove();
@@ -117,8 +113,7 @@ define(function(require, exports, module) {
 
     var zTree = $.fn.zTree.init($("#autoResponserTree"), setting,JSON.parse(zNodes));
 
-    var requester = new Editor(new Renderer($('#requester').get(0)));
-	requester.getSession().setUndoManager(new UndoManager());
+    var requester = $.CreateEditor($('#requester'));
 	requester.getSession().setMode("ace/mode/javascript");
 	requester.commands.addCommand({
 	    name: 'Save',
@@ -128,8 +123,7 @@ define(function(require, exports, module) {
 	    },
 	    readOnly: false
 	});
-	var responser = new Editor(new Renderer($('#responser').get(0)));
-	responser.getSession().setUndoManager(new UndoManager());
+	var responser = $.CreateEditor($('#responser'));
 	responser.getSession().setMode("ace/mode/javascript");
 	responser.commands.addCommand({
 	    name: 'Save',

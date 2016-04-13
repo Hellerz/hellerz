@@ -338,6 +338,7 @@ namespace CEF.Lib
                         break;
                     }
                 }
+                return list;
             }
             return null;
         }

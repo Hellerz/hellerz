@@ -61,9 +61,9 @@ namespace Calibur.Service
                     var flatten = Common.Flatten(e);
                     flatten.ForEachOfUnNone(exc => status.ErrorDataType.Add(new ErrorDataType
                     {
-                        ErrorCode = GetErrorCode(e),
-                        Message = e.Message,
-                        StackTrace = e.StackTrace
+                        ErrorCode = GetErrorCode(exc),
+                        Message = exc.Message,
+                        StackTrace = exc.StackTrace
                     }));
                     socket.Send(JsonConvert.SerializeObject(new MessageInfo { ID = messageId,Status = status }, Common.TimeFormat));
                 }

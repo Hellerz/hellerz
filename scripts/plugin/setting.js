@@ -3,6 +3,29 @@ define(function(require, exports, module) {
 	var $ = require("jquery");
 	require("bootstrap");
 	require("bootstrapswitch");
+	require('common');
+	$('#status').on('click', function(e) {
+		Fiddler.ResetCertificate(function() {
+			$.statusbar("Root Certificate has been reset.",'info');
+		});
+	});
+	$('#proxyoption').on('click', function(e) {
+		Fiddler.OpenWinNet(function() {
+		});
+	});
+	$('#calc').on('click', function(e) {
+		Fiddler.RunExecutable('calc','',function() {
+		});
+	});
+	$('#inetmgr').on('click', function(e) {
+		Fiddler.RunExecutable('inetmgr','',function() {
+		});
+	});
+	$('#certManager').on('click', function(e) {
+		Fiddler.OpenCertManager();
+	});
+
+
 	var $sethttps = $('#sethttps').bootstrapSwitch('size','small')
 	.on('switchChange.bootstrapSwitch', function (e, value) {
 		Fiddler.SetHttps(value).ReStart(function(){
@@ -28,17 +51,6 @@ define(function(require, exports, module) {
 		$portno.val(msg.Result);
 	});
 
-	$('#status').on('click', function(e) {
-		Fiddler.ResetCertificate(function() {
-			$.statusbar("Root Certificate has been reset.",'info');
-		});
-	});
-	$('#proxyoption').on('click', function(e) {
-		Fiddler.OpenWinNet(function() {
-		});
-	});
-	$('#certManager').on('click', function(e) {
-		Fiddler.OpenCertManager();
-	});
+
 	
 });
