@@ -146,7 +146,14 @@ namespace CEF.Lib.JavascriptObject
         {
             get
             {
-                return this.InnerSession.bHasWebSocketMessages ;
+                try
+                {
+                    return this.InnerSession.bHasWebSocketMessages;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 

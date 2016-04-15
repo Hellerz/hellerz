@@ -104,9 +104,12 @@ define(function(require, exports, module) {
 		// });
 
 		var logo = $('#logo');
-        Fiddler.IsStarted&&Fiddler.IsStarted(function(msg){
-    		logo.toggleClass('off',!msg.Result);
-    	});
+    	var timer = window.setInterval(function(){
+    		Fiddler.IsStarted&&Fiddler.IsStarted(function(msg){
+    			window.clearInterval(timer);
+	    		logo.toggleClass('off',!msg.Result);
+	    	});
+    	},100);
         logo.on('click', function(e) {
         	Fiddler.IsStarted(function(msg){
         		if(msg.Result){

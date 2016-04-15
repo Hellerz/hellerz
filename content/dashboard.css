@@ -418,6 +418,7 @@ iframe{
   left: 0px;
   right: 0px;
   width: 100%;
+  display: block;
 }
 
 .composer-content{
@@ -445,3 +446,9 @@ iframe{
   border-radius: 3px;
 }
     
+#autoResponder .tab-pane{
+  top:29px;
+}
+#auto-nor .auto-grid-wrap{
+  bottom: 200px;
+}

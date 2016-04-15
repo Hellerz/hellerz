@@ -33,6 +33,31 @@ define(function(require, exports, module) {
 		autoAction('responseScript',args);
 	});
 	
+
+	//NORMAL
+	var autoNormalSetting=localStorage['autoNormalSetting']||'[]';
+	var cols=[
+			{title:'If request matches',name:'request',width:400,align:'left'},
+			{title:'then respond with...',name:'response',width:400,align:'left'},
+			//{title:'Latency',name:'latency',width:75,align:'left'}
+		];
+	var $autopanel = $('#auto-grid').mmGrid({
+		height: '100%',
+		width: '100%',
+		cols: cols,
+		items: JSON.parse(autoNormalSetting),
+		nowrap: true,
+		sortStatus: 'asc',
+		multiSelect: true,
+		checkCol:true,
+		autoLoad: false,
+		showBackboard:false,
+	});
+
+	$autopanel.load();
+
+
+	//ADVANCED
 	var newCount = 1;
 	var editorTreeNode;
 	var setting = {
@@ -108,7 +133,6 @@ define(function(require, exports, module) {
 		}
     };
     
-	
     var zNodes = localStorage['AutoResponserSettings']||'[{"id": 1,"name": "AutoResponser","drag": false,"open": true,"level": 0, "isParent": true,"zAsync": true,"isFirstNode": true,"isLastNode": true,"isAjaxing": false,"isHover": true,"editNameFlag": false,"checked": true,"checkedOld": true,"nocheck": false,"chkDisabled": false,"halfCheck": false,"check_Child_State": 1,"check_Focus": false}]';
 
     var zTree = $.fn.zTree.init($("#autoResponserTree"), setting,JSON.parse(zNodes));
@@ -133,5 +157,5 @@ define(function(require, exports, module) {
 	    },
 	    readOnly: false 
 	});
-	
+	$('#autoresponder-nav a:first').tab('show');
 });

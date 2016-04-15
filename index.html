@@ -110,17 +110,36 @@
           </div> 
         </div> 
         <div id="autoResponder" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <div class="container-fluid full-y overflow-y col-md-4">   
-            <ul id="autoResponserTree" class="ztree "></ul>
-          </div> 
-          <div class="container-fluid full-y col-md-8 padding0">   
-              <div class="container-fluid full-body-div gold-y0"> 
-                <div id="requester"></div> 
+          <nav> 
+            <ul id="autoresponder-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+              <li><a href="#auto-nor" data-toggle="tab">Normal</a></li>
+              <li><a href="#auto-adv" data-toggle="tab">Advanced</a></li> 
+            </ul> 
+          </nav> 
+          <div class="tab-content">
+            <div id="auto-nor" class="tab-pane fade in rest-body">
+            <div class="rest-body auto-grid-wrap">
+              <table id="auto-grid" class="mmg"></table> 
+            </div>
+              
+            </div>
+            <div id ="auto-adv" class="tab-pane fade in rest-body">
+              <div class="container-fluid full-y overflow-y col-md-4">   
+                  <ul id="autoResponserTree" class="ztree "></ul>
               </div> 
-              <div class="container-fluid full-body-div gold-y1">
-                <div id="responser"></div> 
+              <div class="container-fluid full-y col-md-8 padding0">   
+                  <div class="container-fluid full-body-div gold-y0"> 
+                    <div id="requester"></div> 
+                  </div> 
+                  <div class="container-fluid full-body-div gold-y1">
+                    <div id="responser"></div> 
+                  </div> 
               </div> 
-          </div> 
+            </div>
+          </div>
+          
+         
+
         </div> 
         <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
           <div class="input-group input-group-sm margin10">
