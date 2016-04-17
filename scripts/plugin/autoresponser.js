@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
+	var $ssnpanel = require('sessionpanel').SessionPanel;
 	require('common');
 	require("ztreecore");
 	require("ztreeexcheck");
@@ -35,8 +36,35 @@ define(function(require, exports, module) {
 	
 
 	//NORMAL
-	var autoNormalSetting=localStorage['autoNormalSetting']||'[]';
+	var setAutoNormalSetting = function(){
+		localStorage['autoNormalSetting'] =JSON.stringify(autoNormalSetting);
+	};
+	var findNormalSetting = function(uid){
+		var len=autoNormalSetting.length,i=0;
+		for(;i<len;i++){
+			if(uid === autoNormalSetting[i].uid){
+				return autoNormalSetting[i];
+			}
+		}
+
+	};
+	var addAutoUrl = $('#addAutoUrl');
+	var saveAutoUrl = $('#saveAutoUrl');
+	var deleteAutoUrl = $('#deleteAutoUrl');
+	var autoRequest = $('#auto-request');
+	var autoRespond = $('#auto-respond');
+	var autoNormalSetting=JSON.parse(localStorage['autoNormalSetting']||'[]');
 	var cols=[
+			{
+				title:'#',name:'checked',width:24,align:'center',
+				renderer:function(val,item){
+					var checkbox = $('<input type="checkbox">')
+					.addClass('auto-nor-uid')
+					.attr('uid',item.uid)
+					.attr('checked',val?'checked':undefined);
+					return checkbox[0].outerHTML;
+				}
+			},
 			{title:'If request matches',name:'request',width:400,align:'left'},
 			{title:'then respond with...',name:'response',width:400,align:'left'},
 			//{title:'Latency',name:'latency',width:75,align:'left'}
@@ -45,16 +73,75 @@ define(function(require, exports, module) {
 		height: '100%',
 		width: '100%',
 		cols: cols,
-		items: JSON.parse(autoNormalSetting),
+		items: autoNormalSetting,
 		nowrap: true,
 		sortStatus: 'asc',
 		multiSelect: true,
-		checkCol:true,
 		autoLoad: false,
 		showBackboard:false,
+		isAutoScroll:true,
 	});
 
-	$autopanel.load();
+	$('#navFun a[href="#autoResponder"]').on('shown.bs.tab',function(){
+		$autopanel.resize();
+	});
+	$autopanel.$body.on('click','.auto-nor-uid',function(e){
+		var $checkbox = $(e.target);
+		var uid = $checkbox.attr('uid');
+		var curItem = findNormalSetting(uid);
+		curItem&&(curItem.checked = $checkbox.prop('checked'));
+		setAutoNormalSetting();
+        e.stopPropagation();
+	});
+	$autopanel.on('selected', function(e, $trs) {
+		var item = $trs.data('item');
+		autoRequest.val(item.request);
+		autoRespond.val(item.response);
+		$('#auto-cur-uid').val(item.uid);
+		$trs.eq(0).find('input').get(0).focus()
+	}).on('rowInserted', function(e, item, index, $tr) {
+		if(item.checked){
+			$autopanel.select($tr)
+		};
+		autoNormalSetting.push(item);
+		setAutoNormalSetting();
+	}).on('rowUpdated', function(e, oldItem, newItem, index, $tr) {
+		autoNormalSetting = $autopanel.rows();
+		setAutoNormalSetting();
+	}).on('rowsRemoved', function(e) {
+		autoNormalSetting = $autopanel.rows();
+		setAutoNormalSetting();
+		autoRequest.val('');
+		autoRespond.val('');
+	}).load();
+	addAutoUrl.on('click',function(e){
+		var item = {};
+		var selectItem = $ssnpanel.selectedRows()[0];
+		var uid =Math.random().toString().replace(/0\.0*/,'');
+		if(selectItem&&selectItem.FullUrl){
+			item.request = selectItem.FullUrl;
+		}else{
+			item.request = 'StringToMatch['+uid+']';
+		}
+		item.checked = true;
+		item.uid = uid;
+		$autopanel.addRow(item);
+	});
+	saveAutoUrl.on('click',function(e){
+		var uid =$('#auto-cur-uid').val();
+		var item =findNormalSetting(uid);
+		item.request=autoRequest.val();
+		item.response=autoRespond.val();
+		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
+		$autopanel.updateRow(item,$curTr);
+	});
+	deleteAutoUrl.on('click',function(e){
+		var uid = $('#auto-cur-uid').val();
+		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
+		$autopanel.removeRow([$curTr.index()]);
+	});
+
+
 
 
 	//ADVANCED

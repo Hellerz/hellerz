@@ -561,9 +561,9 @@
 
             //选中事件
             var $body = this.$body;
-            var isGridActive = false;
             $body.on('click','td',function(e){
                 var $this = $(this);
+                var $tr = $this.parents('tr');
                 var event = jQuery.Event("cellSelected");
                 event.target = e.target;
                 that.$body.triggerHandler(event, [$.data($this.parent()[0], 'item'), $this.parent().index(), $this.index()]);
@@ -571,24 +571,30 @@
                 if(event.isPropagationStopped()){
                     return;
                 }
-                that.select($this.parent().index(),e.ctrlKey);
+                if(!$tr.hasClass('selected')){
+                    that.select($tr,!opts.onlyCtrlSelect||e.ctrlKey);
+                }else if(opts.canSimpleUnselect||(!opts.onlyCtrlSelect||e.ctrlKey)){
+                    that.deselect($tr,!opts.onlyCtrlSelect||e.ctrlKey);
+                }
             });
 
             $body.on('click','tr > td .mmg-check',function(e){
                 e.stopPropagation();
                 var $this = $(this);
-                if(this.checked){
-                    that.select($($this.parents('tr')[0]).index());
-                }else{
-                    that.deselect($($this.parents('tr')[0]).index());
+                var $tr = $this.parents('tr');
+
+                if(!$tr.hasClass('selected')){
+                    that.select($tr,!opts.onlyCtrlSelect||e.ctrlKey);
+                }else if(opts.canSimpleUnselect||(!opts.onlyCtrlSelect||e.ctrlKey)){
+                    that.deselect($tr,!opts.onlyCtrlSelect||e.ctrlKey);
                 }
             });
             document.addEventListener('click',function(e){
-                isGridActive = $(e.target).parents('.mmGrid').length > 0;
+                that.__isGridActive = $(e.target).parents('.mmGrid').get(0)===that.$mmGrid.get(0);
             });
             //TODO: Ctrl+A/65,Delete/46,home/36 end/35 pageup/33 pagedown/34
             document.addEventListener('keydown',function(e){
-                if(isGridActive){
+                if(that.__isGridActive){
                     var index = that.selectedRowsIndex()[0] ;
                     var parent = that.$bodyWrapper;
                     var $tbody = parent.find('tbody');
@@ -608,7 +614,6 @@
                             }
                         };
                         that.select(index);
-                        $trs.eq(index).find('td:eq(0)').trigger('click');
                         return;
                     }
                     if(e.which === 35){
@@ -619,7 +624,6 @@
                             }
                         };
                         that.select(index);
-                        $trs.eq(index).find('td:eq(0)').trigger('click');
                         return;
                     }
                     if(e.which === 33){
@@ -631,7 +635,11 @@
                         return;
                     }
                     if(e.which === 46){
-                        $tbody.find('.selected').remove();
+                        var rowsIndex = [];
+                        $tbody.find('.selected').each(function(i,item){
+                            rowsIndex.push($(item).index());
+                        });
+                        that.removeRow(rowsIndex);
                         len = that.rowsLength();
                         var isfind = false;
                         var curindex = index;
@@ -660,23 +668,22 @@
                                 break;
                             }
                         }
-                    }
-                    if(index < 0 || index >= len){
-                        index = lastindex;
-                    }
-                    index = Math.min(index,len-1);
-                    index = Math.max(0,index);
-                    if(index >=0 && !e.ctrlKey){
-                        var cur = $trs.eq(index);
-                        that.select(index);
-                        cur.find('td:eq(0)').trigger('click');
-                        if(cur.position().top < 0){
-                            parent.scrollTop(parent.scrollTop()+cur.position().top);
-                        }else if(cur.position().top-parent.innerHeight()+cur.height() > 0){
-                            parent.scrollTop(parent.scrollTop()+cur.position().top-parent.innerHeight()+cur.height());
+                        if(index < 0 || index >= len){
+                            index = lastindex;
                         }
-                        e.preventDefault();
-                        e.stopPropagation();
+                        index = Math.min(index,len-1);
+                        index = Math.max(0,index);
+                        if(index >=0 && !e.ctrlKey){
+                            var cur = $trs.eq(index);
+                            that.select(index);
+                            if(cur.position().top < 0){
+                                parent.scrollTop(parent.scrollTop()+cur.position().top);
+                            }else if(cur.position().top-parent.innerHeight()+cur.height() > 0){
+                                parent.scrollTop(parent.scrollTop()+cur.position().top-parent.innerHeight()+cur.height());
+                            }
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
                     }
                 }
             },true);
@@ -1163,6 +1170,7 @@
             var $body = this.$body;
             var $head = this.$head;
             var $tr = args;
+            var $selectedtr =$();
             if(typeof args === 'number'){
                 $tr = $body.find('tr').eq(args);
             }
@@ -1179,12 +1187,14 @@
                         $tr.find('td .mmg-check').prop('checked','checked');
                     }
                 }
+                $selectedtr=$selectedtr.add($tr);
             }else if(typeof args === 'function'){
                 $.each($body.find('tr'), function(index){
                     if(args($.data(this, 'item'), index)){
                         var $this = $(this);
                         if(!$this.hasClass('selected')){
                             $this.addClass('selected');
+                            $selectedtr=$selectedtr.add($this);
                             if(opts.checkCol){
                                 $this.find('td .mmg-check').prop('checked','checked');
                             }
@@ -1193,7 +1203,7 @@
                 });
             }else if(args === undefined || (typeof args === 'string' && args === 'all')){
                 $body.find('tr.selected').removeClass('selected');
-                $body.find('tr').addClass('selected');
+                $selectedtr = $body.find('tr').addClass('selected');
                 $body.find('tr > td').find('.mmg-check').prop('checked','checked');
             }else{
                 return;
@@ -1205,18 +1215,30 @@
                     $head.find('th .checkAll').prop('checked','checked');
                 }
             }
-
+            $body.triggerHandler('selected',[$selectedtr]);
 
         }
             //取消选中
-        , deselect: function(args){
+        , deselect: function(args,isCtrl){
             var opts = this.opts;
             var $body = this.$body;
             var $head = this.$head;
+            var $tr = args;
             if(typeof args === 'number'){
-                $body.find('tr').eq(args).removeClass('selected');
-                if(opts.checkCol){
-                    $body.find('tr').eq(args).find('td .mmg-check').prop('checked','');
+                $tr = $body.find('tr').eq(args);
+            }
+            if($tr.is&&$tr.is('tr')){
+                if(!opts.multiSelect||!isCtrl){
+                    $body.find('tr.selected').addClass('selected');
+                    if(opts.checkCol){
+                        $body.find('tr > td').find('.mmg-check').prop('checked','checked');
+                    }
+                }
+                if($tr.hasClass('selected')){
+                    $tr.removeClass('selected');
+                    if(opts.checkCol){
+                        $tr.find('td .mmg-check').prop('checked','');
+                    }
                 }
             }else if(typeof args === 'function'){
                 $.each($body.find('tr'), function(index){
@@ -1325,8 +1347,13 @@
             }
             $tr.data('item', item);
             this._setStyle();
-
-
+            if(this.opts.isAutoScroll){
+                var wapper = this.$bodyWrapper ;
+                if (Math.abs(wapper.height() + wapper[0].scrollTop - wapper[0].scrollHeight) < 25) {
+                    wapper.scrollTop(wapper[0].scrollHeight);
+                }
+            }
+            
             this.$body.triggerHandler('rowInserted', [item, index, $tr]);
         }
         //更新行内容，两个参数都必填
@@ -1381,6 +1408,7 @@
                     this.$body.triggerHandler('rowRemoved', [item, index[i]]);
                 }
             }
+            this.$body.triggerHandler('rowsRemoved',[index]);
             this._setStyle();
             if(this.rowsLength() === 0){
                 this._showNoData();
@@ -1428,6 +1456,7 @@
         , noDataText: 'No Sessions capture'
         , loadErrorText: '数据加载出现异常'
         , multiSelect: false
+        , onlyCtrlSelect: true
         , checkCol: false
         , indexCol: false
         , indexColWidth: 30
@@ -1435,6 +1464,8 @@
         , nowrap: false
         , showBackboard: true
         , backboardMinHeight: 125
+        , isAutoScroll:false
+        , canSimpleUnselect:true
         , plugins: [] //插件 插件必须实现 init($mmGrid)和params()方法，参考mmPaginator
     };
 //  event : loadSuccess(e,data), loadError(e, data), cellSelected(e, item, rowIndex, colIndex)

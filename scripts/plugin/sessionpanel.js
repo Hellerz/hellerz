@@ -18,6 +18,8 @@ define(function(require, exports, module) {
 		sortStatus: 'asc',
 		multiSelect: true,
 		autoLoad: false,
+		isAutoScroll:true,
+		canSimpleUnselect:false
 	});
 	var sessionfilter = {
 		regex:[{

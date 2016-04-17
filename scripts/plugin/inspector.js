@@ -121,18 +121,8 @@ define(function(require, exports, module) {
 		}
 	};
 	
-	var addSession= (function(){
-		var wapper = $('.mmg-bodyWrapper');
-		return function(session){
-			$ssnpanel.addRow(session, $ssnpanel.rowsLength());
-			if (Math.abs(wapper.height() + wapper[0].scrollTop - wapper[0].scrollHeight) < 25) {
-				wapper.scrollTop(wapper[0].scrollHeight);
-			}
-		};
-	}());
-
 	var beforeRequest = function(e, args) {
-		addSession(args.session);
+		$ssnpanel.addRow(args.session, $ssnpanel.rowsLength());
 	}
 
 	var beforeResponse = function(e, args) {
@@ -141,8 +131,8 @@ define(function(require, exports, module) {
 			$ssnpanel.updateRow(session,$.data($ssnpanel,'id_row')[session.Id]);
 		};
 	};
-	$ssnpanel.on('cellSelected', function(e, item, rowIndex, colIndex) {
-		shownStatus.session = item;
+	$ssnpanel.on('selected', function(e, $trs) {
+		shownStatus.session = $trs.data('item');;
 		shownStatus.showSession();
 	}).on('loadSuccess', function(e, data) {
 		Fiddler.addRequest(beforeRequest);
@@ -152,7 +142,11 @@ define(function(require, exports, module) {
 	}).on('rowRemoved', function(e, item, index) {
 		delete $.data($ssnpanel,'id_row')[item.Id];
 	}).load();
-
+	$ssnpanel.$body.on('dblclick','td',function(e){
+	    $('#navFun a[href="#inspectors"]').tab('show');
+	    shownStatus.session =  $(this).parents('tr').data('item');
+		shownStatus.showSession();
+	});
 	$('#req-nav,#res-nav').on('show.bs.tab', function (e) {
 		var $el = $(e.target.hash);
 		if(!$el.data('editor')){

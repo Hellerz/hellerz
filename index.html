@@ -118,10 +118,64 @@
           </nav> 
           <div class="tab-content">
             <div id="auto-nor" class="tab-pane fade in rest-body">
-            <div class="rest-body auto-grid-wrap">
-              <table id="auto-grid" class="mmg"></table> 
-            </div>
-              
+              <div class="rest-body auto-grid-wrap">
+                <table id="auto-grid" class="mmg"></table> 
+              </div>
+              <div class="rest-body auto-url-map">
+                <div class="input-group input-group-sm margin10">
+                  <input id="auto-cur-uid" type="hidden"/>
+                  <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern"/>
+                  <div class="input-group-btn dropup">
+                    <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                      <li><a href="javascript:void(0)">regex:(?inx).+\.jpg$ #Match string ending with JPG</a></li>
+                      <li><a href="javascript:void(0)">regex:(?inx).+\.(gif|png|jpg)$ #Match string ending with img types</a></li>
+                      <li><a href="javascript:void(0)">regex:(?inx)^http://.+\.gif$ #Match HTTPS-delivered GIFs</a></li>
+                      <li><a href="javascript:void(0)">URL WithBody:Upload.php regex:^.*Body Text.*$</a></li>
+                      <li><a href="javascript:void(0)">method:OPTIONS XHRCors.php</a></li>
+                      <li><a href="javascript:void(0)">flag:x-ProcessInfo=iexplore</a></li>
+                      <li><a href="javascript:void(0)">Header:Accept=html</a></li>
+                      <li><a href="javascript:void(0)">65%PartialUrl</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="input-group input-group-sm margin10">
+                  <input type="text" id="auto-respond" class="form-control" placeholder="Local file to return or *Action to execute"/>
+                  <div class="input-group-btn dropup">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                      <li><a href="javascript:void(0)">200_FiddlerGif.dat</a></li>
+                      <li><a href="javascript:void(0)">200_SimpleHTML.dat</a></li>
+                      <li><a href="javascript:void(0)">200_TransPixel.dat</a></li>
+                      <li><a href="javascript:void(0)">204_NoContent.dat</a></li>
+                      <li><a href="javascript:void(0)">302_Redirect.dat</a></li>
+                      <li><a href="javascript:void(0)">303_RedirectWithGet.dat</a></li>
+                      <li><a href="javascript:void(0)">304_NoModified.dat</a></li>
+                      <li><a href="javascript:void(0)">307_RedirectWithMethod.dat</a></li>
+                      <li><a href="javascript:void(0)">401_AuthBasic.dat</a></li>
+                      <li><a href="javascript:void(0)">401_AuthDigest.dat</a></li>
+                      <li><a href="javascript:void(0)">403_AuthDeny.dat</a></li>
+                      <li><a href="javascript:void(0)">404_Plain.dat</a></li>
+                      <li><a href="javascript:void(0)">407_ProxyAuthBasic</a></li>
+                      <li><a href="javascript:void(0)">502_Unreachable.dat</a></li>
+                      <li class="divider"></li>
+                      <li><a href="javascript:void(0)">*script:scriptFunctionName</a></li>
+                      <li class="divider"></li>
+                      <li><a href="javascript:void(0)">Create New Response</a></li>
+                      <li><a href="javascript:void(0)">Find a file...</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="input-group input-group-sm pull-right">
+                  <button type="button" id="addAutoUrl" title="Add" class="btn btn-sm btn-info margin10-x">Add</button>
+                  <button type="button" id="saveAutoUrl" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
+                  <button type="button" id="deleteAutoUrl" title="Delete" class="btn btn-sm btn-danger margin10-x">Delete</button>
+                </div>
+              </div>
             </div>
             <div id ="auto-adv" class="tab-pane fade in rest-body">
               <div class="container-fluid full-y overflow-y col-md-4">   
@@ -137,42 +191,39 @@
               </div> 
             </div>
           </div>
-          
-         
-
         </div> 
         <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
           <div class="input-group input-group-sm margin10">
-              <button type="button" id="exeInject" title="Ctrl+R" class="btn btn-sm btn-primary">Run</button>
-              <span class="input-group-addon">
-                <input  type="checkbox">
-              </span>
-              <input type="text" class="form-control">
-              <div class="input-group-btn">
-                <button type="button" class="btn btn-default border-radius0"  tabindex="-1">Proxy</button>
-                <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
-                  <span class="caret"></span>
-                  <span class="sr-only">Proxy</span>
-                </button>
-              <ul class="dropdown-menu pull-right">
-                <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
-                <li class="divider"></li>
-                <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
-              </ul>
-              </div>
-              <input type="text" class="form-control">
-              <div class="input-group-btn">
-                <button type="button" class="btn btn-default"  tabindex="-1">Bypass</button>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                  <span class="caret"></span>
-                  <span class="sr-only">Bypass</span>
-                </button>
+            <button type="button" id="exeInject" title="Ctrl+R" class="btn btn-sm btn-primary">Run</button>
+            <span class="input-group-addon">
+              <input  type="checkbox">
+            </span>
+            <input type="text" class="form-control"/>
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default border-radius0"  tabindex="-1">Proxy</button>
+              <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
+                <span class="caret"></span>
+                <span class="sr-only">Proxy</span>
+              </button>
+            <ul class="dropdown-menu pull-right">
+              <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
+              <li class="divider"></li>
+              <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
+            </ul>
+            </div>
+            <input type="text" class="form-control">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default"  tabindex="-1">Bypass</button>
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                <span class="caret"></span>
+                <span class="sr-only">Bypass</span>
+              </button>
               <ul class="dropdown-menu pull-right">
                 <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
                 <li class="divider"></li>
                 <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
               </ul>
-              </div>
+            </div>
           </div>
           <nav> 
             <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 

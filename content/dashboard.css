@@ -256,6 +256,14 @@ iframe{
 .margin10{
   margin: 10px;
 }
+.margin10-x{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.margin10-y{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .margin5{
   margin: 5px;
 }
@@ -450,5 +458,13 @@ iframe{
   top:29px;
 }
 #auto-nor .auto-grid-wrap{
-  bottom: 200px;
+  bottom: 540px;
+}
+#auto-nor .auto-url-map{
+  top: 100%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  margin-top: -540px;
+  height: 140px;
 }

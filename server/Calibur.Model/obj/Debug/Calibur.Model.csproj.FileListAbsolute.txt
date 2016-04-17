@@ -16,3 +16,12 @@ C:\GIT\github\Calibur\Calibur.Model\bin\Debug\Newtonsoft.Json.xml
 C:\GIT\github\Calibur\Calibur.Model\obj\Debug\Calibur.Model.csprojResolveAssemblyReference.cache
 C:\GIT\github\Calibur\Calibur.Model\obj\Debug\Calibur.Model.dll
 C:\GIT\github\Calibur\Calibur.Model\obj\Debug\Calibur.Model.pdb
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Calibur.Model.dll
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Calibur.Model.pdb
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Fleck.dll
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Newtonsoft.Json.dll
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Fleck.pdb
+C:\GIT\github\hellerz\server\Calibur.Model\bin\Debug\Newtonsoft.Json.xml
+C:\GIT\github\hellerz\server\Calibur.Model\obj\Debug\Calibur.Model.csprojResolveAssemblyReference.cache
+C:\GIT\github\hellerz\server\Calibur.Model\obj\Debug\Calibur.Model.dll
+C:\GIT\github\hellerz\server\Calibur.Model\obj\Debug\Calibur.Model.pdb
