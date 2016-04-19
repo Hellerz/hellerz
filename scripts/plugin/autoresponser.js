@@ -2,11 +2,13 @@ define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
+	var File = require('file');
 	require('common');
 	require("ztreecore");
 	require("ztreeexcheck");
 	require("ztreeexedit");
 
+	
 	var autoAction=function(scriptName,context){
 		var setting =zTree.getNodes();
 		var resper =  setting[0];
@@ -27,7 +29,51 @@ define(function(require, exports, module) {
 			};
 		}
 	};
+
+	var autoReqRe = /((regex|direct):|)(.+)/i;
+	var autoResRe = /(\*|\w:\\|http(s?):\/\/|).+/i;
+	var isMatchRequest = function(url,reqPattern){
+		var match = reqPattern.match(autoReqRe);
+		if(match&&match.length===4){
+			return {
+				"option":match[2]||'direct',
+				"text":match[3],
+				"match":""
+			} 
+		}
+		return null;
+	};
+	var aynres = function(resPattern){
+		var match = resPattern.match(autoResRe);
+		if(match&&match.length===3){
+			return {
+				"option":match[1],
+				"text":match[0]
+			} 
+		}
+		return null;
+	};
+	var autoRedirect = function(context){
+		var setting =$autopanel.rows()
+		  , session = context.session
+		  , index = 0
+		  , len = setting.length
+		  , match
+		  , reqmatch
+		  , resmatch
+		if(setting.length>0){
+			for (; index < len; index++) {
+				if(setting[i].checked){
+					//if(isMatchRequest(session.FullUrl,setting[i].request);
+					//resmatch = aynres(setting[i].request);
+					
+				}
+			};
+		}
+
+	};
 	Fiddler.addRequest(function(e, args) {
+		//autoRedirect(args);
 		autoAction('requestScript',args);
 	});
 	Fiddler.addResponse(function(e, args) {
@@ -51,8 +97,44 @@ define(function(require, exports, module) {
 	var addAutoUrl = $('#addAutoUrl');
 	var saveAutoUrl = $('#saveAutoUrl');
 	var deleteAutoUrl = $('#deleteAutoUrl');
+
+	var $savecrt = $('#savecrt');
+	var $cancelcrt = $('#cancelcrt');
+
 	var autoRequest = $('#auto-request');
 	var autoRespond = $('#auto-respond');
+
+	var $autonor = $('#auto-nor');
+	var $autowrap = $autonor.find('.auto-grid-wrap');
+	var $automap =  $autonor.find('.auto-url-map');
+	var $autocrt =  $autonor.find('.auto-file-crt');
+
+	var $crteditor =  $('#crteditor');
+	var crteditor = $.CreateEditor($crteditor);
+	crteditor.commands.addCommand({
+	    name: 'Cancel',
+	    bindKey: {win: 'ESC',  mac: 'ESC'},
+	    exec: function(editor) {
+	        collapscrt();
+	    },
+	    readOnly: false
+	});
+	crteditor.commands.addCommand({
+	    name: 'Save',
+	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+	    exec: function(editor) {
+	        File.SaveDialog("Save File",'C:\\GIT\\github\\FairyKey','文本文件|*.*|C#文件|*.cs|所有文件|*.*',2,function(msg){
+				if(msg.Result&&msg.Result.length){
+					File.CreateFile(msg.Result[0],editor.getValue(),'UTF8',function(){
+						editor.setValue('');
+						$.statusbar('file '+msg.Result[0]+' saved successfully.','success');
+					});
+				}
+			});
+	    },
+	    readOnly: false
+	});
+
 	var autoNormalSetting=JSON.parse(localStorage['autoNormalSetting']||'[]');
 	var cols=[
 			{
@@ -140,9 +222,40 @@ define(function(require, exports, module) {
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.removeRow([$curTr.index()]);
 	});
-
-
-
+	var extendcrt = function(height){
+		var mapHeight = $automap.outerHeight();
+		$autocrt.css({
+			height:500,
+			marginTop:-500
+		});
+		$autowrap.animate({bottom: mapHeight+height}, 'fast',function(){
+			$autopanel.resize();
+		} );
+		$automap.animate({marginTop: -(mapHeight+height) }, 'fast' );
+		crteditor.focus();
+	};
+	var collapscrt = function(){
+		var mapHeight = $automap.outerHeight();
+		$autocrt.css({
+			height:500,
+			marginTop:-500
+		});
+		$autowrap.animate({bottom: mapHeight}, 'fast',function(){
+			$autopanel.resize();
+		} );
+		$automap.animate({marginTop: -mapHeight }, 'fast' );
+		crteditor.blur();
+	};
+	$cancelcrt.on('click',function(e){
+		collapscrt();
+	});
+	$('.auto-respond-list').on('click','a',function(e){
+		var oprate = $(e.target).attr('oprate');
+		if(oprate === 'create'){
+			extendcrt(500);
+		}
+	});
+	
 
 	//ADVANCED
 	var newCount = 1;
@@ -223,6 +336,7 @@ define(function(require, exports, module) {
     var zNodes = localStorage['AutoResponserSettings']||'[{"id": 1,"name": "AutoResponser","drag": false,"open": true,"level": 0, "isParent": true,"zAsync": true,"isFirstNode": true,"isLastNode": true,"isAjaxing": false,"isHover": true,"editNameFlag": false,"checked": true,"checkedOld": true,"nocheck": false,"chkDisabled": false,"halfCheck": false,"check_Child_State": 1,"check_Focus": false}]';
 
     var zTree = $.fn.zTree.init($("#autoResponserTree"), setting,JSON.parse(zNodes));
+
 
     var requester = $.CreateEditor($('#requester'));
 	requester.getSession().setMode("ace/mode/javascript");

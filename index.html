@@ -121,15 +121,15 @@
               <div class="rest-body auto-grid-wrap">
                 <table id="auto-grid" class="mmg"></table> 
               </div>
-              <div class="rest-body auto-url-map">
-                <div class="input-group input-group-sm margin10">
+              <div class="rest-body auto-url-map grid-border">
+                <div class="input-group input-group-sm margin10 ">
                   <input id="auto-cur-uid" type="hidden"/>
                   <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern"/>
                   <div class="input-group-btn dropup">
                     <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
                       <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
+                    <ul class="dropdown-menu pull-right auto-request-list">
                       <li><a href="javascript:void(0)">regex:(?inx).+\.jpg$ #Match string ending with JPG</a></li>
                       <li><a href="javascript:void(0)">regex:(?inx).+\.(gif|png|jpg)$ #Match string ending with img types</a></li>
                       <li><a href="javascript:void(0)">regex:(?inx)^http://.+\.gif$ #Match HTTPS-delivered GIFs</a></li>
@@ -147,7 +147,7 @@
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                       <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
+                    <ul class="dropdown-menu pull-right auto-respond-list">
                       <li><a href="javascript:void(0)">200_FiddlerGif.dat</a></li>
                       <li><a href="javascript:void(0)">200_SimpleHTML.dat</a></li>
                       <li><a href="javascript:void(0)">200_TransPixel.dat</a></li>
@@ -165,8 +165,8 @@
                       <li class="divider"></li>
                       <li><a href="javascript:void(0)">*script:scriptFunctionName</a></li>
                       <li class="divider"></li>
-                      <li><a href="javascript:void(0)">Create New Response</a></li>
-                      <li><a href="javascript:void(0)">Find a file...</a></li>
+                      <li><a href="javascript:void(0)" oprate="create">Create New Response</a></li>
+                      <li><a href="javascript:void(0)" oprate="find">Find a file...</a></li>
                     </ul>
                   </div>
                 </div>
@@ -174,6 +174,15 @@
                   <button type="button" id="addAutoUrl" title="Add" class="btn btn-sm btn-info margin10-x">Add</button>
                   <button type="button" id="saveAutoUrl" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
                   <button type="button" id="deleteAutoUrl" title="Delete" class="btn btn-sm btn-danger margin10-x">Delete</button>
+                </div>
+              </div>
+              <div class="rest-body auto-file-crt grid-border">
+                <div class="rest-body full-body-div auto-file-crt-container"> 
+                  <div id="crteditor"></div> 
+                </div> 
+                <div class="input-group input-group-sm auto-file-crt-btn">
+                  <button type="button" id="savecrt" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
+                  <button type="button" id="cancelcrt" title="Delete" class="btn btn-sm btn-danger margin10-x">Cancel</button>
                 </div>
               </div>
             </div>

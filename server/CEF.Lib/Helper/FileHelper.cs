@@ -33,7 +33,7 @@ namespace CEF.Lib.Helper
                     return Encoding.Default;
             }
         }
-        
+
         [JSchema]
         public static List<string> OpenDialog(string title, string path, string filter, int filterIndex)
         {
@@ -47,6 +47,7 @@ namespace CEF.Lib.Helper
                 Title = title,
                 InitialDirectory = path,
                 Filter = filter,
+                RestoreDirectory = true,
                 FilterIndex = filterIndex
             };
             if (dialog.ShowDialog() == true)
@@ -54,6 +55,45 @@ namespace CEF.Lib.Helper
                 return dialog.FileNames.ToList();
             }
             return null;
+        }
+        [JSchema]
+        public static List<string> SaveDialog(string title, string path, string filter, int filterIndex)
+        {
+            var dialog = new SaveFileDialog
+            {
+                CheckFileExists = false,
+                CheckPathExists = true,
+                Title = title,
+                InitialDirectory = path,
+                RestoreDirectory = true,
+                Filter = filter,
+                FilterIndex = filterIndex
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                return dialog.FileNames.ToList();
+            }
+            return null;
+        }
+        [JSchema]
+        public static void CreateNewFile(string path, string base64Content)
+        {
+            using (var fs = new FileStream(path, FileMode.CreateNew))
+            {
+                var bytes = Convert.FromBase64String(base64Content);
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Flush();
+            }
+        }
+        [JSchema]
+        public static void CreateFile(string path, string content, string encoding)
+        {
+            using (var fs = new FileStream(path, FileMode.Create))
+            {
+                var bytes = GetEncoding(encoding).GetBytes(content);
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Flush();
+            }
         }
 
         /// <summary>

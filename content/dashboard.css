@@ -453,18 +453,35 @@ iframe{
   padding: 4px;
   border-radius: 3px;
 }
+.grid-border{
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+}
     
 #autoResponder .tab-pane{
   top:29px;
 }
 #auto-nor .auto-grid-wrap{
-  bottom: 540px;
+  bottom: 140px;
+  z-index: 10;
 }
 #auto-nor .auto-url-map{
   top: 100%;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  border-radius: 4px;
-  margin-top: -540px;
+  margin-top: -140px;
   height: 140px;
+  z-index: 10;
+}
+#auto-nor .auto-file-crt{
+  height: 500px;
+  top: 100%;
+  margin-top: -500px;
+}
+.auto-file-crt-container{
+  bottom: 50px;
+}
+.auto-file-crt-btn{
+  bottom: 30px;
+  position: absolute;
+  right: 0px;
 }
