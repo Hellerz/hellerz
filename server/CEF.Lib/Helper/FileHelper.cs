@@ -45,7 +45,9 @@ namespace CEF.Lib.Helper
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Title = title,
-                InitialDirectory = path,
+                ValidateNames =true,
+                AddExtension=true,
+                InitialDirectory = string.IsNullOrWhiteSpace(path) ? DirectoryHelper.GetBasePath() : path,
                 Filter = filter,
                 RestoreDirectory = true,
                 FilterIndex = filterIndex
@@ -63,8 +65,10 @@ namespace CEF.Lib.Helper
             {
                 CheckFileExists = false,
                 CheckPathExists = true,
+                AddExtension = true,
                 Title = title,
-                InitialDirectory = path,
+                InitialDirectory = string.IsNullOrWhiteSpace(path) ? DirectoryHelper.GetBasePath() : path,
+                ValidateNames = true,
                 RestoreDirectory = true,
                 Filter = filter,
                 FilterIndex = filterIndex

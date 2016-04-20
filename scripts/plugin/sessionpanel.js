@@ -8,6 +8,9 @@ define(function(require, exports, module) {
 		return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); 
 	}
 	var cols=[{title:'#',name:'Id',width:55,sortable:true,align:'center',renderer:function(val){return prefixInteger(val,5);}},{title:'Code',name:'ResponseCode',width:50,sortable:true,align:'center'},{title:'Prtcl',name:'UriScheme',width:45,sortable:true,align:'center'},{title:'Host',name:'Host',width:120,sortable:true,align:'right'},{title:'URL',name:'PathAndQuery',width:450,sortable:true,align:'left'}];
+	var status = {
+		'IsPauseSession':false
+	};
 	var $ssnpanel = $('#mmg').mmGrid({
 		height: '100%',
 		width: '100%',
@@ -134,17 +137,20 @@ define(function(require, exports, module) {
 	});
 	var pausessn = $('#pausessn');
 	Fiddler.IsPauseSession&&Fiddler.IsPauseSession(function(msg){
+		status.IsPauseSession = msg.Result;
 		pausessn.toggleClass('off',!msg.Result);
 	});
     pausessn.on('click', function(e) {
     	Fiddler.IsPauseSession(function(msg){
     		if(msg.Result){
     			Fiddler.SetPauseSession(false,function() {
+    				status.IsPauseSession = false;
 					$.statusbar("AutoResponser has closed.",'info');
 					pausessn.addClass('off');
 				});
     		}else{
     			Fiddler.SetPauseSession(true,function() {
+    				status.IsPauseSession = true;
 					$.statusbar("AutoResponser has open.");
 					pausessn.removeClass('off','info');
 				});
@@ -162,4 +168,5 @@ define(function(require, exports, module) {
 		});
 	});
 	exports.SessionPanel = $ssnpanel;
+	exports.Status = status;
 });

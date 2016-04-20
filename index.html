@@ -121,10 +121,10 @@
               <div class="rest-body auto-grid-wrap">
                 <table id="auto-grid" class="mmg"></table> 
               </div>
-              <div class="rest-body auto-url-map grid-border">
+              <div class="rest-body auto-url-map grid-border disabled dropup">
                 <div class="input-group input-group-sm margin10 ">
-                  <input id="auto-cur-uid" type="hidden"/>
-                  <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern"/>
+                  <input id="auto-cur-uid" type="hidden" tabIndex="-1" spellcheck="false"/>
+                  <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern" tabIndex="-1" spellcheck="false"/>
                   <div class="input-group-btn dropup">
                     <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
                       <span class="caret"></span>
@@ -142,8 +142,8 @@
                   </div>
                 </div>
                 <div class="input-group input-group-sm margin10">
-                  <input type="text" id="auto-respond" class="form-control" placeholder="Local file to return or *Action to execute"/>
-                  <div class="input-group-btn dropup">
+                  <input type="text" id="auto-respond" class="form-control" placeholder="Local file to return or *Action to execute" tabIndex="-1" spellcheck="false"/>
+                  <div class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                       <span class="caret"></span>
                     </button>
@@ -171,10 +171,11 @@
                   </div>
                 </div>
                 <div class="input-group input-group-sm pull-right">
-                  <button type="button" id="addAutoUrl" title="Add" class="btn btn-sm btn-info margin10-x">Add</button>
-                  <button type="button" id="saveAutoUrl" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
-                  <button type="button" id="deleteAutoUrl" title="Delete" class="btn btn-sm btn-danger margin10-x">Delete</button>
+                  <button type="button" id="addAutoUrl" title="Add" class="btn btn-sm btn-info margin10-x" tabIndex="-1">Add</button>
+                  <button type="button" id="saveAutoUrl" title="Save" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Save</button>
+                  <button type="button" id="deleteAutoUrl" title="Delete" class="btn btn-sm btn-danger margin10-x" tabIndex="-1">Delete</button>
                 </div>
+                <div class="rest-body disabled-overview"></div>
               </div>
               <div class="rest-body auto-file-crt grid-border">
                 <div class="rest-body full-body-div auto-file-crt-container"> 
@@ -207,7 +208,7 @@
             <span class="input-group-addon">
               <input  type="checkbox">
             </span>
-            <input type="text" class="form-control"/>
+            <input type="text" class="form-control" spellcheck="false"/>
             <div class="input-group-btn">
               <button type="button" class="btn btn-default border-radius0"  tabindex="-1">Proxy</button>
               <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
@@ -220,7 +221,7 @@
               <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
             </ul>
             </div>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" spellcheck="false">
             <div class="input-group-btn">
               <button type="button" class="btn btn-default"  tabindex="-1">Bypass</button>
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
@@ -262,7 +263,7 @@
                     </select>
                   </div>
                   <div class="col-md-9 paddingx5">
-                    <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://">
+                    <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://" spellcheck="false">
                   </div>
                   <div class="col-md-2 padding0">
                     <select id="cmpsr_type" name="type" class="selectpicker">

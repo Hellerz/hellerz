@@ -311,6 +311,38 @@ namespace CEF.Lib.Helper
             }
             return Directory.GetDirectories(path, searchPattern).ToList();
         }
+
+        [JSchema]
+        public static List<string> GetFileFolders(string path)
+        {
+            var members = new List<string>();
+            members.AddRange(Directory.GetFiles(path).ToList());
+            members.AddRange(Directory.GetDirectories(path).ToList());
+            return members;
+        }
+        [JSchema]
+        public static List<string> GetFileFoldersSearch(string path, string searchPattern)
+        {
+            var members = new List<string>();
+            members.AddRange(Directory.GetFiles(path, searchPattern).ToList());
+            members.AddRange(Directory.GetDirectories(path, searchPattern).ToList());
+            return members;
+        }
+        [JSchema]
+        public static List<string> GetFileFoldersOption(string path, string searchPattern, string searchOption)
+        {
+            SearchOption option;
+            if (Enum.TryParse(searchOption, out option))
+            {
+                var members = new List<string>();
+                members.AddRange(Directory.GetFiles(path, searchPattern, option).ToList());
+                members.AddRange(Directory.GetDirectories(path, searchPattern, option).ToList());
+                return members;
+            }
+            return GetFileFoldersSearch(path, searchPattern);
+        }
+
+
         /// <summary>
         /// Returns the names of all files and subdirectories in the specified directory.
         /// </summary>

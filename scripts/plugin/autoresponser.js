@@ -2,7 +2,11 @@ define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
+	var ssnstatus = require('sessionpanel').Status;
 	var File = require('file');
+	var Directory = require('directory');
+
+	require('bootstraptypeahead');
 	require('common');
 	require("ztreecore");
 	require("ztreeexcheck");
@@ -30,15 +34,14 @@ define(function(require, exports, module) {
 		}
 	};
 
-	var autoReqRe = /((regex|direct):|)(.+)/i;
+	var autoReqRe = /((regex|exact):|)(.+)/i;
 	var autoResRe = /(\*|\w:\\|http(s?):\/\/|).+/i;
-	var isMatchRequest = function(url,reqPattern){
+	var aynreq = function(reqPattern){
 		var match = reqPattern.match(autoReqRe);
 		if(match&&match.length===4){
 			return {
-				"option":match[2]||'direct',
+				"option":(match[2]||'exact').toLowerCase(),
 				"text":match[3],
-				"match":""
 			} 
 		}
 		return null;
@@ -47,33 +50,66 @@ define(function(require, exports, module) {
 		var match = resPattern.match(autoResRe);
 		if(match&&match.length===3){
 			return {
-				"option":match[1],
+				"option":match[1].toLowerCase(),
 				"text":match[0]
 			} 
 		}
 		return null;
 	};
+	var isMatchRequest = function(url,reqmatch){
+		if(reqmatch&&url){
+			if(reqmatch.option==='regex'){
+				return new RegExp(reqmatch.text,'i').test(url);
+			}else{
+				return url.indexOf(reqmatch.text) >- 1;
+			}
+		}
+		return false;
+	};
 	var autoRedirect = function(context){
 		var setting =$autopanel.rows()
 		  , session = context.session
-		  , index = 0
 		  , len = setting.length
+		  , index = 0
+		  , cursetting
 		  , match
 		  , reqmatch
 		  , resmatch
-		if(setting.length>0){
-			for (; index < len; index++) {
-				if(setting[i].checked){
-					//if(isMatchRequest(session.FullUrl,setting[i].request);
-					//resmatch = aynres(setting[i].request);
-					
-				}
-			};
-		}
+		if(ssnstatus.IsPauseSession){
+			if(setting.length>0){
+				for (; index < len; index++) {
+					cursetting=setting[index];
+					if(cursetting.checked&&cursetting.request&&cursetting.response){
+						reqmatch = aynreq(cursetting.request);
+						if(isMatchRequest(session.FullUrl,reqmatch)){
+							resmatch = aynres(cursetting.response);
+							if(reqmatch.option === 'regex'){
+								reqmatch.text = reqmatch.text.replace(new RegExp(reqmatch.option,'i'),resmatch.text);
+							}
+							if(resmatch.option.indexOf('http')>-1){//web
+								session.SetFullUrl(reqmatch.text);
+							}else if(resmatch.option.indexOf(':\\')>-1){//file
+								session.SetBypassGateway(true)
+								.UtilCreateResponseAndBypassServer()
+								.LoadResponseFromFile(resmatch.text)
+								.UtilChunkResponse(1)
+								.SetResponseHeaders(JSON.stringify({
+								    "Access-Control-Allow-Headers": "accept, content-type, cookieorigin",
+								    "Access-Control-Allow-Origin":session.RequestHeaders.Origin || "*",
+								    "Access-Control-Allow-Credentials": "true",
+								    "Access-Control-Allow-Methods":"POST",
+								}));
+							}else if(resmatch.option === '*'){//function
 
+							}
+						}
+					}
+				};
+			}
+		}
 	};
 	Fiddler.addRequest(function(e, args) {
-		//autoRedirect(args);
+		autoRedirect(args);
 		autoAction('requestScript',args);
 	});
 	Fiddler.addResponse(function(e, args) {
@@ -94,15 +130,29 @@ define(function(require, exports, module) {
 		}
 
 	};
-	var addAutoUrl = $('#addAutoUrl');
-	var saveAutoUrl = $('#saveAutoUrl');
-	var deleteAutoUrl = $('#deleteAutoUrl');
+	var saveEditor=function(editor){
+		File.SaveDialog("Save File",'','所有文件|*.*',0,function(msg){
+			if(msg.Result&&msg.Result.length){
+				File.CreateFile(msg.Result[0],editor.getValue(),'UTF8',function(){
+					editor.setValue('');
+					var path = msg.Result[0];
+					$autoRespond.val(path);
+					$.statusbar('file '+path+' saved successfully.','success');
+					collapscrt();
+					$saveAutoUrl.trigger('click');
+				});
+			}
+		});
+	};
+	var $addAutoUrl = $('#addAutoUrl');
+	var $saveAutoUrl = $('#saveAutoUrl');
+	var $deleteAutoUrl = $('#deleteAutoUrl');
 
 	var $savecrt = $('#savecrt');
 	var $cancelcrt = $('#cancelcrt');
 
-	var autoRequest = $('#auto-request');
-	var autoRespond = $('#auto-respond');
+	var $autoRequest = $('#auto-request');
+	var $autoRespond = $('#auto-respond');
 
 	var $autonor = $('#auto-nor');
 	var $autowrap = $autonor.find('.auto-grid-wrap');
@@ -123,18 +173,14 @@ define(function(require, exports, module) {
 	    name: 'Save',
 	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 	    exec: function(editor) {
-	        File.SaveDialog("Save File",'C:\\GIT\\github\\FairyKey','文本文件|*.*|C#文件|*.cs|所有文件|*.*',2,function(msg){
-				if(msg.Result&&msg.Result.length){
-					File.CreateFile(msg.Result[0],editor.getValue(),'UTF8',function(){
-						editor.setValue('');
-						$.statusbar('file '+msg.Result[0]+' saved successfully.','success');
-					});
-				}
-			});
+	        saveEditor(editor);
 	    },
 	    readOnly: false
 	});
-
+	$savecrt.on('click',function(e){
+		saveEditor(crteditor);
+	});
+	
 	var autoNormalSetting=JSON.parse(localStorage['autoNormalSetting']||'[]');
 	var cols=[
 			{
@@ -175,10 +221,17 @@ define(function(require, exports, module) {
 		setAutoNormalSetting();
         e.stopPropagation();
 	});
-	$autopanel.on('selected', function(e, $trs) {
+	$autopanel.on('cellAfterSelected',function(){
+		var  hasSelect = $autopanel.selectedRows().length>0;
+		 $automap.toggleClass('disabled',!hasSelect);
+		 if(!hasSelect){
+		 	$autoRequest.val('');
+			$autoRespond.val('');
+		 }
+	}).on('selected', function(e, $trs) {
 		var item = $trs.data('item');
-		autoRequest.val(item.request);
-		autoRespond.val(item.response);
+		$autoRequest.val(item.request);
+		$autoRespond.val(item.response);
 		$('#auto-cur-uid').val(item.uid);
 		$trs.eq(0).find('input').get(0).focus()
 	}).on('rowInserted', function(e, item, index, $tr) {
@@ -193,10 +246,10 @@ define(function(require, exports, module) {
 	}).on('rowsRemoved', function(e) {
 		autoNormalSetting = $autopanel.rows();
 		setAutoNormalSetting();
-		autoRequest.val('');
-		autoRespond.val('');
+		$autoRequest.val('');
+		$autoRespond.val('');
 	}).load();
-	addAutoUrl.on('click',function(e){
+	$addAutoUrl.on('click',function(e){
 		var item = {};
 		var selectItem = $ssnpanel.selectedRows()[0];
 		var uid =Math.random().toString().replace(/0\.0*/,'');
@@ -209,15 +262,15 @@ define(function(require, exports, module) {
 		item.uid = uid;
 		$autopanel.addRow(item);
 	});
-	saveAutoUrl.on('click',function(e){
+	$saveAutoUrl.on('click',function(e){
 		var uid =$('#auto-cur-uid').val();
 		var item =findNormalSetting(uid);
-		item.request=autoRequest.val();
-		item.response=autoRespond.val();
+		item.request=$autoRequest.val();
+		item.response=$autoRespond.val();
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.updateRow(item,$curTr);
 	});
-	deleteAutoUrl.on('click',function(e){
+	$deleteAutoUrl.on('click',function(e){
 		var uid = $('#auto-cur-uid').val();
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.removeRow([$curTr.index()]);
@@ -250,11 +303,57 @@ define(function(require, exports, module) {
 		collapscrt();
 	});
 	$('.auto-respond-list').on('click','a',function(e){
-		var oprate = $(e.target).attr('oprate');
+		var $a =$(e.target);
+		var oprate = $a.attr('oprate');
 		if(oprate === 'create'){
 			extendcrt(500);
+		}else if(oprate === 'find'){
+			File.OpenDialog("Select a response file",'','所有文件|*.*',0,function(msg){
+				if(msg.Result&&msg.Result.length){
+					$autoRespond.val(msg.Result[0]);
+				}
+			});
+		}else{
+			$autoRespond.val($a.html());
 		}
 	});
+
+	var pathSplitRegex = /(.+\\)(.*)/;
+	var pathEndRegex = /(.+?)(\\+)$/;
+	var correctPath =function(path){
+		if(!path)return path;
+		if(!pathEndRegex.test(path)){
+			return path+'\\';
+		}else{
+			return path.replace(/(.+?)(\\+)$/,'$1\\');
+		}
+	};
+	$autoRespond.typeahead({
+		items : 30,
+		source: function(query, process) {
+			var corPath = correctPath(query);
+			Directory.Exists(corPath,function(msg){
+				if(msg.Result){
+					Directory.GetFileFolders(corPath,function(member){
+						process(member.Result||[]);
+					});
+				}else{
+					var m =query.match(pathSplitRegex);
+					if(m&&m.length===3&&m[2]){
+						var path =m[1];
+						var search =m[2]+'*';
+						Directory.Exists(path,function(exists){
+							if(exists.Result){
+								Directory.GetFileFoldersSearch(path,search,function(member){
+									process(member.Result||[]);
+								});
+							}
+						});
+					}
+				}
+			});
+		}
+    });
 	
 
 	//ADVANCED

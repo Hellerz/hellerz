@@ -571,11 +571,15 @@
                 if(event.isPropagationStopped()){
                     return;
                 }
-                if(!$tr.hasClass('selected')){
+                var hasMoreSelected = that.selectedRows().length > 1;
+                if(hasMoreSelected&&(opts.onlyCtrlSelect&&!e.ctrlKey)){
+                    that.select($tr,false);
+                }else if(!$tr.hasClass('selected')){
                     that.select($tr,!opts.onlyCtrlSelect||e.ctrlKey);
                 }else if(opts.canSimpleUnselect||(!opts.onlyCtrlSelect||e.ctrlKey)){
                     that.deselect($tr,!opts.onlyCtrlSelect||e.ctrlKey);
                 }
+                that.$body.triggerHandler('cellAfterSelected',  [$.data($this.parent()[0], 'item'), $this.parent().index(), $this.index()]);
             });
 
             $body.on('click','tr > td .mmg-check',function(e){

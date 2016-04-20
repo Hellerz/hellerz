@@ -280,7 +280,7 @@ iframe{
 }
 
 .mmGrid .mmg-bodyWrapper .mmg-body tr.selected td {
-    background: #333;
+    background: #5bc0de;
     color: white;
 }
 
@@ -484,4 +484,21 @@ iframe{
   bottom: 30px;
   position: absolute;
   right: 0px;
+}
+
+.disabled-overview{
+  z-index: 50;
+  background-color: rgba(51, 51, 51, 0.15);
+  display: none;
+}
+.disabled .disabled-overview{
+  display: block;
+}
+.disabled .btn{
+  background-color: #999999;
+  background-image: linear-gradient(to bottom, #999999 0%, #999999 100%);
+  border-color: #999999;
+}
+.auto-url-map.dropup .dropdown-menu{
+  top:auto!important;
 }
