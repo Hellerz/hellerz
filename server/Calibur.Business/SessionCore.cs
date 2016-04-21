@@ -117,12 +117,14 @@ namespace Calibur.Business
         public static SessionHandlerResponse SessionHandler(SessionHandlerRequest request)
         {
             var socket = request.Head.Socket.ConnectionInfo.Id;
-            var id = request.EventName + "_" + socket;
-            if (request.EventType == EventType.Add && !FiddlerHelper.EventHandlers.ContainsKey(id))
+            var name = request.EventName.ToString();
+            var id = name + "_" + socket;
+            var hasHandlerEvent = FiddlerHelper.EventHandlers.Keys.ToList().Exists(key => key.StartsWith(name));
+            if (request.EventType == EventType.Add && !hasHandlerEvent)
             {
                 SessionStateHandler handler = session =>
                 {
-                    SendSessionStateHandler(request.EventName.ToString(), request.Head.Socket, session);
+                    SendSessionStateHandler(name, request.Head.Socket, session);
                 };
                 switch (request.EventName)
                 {

@@ -117,7 +117,15 @@
             </ul> 
           </nav> 
           <div class="tab-content">
+
             <div id="auto-nor" class="tab-pane fade in rest-body">
+              <div class="auto-indicate"></div>
+              <div class="input-group">
+                <button type="button" id="addRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Add Rule</button>
+                <button type="button" id="importRule" title="Add" class="btn btn-xs btn-info margin10-x" tabIndex="-1">Import Rules</button>
+                <button type="button" id="exportRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Export Rules</button>
+                 <div ></div>
+              </div>
               <div class="rest-body auto-grid-wrap">
                 <table id="auto-grid" class="mmg"></table> 
               </div>
@@ -171,9 +179,9 @@
                   </div>
                 </div>
                 <div class="input-group input-group-sm pull-right">
-                  <button type="button" id="addAutoUrl" title="Add" class="btn btn-sm btn-info margin10-x" tabIndex="-1">Add</button>
-                  <button type="button" id="saveAutoUrl" title="Save" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Save</button>
-                  <button type="button" id="deleteAutoUrl" title="Delete" class="btn btn-sm btn-danger margin10-x" tabIndex="-1">Delete</button>
+                  
+                  <button type="button" id="saveRule" title="Save" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Save</button>
+                  <button type="button" id="deleteRule" title="Delete" class="btn btn-sm btn-danger margin10-x" tabIndex="-1">Delete</button>
                 </div>
                 <div class="rest-body disabled-overview"></div>
               </div>
@@ -188,6 +196,7 @@
               </div>
             </div>
             <div id ="auto-adv" class="tab-pane fade in rest-body">
+              <div class="auto-indicate"></div>
               <div class="container-fluid full-y overflow-y col-md-4">   
                   <ul id="autoResponserTree" class="ztree "></ul>
               </div> 

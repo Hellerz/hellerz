@@ -185,3 +185,7 @@ C:\GIT\github\hellerz\server\Calibur\obj\Debug\DashBord.baml
 C:\GIT\github\hellerz\server\Calibur\obj\Debug\Calibur.g.resources
 C:\GIT\github\hellerz\server\Calibur\obj\Debug\Calibur.Properties.Resources.resources
 C:\GIT\github\hellerz\server\Calibur\obj\Debug\Calibur.csproj.GenerateResource.Cache
+D:\git\Hellerz\Hellerz\server\Calibur\bin\Debug\Calibur.exe.manifest
+D:\git\Hellerz\Hellerz\server\Calibur\bin\Debug\Calibur.application
+D:\git\Hellerz\Hellerz\server\Calibur\obj\Debug\Calibur.exe.manifest
+D:\git\Hellerz\Hellerz\server\Calibur\obj\Debug\Calibur.application

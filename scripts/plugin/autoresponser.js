@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
-	var ssnstatus = require('sessionpanel').Status;
+	var pausessn = require('sessionpanel').pausessn;
 	var File = require('file');
 	var Directory = require('directory');
 
@@ -12,7 +12,36 @@ define(function(require, exports, module) {
 	require("ztreeexcheck");
 	require("ztreeexedit");
 
-	
+	var $autoResponder = $('#autoResponder');
+	var $addRule = $('#addRule');
+	var $importRule = $('#importRule');
+	var $exportRule = $('#exportRule');
+
+	var $saveRule = $('#saveRule');
+	var $deleteRule = $('#deleteRule');
+
+	var $savecrt = $('#savecrt');
+	var $cancelcrt = $('#cancelcrt');
+
+	var $autoRequest = $('#auto-request');
+	var $autoRespond = $('#auto-respond');
+
+	var $autonor = $('#auto-nor');
+	var $autowrap = $autonor.find('.auto-grid-wrap');
+	var $automap =  $autonor.find('.auto-url-map');
+	var $autocrt =  $autonor.find('.auto-file-crt');
+
+	var $crteditor =  $('#crteditor');
+	var $autoIndicate = $('.auto-indicate');
+	var crteditor = $.CreateEditor($crteditor);
+	var ispause = false;
+	pausessn.on('switch',function(e,status){
+		ispause=status;
+		$autoResponder.toggleClass('unpausessn',!status);
+	});
+	$autoIndicate.on('click',function(){
+		pausessn.trigger('click');
+	});
 	var autoAction=function(scriptName,context){
 		var setting =zTree.getNodes();
 		var resper =  setting[0];
@@ -66,6 +95,7 @@ define(function(require, exports, module) {
 		}
 		return false;
 	};
+
 	var autoRedirect = function(context){
 		var setting =$autopanel.rows()
 		  , session = context.session
@@ -75,45 +105,47 @@ define(function(require, exports, module) {
 		  , match
 		  , reqmatch
 		  , resmatch
-		if(ssnstatus.IsPauseSession){
-			if(setting.length>0){
-				for (; index < len; index++) {
-					cursetting=setting[index];
-					if(cursetting.checked&&cursetting.request&&cursetting.response){
-						reqmatch = aynreq(cursetting.request);
-						if(isMatchRequest(session.FullUrl,reqmatch)){
-							resmatch = aynres(cursetting.response);
-							if(reqmatch.option === 'regex'){
-								reqmatch.text = reqmatch.text.replace(new RegExp(reqmatch.option,'i'),resmatch.text);
-							}
-							if(resmatch.option.indexOf('http')>-1){//web
-								session.SetFullUrl(reqmatch.text);
-							}else if(resmatch.option.indexOf(':\\')>-1){//file
-								session.SetBypassGateway(true)
-								.UtilCreateResponseAndBypassServer()
-								.LoadResponseFromFile(resmatch.text)
-								.UtilChunkResponse(1)
-								.SetResponseHeaders(JSON.stringify({
-								    "Access-Control-Allow-Headers": "accept, content-type, cookieorigin",
-								    "Access-Control-Allow-Origin":session.RequestHeaders.Origin || "*",
-								    "Access-Control-Allow-Credentials": "true",
-								    "Access-Control-Allow-Methods":"POST",
-								}));
-							}else if(resmatch.option === '*'){//function
+		if(setting.length>0){
+			for (; index < len; index++) {
+				cursetting=setting[index];
+				if(cursetting.checked&&cursetting.request&&cursetting.response){
+					reqmatch = aynreq(cursetting.request);
+					if(isMatchRequest(session.FullUrl,reqmatch)){
+						resmatch = aynres(cursetting.response);
+						if(reqmatch.option === 'regex'){
+							reqmatch.text = session.FullUrl.replace(new RegExp(reqmatch.text,'i'),resmatch.text);
+						}
+						if(resmatch.option.indexOf('http')>-1){//web
+							session.SetfullUrl(reqmatch.text);
+						}else if(resmatch.option.indexOf(':\\')>-1){//file
+							session.SetBypassGateway(true)
+							.UtilCreateResponseAndBypassServer()
+							.LoadResponseFromFile(resmatch.text)
+							.UtilChunkResponse(1)
+							.SetResponseHeaders(JSON.stringify({
+							    "Access-Control-Allow-Headers": "accept, content-type, cookieorigin",
+							    "Access-Control-Allow-Origin":session.RequestHeaders.Origin || "*",
+							    "Access-Control-Allow-Credentials": "true",
+							    "Access-Control-Allow-Methods":"POST",
+							}));
+						}else if(resmatch.option === '*'){//function
 
-							}
 						}
 					}
-				};
-			}
+				}
+			};
 		}
 	};
 	Fiddler.addRequest(function(e, args) {
-		autoRedirect(args);
-		autoAction('requestScript',args);
+		if(ispause){
+			autoRedirect(args);
+			autoAction('requestScript',args);
+		}
 	});
 	Fiddler.addResponse(function(e, args) {
-		autoAction('responseScript',args);
+		if(ispause){
+			autoAction('responseScript',args);
+		}
 	});
 	
 
@@ -139,28 +171,12 @@ define(function(require, exports, module) {
 					$autoRespond.val(path);
 					$.statusbar('file '+path+' saved successfully.','success');
 					collapscrt();
-					$saveAutoUrl.trigger('click');
+					$saveRule.trigger('click');
 				});
 			}
 		});
 	};
-	var $addAutoUrl = $('#addAutoUrl');
-	var $saveAutoUrl = $('#saveAutoUrl');
-	var $deleteAutoUrl = $('#deleteAutoUrl');
-
-	var $savecrt = $('#savecrt');
-	var $cancelcrt = $('#cancelcrt');
-
-	var $autoRequest = $('#auto-request');
-	var $autoRespond = $('#auto-respond');
-
-	var $autonor = $('#auto-nor');
-	var $autowrap = $autonor.find('.auto-grid-wrap');
-	var $automap =  $autonor.find('.auto-url-map');
-	var $autocrt =  $autonor.find('.auto-file-crt');
-
-	var $crteditor =  $('#crteditor');
-	var crteditor = $.CreateEditor($crteditor);
+	
 	crteditor.commands.addCommand({
 	    name: 'Cancel',
 	    bindKey: {win: 'ESC',  mac: 'ESC'},
@@ -249,7 +265,7 @@ define(function(require, exports, module) {
 		$autoRequest.val('');
 		$autoRespond.val('');
 	}).load();
-	$addAutoUrl.on('click',function(e){
+	$addRule.on('click',function(e){
 		var item = {};
 		var selectItem = $ssnpanel.selectedRows()[0];
 		var uid =Math.random().toString().replace(/0\.0*/,'');
@@ -262,7 +278,7 @@ define(function(require, exports, module) {
 		item.uid = uid;
 		$autopanel.addRow(item);
 	});
-	$saveAutoUrl.on('click',function(e){
+	$saveRule.on('click',function(e){
 		var uid =$('#auto-cur-uid').val();
 		var item =findNormalSetting(uid);
 		item.request=$autoRequest.val();
@@ -270,7 +286,7 @@ define(function(require, exports, module) {
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.updateRow(item,$curTr);
 	});
-	$deleteAutoUrl.on('click',function(e){
+	$deleteRule.on('click',function(e){
 		var uid = $('#auto-cur-uid').val();
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.removeRow([$curTr.index()]);

@@ -465,6 +465,7 @@ iframe{
 #auto-nor .auto-grid-wrap{
   bottom: 140px;
   z-index: 10;
+  top:50px;
 }
 #auto-nor .auto-url-map{
   top: 100%;
@@ -501,4 +502,13 @@ iframe{
 }
 .auto-url-map.dropup .dropdown-menu{
   top:auto!important;
+}
+
+.unpausessn .auto-indicate{
+  background-color: #999999;
+}
+.auto-indicate{
+  height: 15px;
+  background: #007ACC;
+  margin-bottom: 7px;
 }
