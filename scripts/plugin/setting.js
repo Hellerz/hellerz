@@ -47,10 +47,11 @@ define(function(require, exports, module) {
 	   		$.statusbar("The format('"+$portno.val()+"') of Proxy port is invalid.",'danger');
 	   	}
 	});
-	Fiddler.GetPort&&Fiddler.GetPort(function(msg){
-		$portno.val(msg.Result);
-	});
 
-
-	
+   var timer = window.setInterval(function(){
+		Fiddler.GetPort&&Fiddler.GetPort(function(msg){
+			window.clearInterval(timer);
+    		$portno.val(msg.Result);
+    	});
+	},100);
 });

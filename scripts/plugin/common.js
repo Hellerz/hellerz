@@ -22,6 +22,7 @@ define(function(require, exports, module) {
 		return "text";
 	};
 
+
 	$.showEditor = function(editor,content,mode){
 		editor.getSession().setMode("ace/mode/" + mode);
 		editor.setValue(content);

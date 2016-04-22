@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("avalondock.mvvmtestapp.csproj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("monster.ico")]
 
 

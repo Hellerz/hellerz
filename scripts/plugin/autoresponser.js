@@ -256,6 +256,7 @@ define(function(require, exports, module) {
 		};
 		autoNormalSetting.push(item);
 		setAutoNormalSetting();
+		$automap.toggleClass('disabled',$autopanel.selectedRows().length==0);
 	}).on('rowUpdated', function(e, oldItem, newItem, index, $tr) {
 		autoNormalSetting = $autopanel.rows();
 		setAutoNormalSetting();
