@@ -2,4 +2,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="D:\git\Hellerz\Calibur\packages\AvalonDock\AvalonDock.Themes.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\git\Hellerz\Calibur\packages\FiddlerCoreAPI\DotNet4\FiddlerCore4.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\git\Hellerz\Hellerz\server\packages\Xceed.Wpf.AvalonDock.2.4.14475.10340\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2013.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
