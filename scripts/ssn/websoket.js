@@ -27,6 +27,9 @@ define(function() {
       this.__readyStateCallbackCache.push(message);
     }
   }
+  WebSocket.prototype.addMessageEvent = function(id,callback) {
+    this.__shuttleCache[id] = callback;
+  };
   WebSocket.prototype.addEvent = function(eventName, callback) {
     if (!this.__shuttleCache[eventName]) {
       this.__shuttleCache[eventName] = [];

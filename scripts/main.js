@@ -95,13 +95,6 @@ define(function(require, exports, module) {
 		require('autoresponser');
 		require('setting');
 		
-		// File.OpenDialog("SB",'D:\\Demos1','文本文件|*.*|C#文件|*.cs|所有文件|*.*',2,function(msg){
-		// 	console.dir(msg);
-
-		// });
-		// Directory.OpenDialog("SB1",'Desktop','D:\\Demos1',function(msg1){
-		// 	console.dir(msg1);
-		// });
 
 		var logo = $('#logo');
     	var timer = window.setInterval(function(){
@@ -125,7 +118,24 @@ define(function(require, exports, module) {
         		}
         	});
 		});
-		
+
+       
+
+		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(msg){
+			$.statusbar('The system was changed.','warning');
+			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning',function(e){
+    			Fiddler.ReStart().GetPort(function(port) {
+					$.statusbar("Proxy has started. Port:"+port.Result,'info');
+					logo.removeClass('off');
+				});
+			});
+		});
+		var timer = window.setInterval(function(){
+    		Fiddler.IsStarted&&Fiddler.IsStarted(function(msg){
+    			window.clearInterval(timer);
+	    		logo.toggleClass('off',!msg.Result);
+	    	});
+    	},100);
 		Calibur.webSocket.onServerError=function(evt){
         	console.dir(JSON.parse(evt.data));
         };

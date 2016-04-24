@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Calibur.Model.IMessage;
 using CEF.Lib;
 using CEF.Lib.Exceptions;
 using CEF.Lib.Helper;
-using CEF.Lib.JavascriptObject;
-using Fleck;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace Calibur.Service
 {
     public class WebSocketEntry
     {
-        
-
         public static void Start()
         {
             WebSocketHelper.OnMessage += (msg, socket) =>

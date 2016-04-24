@@ -120,7 +120,7 @@ namespace CEF.Lib.Helper
 
         public static void ExecuteScriptAsync(string pluginKey, string message)
         {
-            WebSocketHelper.SendMessage( pluginKey,  message);
+           // WebSocketHelper.SendMessage( pluginKey,  message);
         }
     }
 }

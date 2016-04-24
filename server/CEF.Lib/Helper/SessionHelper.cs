@@ -19,6 +19,12 @@ namespace CEF.Lib.Helper
             handler(Sessions, data);
             Monitor.Exit(Sessions);
         }
+        public static void OpSession<T>(Action<Dictionary<int, Session>> handler)
+        {
+            Monitor.Enter(Sessions);
+            handler(Sessions);
+            Monitor.Exit(Sessions);
+        }
         public static void OpRequestHeaderss<T>(Action<Dictionary<string, HTTPRequestHeaders>, T> handler, T data)
         {
             Monitor.Enter(JRequestHeaderss);

@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="InstanceCore.cs" />
     <Compile Include="JSchemaCore.cs" />
-    <Compile Include="RegisterSocketCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionCore.cs" />
   </ItemGroup>

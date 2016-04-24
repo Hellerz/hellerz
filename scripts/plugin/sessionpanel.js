@@ -166,6 +166,7 @@ define(function(require, exports, module) {
 				$.each(klasses,function(i,itm){
 					$tbody.find('.'+ itm.replace('wrapper','filter')).remove(); 
 				});
+				Fiddler.ClearAllSession();
 			}
 		});
 	});

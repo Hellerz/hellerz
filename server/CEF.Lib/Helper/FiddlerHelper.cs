@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Calibur.Model;
+using Calibur.Model.IMessage;
 using CEF.Lib.Attributes;
 using Fiddler;
 using Newtonsoft.Json;
@@ -39,6 +41,12 @@ namespace CEF.Lib.Helper
             };
         }
 
+        [JSchema]
+        public static void ClearAllSession()
+        {
+            SessionHelper.OpSession(mapping => mapping.Clear());
+        }
+
         private static bool _isPauseSession = Common.ConvertToStruct(StorageHelper.AchiveValue("isautoresponser", "false"), false);
 
         private static bool _isHttps = Common.ConvertToStruct(StorageHelper.AchiveValue("ishttps", "true"), true);
@@ -59,6 +67,16 @@ namespace CEF.Lib.Helper
         {
             StorageHelper.SetValue("isautoresponser", isPauseSession.ToString().ToLower());
             _isPauseSession = isPauseSession;
+        }
+
+        [JSchema]
+        public static bool IsAttached()
+        {
+            if (FiddlerApplication.oProxy != null)
+            {
+                return FiddlerApplication.oProxy.IsAttached;
+            }
+            return false;
         }
 
         [JSchema]
@@ -103,7 +121,7 @@ namespace CEF.Lib.Helper
             Stop();
             Start();
         }
-         [JSchema]
+        [JSchema]
         public static void Start()
         {
             var flag = FiddlerCoreStartupFlags.Default;
@@ -112,6 +130,11 @@ namespace CEF.Lib.Helper
                 flag = flag & ~FiddlerCoreStartupFlags.DecryptSSL;
             }
             FiddlerApplication.Startup(_port, flag);
+            if (FiddlerApplication.oProxy != null)
+            {
+                FiddlerApplication.oProxy.DetachedUnexpectedly += NotifyProxyChanged;
+            }
+
         }
 
          [JSchema]
@@ -204,17 +227,33 @@ namespace CEF.Lib.Helper
         [JSchema]
         public static void Stop()
         {
+            if (FiddlerApplication.oProxy != null)
+            {
+                FiddlerApplication.oProxy.DetachedUnexpectedly -= NotifyProxyChanged;
+            }
             if (FiddlerApplication.IsStarted())
             {
                 FiddlerApplication.Shutdown();
             }
             Thread.Sleep(500);
         }
-         [JSchema]
+        [JSchema]
         public static void RemoveFiddlerCertificates()
         {
             CertMaker.removeFiddlerGeneratedCerts();
         }
+
+
+        private static void NotifyProxyChanged(object sender, EventArgs e)
+        {
+            var message = new MessageInfo
+            {
+                ID = "DetachedUnexpectedly",
+                Type = MessageMode.Event
+            };
+            WebSocketHelper.Broadcast(JsonConvert.SerializeObject(message, Common.TimeFormat));
+        }
+
 
         #region ResetCertificate
          [JSchema]

@@ -45,19 +45,9 @@ namespace Calibur.Service
             return response;
         }
 
-        public static RegisterSocketResponse RegisterSocket(RegisterSocketRequest request)
-        {
-            return RegisterSocketCore.RegisterSocket(request);
-        }
-
         public static InstanceResponse Instance(InstanceRequest request)
         {
             return InstanceCore.Instance(request);
-        }
-
-        public static SessionSearchResponse SessionSearch(SessionSearchRequest request)
-        {
-            return SessionCore.SessionSearch(request);
         }
 
         public static SessionHandlerResponse SessionHandler(SessionHandlerRequest request)

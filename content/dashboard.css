@@ -520,3 +520,9 @@ iframe{
   background: #007ACC;
   margin-bottom: 7px;
 }
+
+.notifybar{
+  text-align:center;
+  padding-top: 5px;
+  cursor: pointer;
+}

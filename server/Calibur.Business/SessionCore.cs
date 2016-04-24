@@ -16,36 +16,6 @@ namespace Calibur.Business
 {
     public class SessionCore
     {
-        public static SessionSearchResponse SessionSearch(SessionSearchRequest request)
-        {
-            if (request.EndTime == default(DateTime))
-            {
-                request.EndTime = DateTime.MaxValue;
-            }
-            if (request.StartTime == default(DateTime))
-            {
-                request.StartTime = DateTime.Now;
-            }
-            var response = new SessionSearchResponse
-            {
-                SessionList = new  List<SessionInfo>()
-            };
-            SessionHelper.OpSession((sessionMap, req) =>
-            {
-                sessionMap.ForEachOfUnNone(sessionPair =>
-                {
-                    var isession = sessionPair.Value;
-                    var time = isession.Timers.ClientBeginRequest;
-                    if (time > req.StartTime && time < req.EndTime)
-                    {
-                        response.SessionList.Add(GenerateSessionInfo(isession));
-                    }
-                });
-            },request);
-
-            return response;
-        }
-
         private static SessionInfo GenerateSessionInfo(Session isession)
         {
             var session = new JSession(isession);
@@ -116,16 +86,14 @@ namespace Calibur.Business
 
         public static SessionHandlerResponse SessionHandler(SessionHandlerRequest request)
         {
-            var socket = request.Head.Socket.ConnectionInfo.Id;
+            var socket = request.Head.Socket;
+            var socketid = socket.ConnectionInfo.Id;
             var name = request.EventName.ToString();
-            var id = name + "_" + socket;
+            var id = name + "_" + socketid;
             var hasHandlerEvent = FiddlerHelper.EventHandlers.Keys.ToList().Exists(key => key.StartsWith(name));
             if (request.EventType == EventType.Add && !hasHandlerEvent)
             {
-                SessionStateHandler handler = session =>
-                {
-                    SendSessionStateHandler(name, request.Head.Socket, session);
-                };
+                SessionStateHandler handler = session => SendSessionStateHandler(name, socket, session);
                 switch (request.EventName)
                 {
                     case EventName.BeforeRequest:

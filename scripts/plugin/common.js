@@ -36,6 +36,23 @@ define(function(require, exports, module) {
 			.addClass('alert-'+mode)
 			.html(content);
 	};
+
+	$.notifybar = function(content,mode,callback){
+		if($.isFunction(mode)){
+			callback = mode;
+			mode = mode||'success';
+		}
+		$('<div>')
+		.addClass('notifybar navbar navbar-fixed-top alert-'+mode)
+		.html(content)
+		.on('click',function(e){
+			var result = callback(e);
+			if(result === true||result===undefined){
+				$(e.target).remove();
+			}
+		}).appendTo($('body'));
+	};
+
 	$.CreateEditor = function($dom){
 		var editor = new Editor(new Renderer($dom.get(0)));
 		editor.getSession().setUndoManager(new UndoManager());

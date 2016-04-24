@@ -14,37 +14,21 @@ namespace CEF.Lib.Helper
         {
             get { return 8181; }
         }
-        private static readonly Dictionary<string, IWebSocketConnection> AllSockets = new Dictionary<string, IWebSocketConnection>();
-        private static readonly Dictionary<IWebSocketConnection, string> AllSocketIDs = new Dictionary<IWebSocketConnection, string>();
+        private static readonly Dictionary<Guid, IWebSocketConnection> AllSockets = new Dictionary<Guid, IWebSocketConnection>();
 
-        public static void OpSocket<T>(Action<Dictionary<string, IWebSocketConnection>, T> handler, T data)
+        public static void OpSocket<T>(Action<Dictionary<Guid, IWebSocketConnection>, T> handler, T data)
         {
             Monitor.Enter(AllSockets);
             handler(AllSockets, data);
             Monitor.Exit(AllSockets);
         }
 
-        public static void OpSocket(Action<Dictionary<string, IWebSocketConnection>> handler)
+        public static void OpSocket(Action<Dictionary<Guid, IWebSocketConnection>> handler)
         {
             Monitor.Enter(AllSockets);
             handler(AllSockets);
             Monitor.Exit(AllSockets);
         }
-
-        public static void OpSocketId<T>(Action<Dictionary<IWebSocketConnection, string>, T> handler, T data)
-        {
-            Monitor.Enter(AllSockets);
-            handler(AllSocketIDs, data);
-            Monitor.Exit(AllSockets);
-        }
-
-        public static void OpSocketId(Action<Dictionary<IWebSocketConnection, string>> handler)
-        {
-            Monitor.Enter(AllSockets);
-            handler(AllSocketIDs);
-            Monitor.Exit(AllSockets);
-        }
-
 
         private static WebSocketServer _server;
         static WebSocketHelper()
@@ -59,18 +43,11 @@ namespace CEF.Lib.Helper
             {
                 socket.OnOpen = () =>
                 {
-                    //AllSockets.Add(socket);
+                    OpSocket((map, skt) => map.Add(skt.ConnectionInfo.Id, skt), socket);
                 };
                 socket.OnClose = () =>
                 {
-                    OpSocket(sockets =>
-                    {
-                        var cur = sockets.FirstOrDefault(sock => sock.Value == socket);
-                        if (!string.IsNullOrWhiteSpace(cur.Key) && sockets.ContainsKey(cur.Key))
-                        {
-                            sockets.Remove(cur.Key);
-                        }
-                    });
+                    OpSocket((map, skt) => map.Remove(skt.ConnectionInfo.Id), socket);
                 };
                 socket.OnMessage = message =>
                 {
@@ -83,7 +60,7 @@ namespace CEF.Lib.Helper
             });
         }
 
-        public static void SendMessage(string socketId,string message)
+        public static void SendMessage(Guid socketId,string message)
         {
             OpSocket(sockets =>
             {
