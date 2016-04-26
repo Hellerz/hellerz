@@ -37,12 +37,20 @@ define(function(require, exports, module) {
 			.html(content);
 	};
 
-	$.notifybar = function(content,mode,callback){
+	$.notifybar = function(content,mode,indecator,callback){
 		if($.isFunction(mode)){
 			callback = mode;
-			mode = mode||'success';
+			indecator = Math.random().toString();
+			
+		}else if($.isFunction(indecator)){
+			callback = indecator;
+			indecator = Math.random().toString();
 		}
-		$('<div>')
+		if($('#'+indecator).length){
+			return ;
+		}
+		mode = mode||'success';
+		$('<div>').attr('id',indecator)
 		.addClass('notifybar navbar navbar-fixed-top alert-'+mode)
 		.html(content)
 		.on('click',function(e){

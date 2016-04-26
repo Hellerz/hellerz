@@ -175,7 +175,14 @@ define(["config",'websoket'], function(config,WebSocketEx) {
                 if(Calibur.IsType(finals.met,"Function")){
                   finals.met = finals.met(msg);
                 }
-                return invokeMethod(finals);
+                if(Calibur.IsType(finals.stopmet,"Function")){
+                  finals.stopmet = finals.stopmet(msg);
+                }
+                if(!finals.stopmet){
+                  return invokeMethod(finals);
+                }else{
+                  return;
+                }
               });
               return this;
             };

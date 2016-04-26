@@ -123,7 +123,7 @@ define(function(require, exports, module) {
 
 		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(msg){
 			$.statusbar('The system was changed.','warning');
-			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning',function(e){
+			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning','thesystemwaschanged',function(e){
     			Fiddler.ReStart().GetPort(function(port) {
 					$.statusbar("Proxy has started. Port:"+port.Result,'info');
 					logo.removeClass('off');
