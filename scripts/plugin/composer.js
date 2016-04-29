@@ -70,6 +70,7 @@ define(function(require, exports, module) {
 
 	var runComposer = function () {
 		if($('#composerraw').hasClass('active')){
+			cmpsr_resraw.setValue('');
     		Fiddler.InjectRaw(cmpsr_reqraw.getValue(),function(msg){
     			raw_guid = msg.Result;
     		});
@@ -79,6 +80,7 @@ define(function(require, exports, module) {
     		var contenttype = $cmpsr_type.selectpicker('val');
     		var header = cmpsr_reqhd.getValue();
     		var body = cmpsr_reqbd.getValue();
+    		cmpsr_resbd.setValue('');
     		Fiddler.Inject(url,method,contenttype,header,body,function(msg){
     			setParsed({
     				url:url,

@@ -59,5 +59,15 @@ namespace Calibur.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon calibur {
+            get {
+                object obj = ResourceManager.GetObject("calibur", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

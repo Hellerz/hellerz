@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -201,6 +203,22 @@ namespace CEF.Lib.Helper
              }
              
          }
+
+        [JSchema]
+        public static string AcheiveHeader(string url)
+        {
+            var uri = new Uri(url);
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Method = "HEAD";
+            using (var response = request.GetResponse() as HttpWebResponse)
+            {
+                if (response != null)
+                {
+                    return JsonConvert.SerializeObject(response.Headers);
+                }
+            }
+            return string.Empty;
+        }
 
         [JSchema]
         public static bool IsStarted()

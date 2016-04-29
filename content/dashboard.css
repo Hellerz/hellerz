@@ -225,10 +225,6 @@ iframe{
     height: 8.333333333333332%;
   }
 
-.dashboard .sidebar {
-  overflow-y: hidden;
-}
-
 .overflow{
   overflow:auto;
 }
@@ -486,6 +482,9 @@ iframe{
   top: 100%;
   margin-top: -500px;
 }
+#auto-adv{
+  bottom: 22px;
+}
 .auto-file-crt-container{
   bottom: 50px;
 }
@@ -525,4 +524,16 @@ iframe{
   text-align:center;
   padding-top: 5px;
   cursor: pointer;
+}
+
+.badge-xs{
+    background-color: red;
+    color: red;
+    padding: 0;
+    position: absolute;
+    height: 10px;
+    right: 4px;
+}
+#updateserver{
+  display: none;
 }

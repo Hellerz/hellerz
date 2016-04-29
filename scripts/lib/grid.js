@@ -1362,6 +1362,7 @@
         }
         //更新行内容，两个参数都必填
         , updateRow: function(item, selector){
+            if(!selector)return;
             var $tr,index;
             
             var opts = this.opts;

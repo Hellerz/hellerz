@@ -18,7 +18,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Windows;
 using Calibur.Service;
 using CEF.Lib.Helper;
@@ -32,7 +35,32 @@ namespace Calibur
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+
+            #region 判断是否重复运行
+            bool createdNew;
+            var mutex = new Mutex(false, "Calibur", out createdNew);
+
+            if (!createdNew)
+            {
+                Process currentProcess = Process.GetCurrentProcess();
+                foreach (Process process in Process.GetProcessesByName(currentProcess.ProcessName))
+                {
+                    if ((process.Id != currentProcess.Id) &&
+                        (Assembly.GetExecutingAssembly().Location == currentProcess.MainModule.FileName))
+                    {
+                        if (process != null)
+                        {
+                            MessageBox.Show("Program is running.");
+                            System.Windows.Forms.Application.Exit();
+                            return;
+                        }
+                    }
+                }
+            } 
+            #endregion
+
             base.OnStartup(e);
+            SystemHelper.InitIcon(this, Calibur.Properties.Resources.calibur);
             FiddlerHelper.Start();
             WebSocketHelper.Start();
             WebSocketEntry.Start();
@@ -41,6 +69,7 @@ namespace Calibur
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
+            SystemHelper.RemoveIcon();
             FiddlerHelper.Stop();
             WebSocketHelper.Stop();
         }

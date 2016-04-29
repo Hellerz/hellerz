@@ -192,7 +192,7 @@ define(["config",'websoket'], function(config,WebSocketEx) {
       callback && callback(method);
     });
   };
-
+  
   Calibur.webSocket = new WebSocketEx(config.websocketUrl);
 
   return Calibur;

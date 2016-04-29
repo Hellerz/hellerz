@@ -68,6 +68,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -87,6 +88,7 @@
     <Compile Include="Helper\JStringFrtHelper.cs" />
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\StorageHelper.cs" />
+    <Compile Include="Helper\SystemHelper.cs" />
     <Compile Include="Helper\UtilsHelper.cs" />
     <Compile Include="Helper\WebSocketHelper.cs" />
     <Compile Include="Helper\InstanceHelper.cs" />

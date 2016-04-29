@@ -50,13 +50,13 @@ define(function(require, exports, module) {
 			return ;
 		}
 		mode = mode||'success';
-		$('<div>').attr('id',indecator)
+		var notibar = $('<div>').attr('id',indecator)
 		.addClass('notifybar navbar navbar-fixed-top alert-'+mode)
 		.html(content)
 		.on('click',function(e){
-			var result = callback(e);
+			var result = callback&&callback(e);
 			if(result === true||result===undefined){
-				$(e.target).remove();
+				notibar.remove();
 			}
 		}).appendTo($('body'));
 	};

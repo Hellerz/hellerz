@@ -1,6 +1,9 @@
 define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
+	var config = require("config");
+	var System = require("system");
+
 	require("bootstrap");
 	require("bootstrapswitch");
 	require('common');
@@ -25,7 +28,7 @@ define(function(require, exports, module) {
 		Fiddler.OpenCertManager();
 	});
 
-
+	$('#updateserverhref').attr('href', config.ServerPakage);
 	var $sethttps = $('#sethttps').bootstrapSwitch('size','small')
 	.on('switchChange.bootstrapSwitch', function (e, value) {
 		Fiddler.SetHttps(value).ReStart(function(){
@@ -47,6 +50,24 @@ define(function(require, exports, module) {
 	   		$.statusbar("The format('"+$portno.val()+"') of Proxy port is invalid.",'danger');
 	   	}
 	});
+
+	// var timerInject = window.setInterval(function(){
+	// 	Fiddler.Inject&&Fiddler.Inject(config.ServerPakage,'HEAD','','','',function(msg){
+	// 		window.clearInterval(timerInject);
+ //    		$portno.val(msg.Result);
+	// 	});
+	// },5000);
+
+	var timerInject = window.setInterval(function(){
+		System.CompareVersion&&System.CompareVersion(config.Version,function(msg){
+			window.clearInterval(timerInject);
+			if(msg.Result < 0){
+				$('#settingtab').html('.');		
+				$('#updateserver').show();
+			}
+		});
+	},100);
+
 
    var timer = window.setInterval(function(){
 		Fiddler.GetPort&&Fiddler.GetPort(function(msg){

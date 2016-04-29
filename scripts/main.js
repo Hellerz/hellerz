@@ -28,6 +28,8 @@ requirejs.config({
 		//file directory
 		file:'ssn/file',
 		directory:'ssn/directory',
+		system:'ssn/system',
+
 
 		common:'plugin/common',
 		autoresponser:'plugin/autoresponser',
@@ -79,7 +81,8 @@ define(function(require, exports, module) {
 
 	var $ = require("jquery")
 	  , Calibur = require("calibur")
-	  , Fiddler = require("fiddler");
+	  , Fiddler = require("fiddler")
+	  , config = require("config");
 
 	//load jQuery Plugin
 	require("bootstrap");
@@ -147,6 +150,15 @@ define(function(require, exports, module) {
 		});
 		Calibur.webSocket.addEventListener('error',function(e){	
 			if(e.target.readyState === 3){
+				$.notifybar('WebSocket connection to '+e.target.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'"  target="_blank">click here</a>.',
+					'danger',
+					'downloadclient',
+					function(e){
+						if($(e.target).is('a')){
+							return true;
+						}
+						return false;
+					});
 				$.statusbar('WebSocket connection to '+e.target.url+' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED','danger');
 				e.target.FailedConnected = true;
 			}
