@@ -116,7 +116,7 @@ define(function(require, exports, module) {
 							reqmatch.text = session.FullUrl.replace(new RegExp(reqmatch.text,'i'),resmatch.text);
 						}
 						if(resmatch.option.indexOf('http')>-1){//web
-							session.SetfullUrl(reqmatch.text);
+							session.SetfullUrl(resmatch.text);
 						}else if(resmatch.option.indexOf(':\\')>-1){//file
 							session.SetBypassGateway(true)
 							.UtilCreateResponseAndBypassServer()
