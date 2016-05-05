@@ -148,6 +148,7 @@ define(function(require, exports, module) {
 			if(!e.target.FailedConnected){
 				$.statusbar('WebSocket connection has closed.','warning');
 				logo.addClass('off');
+				window.open(' ','_self',' ');    
 				window.close();
 			}
 		});

@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Calibur.Model.IMessage;
+using CEF.Lib.Exceptions;
 using Fleck;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CEF.Lib.Helper
 {
@@ -51,7 +56,7 @@ namespace CEF.Lib.Helper
                 };
                 socket.OnMessage = message =>
                 {
-                    OnOnMessage(message,socket);
+                    OnMessage(message, socket);
                 };
                 socket.OnError = exception =>
                 {
@@ -76,7 +81,7 @@ namespace CEF.Lib.Helper
             AllSockets.Values.ForEachOfUnNone(socket => socket.Send(message));
         }
 
-        public static event Action<string,IWebSocketConnection> OnMessage;
+        public static event Action<string, IWebSocketConnection> OnMessageHandler;
 
         public static void Stop()
         {
@@ -87,10 +92,12 @@ namespace CEF.Lib.Helper
         }
 
 
-        private static void OnOnMessage(string message, IWebSocketConnection socket)
+        private static void OnMessage(string message, IWebSocketConnection socket)
         {
-            var handler = OnMessage;
+            var handler = OnMessageHandler;
             if (handler != null) handler(message, socket);
         }
+
+       
     }
 }

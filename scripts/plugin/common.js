@@ -37,6 +37,15 @@ define(function(require, exports, module) {
 			.html(content);
 	};
 
+	var popup = $('#popup');
+	$.showPopup = function(title,body,footer){
+		popup.find('.modal-title').html(title);
+		popup.find('.modal-body').html(body);
+		popup.find('.modal-footer').html(footer);
+		popup.modal();
+		return popup;
+	}
+
 	$.notifybar = function(content,mode,indecator,callback){
 		if($.isFunction(mode)){
 			callback = mode;

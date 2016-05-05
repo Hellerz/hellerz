@@ -2,6 +2,7 @@
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <StartArguments>del:53a74445-424a-4915-a570-cd2100aba901</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />

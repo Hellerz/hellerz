@@ -86,6 +86,7 @@
     <Compile Include="Helper\FiddlerHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\JStringFrtHelper.cs" />
+    <Compile Include="Helper\ProcessHelper.cs" />
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\StorageHelper.cs" />
     <Compile Include="Helper\SystemHelper.cs" />

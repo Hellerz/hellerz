@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CEF.Lib.Attributes;
 using Microsoft.Win32;
@@ -11,6 +15,32 @@ namespace CEF.Lib.Helper
 {
     public static class FileHelper
     {
+        [DllImport("User32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+
+        private static void SetForegroundDialog(CommonDialog dialog)
+        {
+            var intptrField = typeof(CommonDialog).GetField("_hwndOwnerWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (intptrField != null)
+            {
+                var intptr = intptrField.GetValue(dialog);
+                if (intptr is IntPtr && (IntPtr)intptr != IntPtr.Zero)
+                {
+                    SetForegroundWindow((IntPtr)intptr);
+                }
+            }
+        }
+
+        private static void DelayForegroundialog(CommonDialog dialog, int delay = 500)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(delay);
+                SetForegroundDialog(dialog);
+            });
+        }
+
         private static Encoding GetEncoding(string encode)
         {
             if (string.IsNullOrWhiteSpace(encode)) return Encoding.Default;
@@ -34,6 +64,42 @@ namespace CEF.Lib.Helper
             }
         }
 
+
+        [JSchema]
+        public static string HttpDownloadFile(string url, string path)
+        {
+            // 设置参数
+            var request = WebRequest.Create(url) as HttpWebRequest;
+            //发送请求并获取相应回应数据
+            var response = request.GetResponse() as HttpWebResponse;
+            //直到request.GetResponse()程序才开始向目标网页发送Post请求
+            using (var responseStream = response.GetResponseStream())
+            {
+                var filePath = Path.GetFullPath(path);
+                var directory = Path.GetDirectoryName(filePath);
+                //Path.GetDirectoryName
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                //创建本地文件写入流
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    byte[] bArr = new byte[1024];
+                    int size = responseStream.Read(bArr, 0, (int)bArr.Length);
+                    while (size > 0)
+                    {
+                        stream.Write(bArr, 0, size);
+                        size = responseStream.Read(bArr, 0, (int)bArr.Length);
+                    }
+                }
+                return filePath;
+            }
+            return null;
+        }
+
+
+
         [JSchema]
         public static List<string> OpenDialog(string title, string path, string filter, int filterIndex)
         {
@@ -52,6 +118,8 @@ namespace CEF.Lib.Helper
                 RestoreDirectory = true,
                 FilterIndex = filterIndex
             };
+
+            DelayForegroundialog(dialog);
             if (dialog.ShowDialog() == true)
             {
                 return dialog.FileNames.ToList();
@@ -73,6 +141,7 @@ namespace CEF.Lib.Helper
                 Filter = filter,
                 FilterIndex = filterIndex
             };
+            DelayForegroundialog(dialog);
             if (dialog.ShowDialog() == true)
             {
                 return dialog.FileNames.ToList();

@@ -28,8 +28,14 @@ define(function(require, exports, module) {
 		Fiddler.OpenCertManager();
 	});
 
-	$('#updateserverhref').attr('href', config.ServerPakage);
-	var $sethttps = $('#sethttps').bootstrapSwitch('size','small')
+
+	$('#updateserverhref').on('click', function(){
+		System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+	});
+
+
+	var $sethttps = $('#sethttps')
+	.bootstrapSwitch('size','small')
 	.on('switchChange.bootstrapSwitch', function (e, value) {
 		Fiddler.SetHttps(value).ReStart(function(){
 			$.statusbar("HTTPS proxy has "+(value?'open':'closed'),'info');
@@ -51,17 +57,33 @@ define(function(require, exports, module) {
 	   	}
 	});
 
-	// var timerInject = window.setInterval(function(){
-	// 	Fiddler.Inject&&Fiddler.Inject(config.ServerPakage,'HEAD','','','',function(msg){
-	// 		window.clearInterval(timerInject);
- //    		$portno.val(msg.Result);
-	// 	});
-	// },5000);
-
 	var timerInject = window.setInterval(function(){
-		System.CompareVersion&&System.CompareVersion(config.Version,function(msg){
+		var version = config.Version;
+		var newVersion = function(){
+			var $popup = $.showPopup('Update',
+				'A new version can be updated.',
+				'<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-success updatenewversion">Update</button>');
+			$popup.find('.updatenewversion').on('click',function(){
+				System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+			});
+			localStorage.showUpdateVersion=version;
+		};
+		if(!$.isEmptyObject(System)&&!System.CompareVersion){
+			newVersion();
+		}
+		System.CompareVersion&&System.CompareVersion(version,function(msg){
 			window.clearInterval(timerInject);
 			if(msg.Result < 0){
+				if(localStorage.showUpdateVersion!==version){
+					var $popup = $.showPopup('Update',
+						'A new version can be updated.',
+						'<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-success updatenewversion">Update</button>');
+					$popup.find('.updatenewversion').on('click',function(){
+						System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+					});
+
+					localStorage.showUpdateVersion=version;
+				}
 				$('#settingtab').html('.');		
 				$('#updateserver').show();
 			}

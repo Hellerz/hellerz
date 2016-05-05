@@ -17,6 +17,18 @@
   </head> 
   <body class="dashboard" onselectstart="return !1;"> 
     <div id="notifybar" class="notifybar navbar navbar-fixed-top"></div>
+    <div class="modal fade modal-sm" id="popup" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
     <nav class="navbar navbar-fixed-top"> 
       <div class="container-fluid dashboard-header"> 
         <div class="navbar-header"> 
@@ -301,10 +313,9 @@
         </div>   
         <div id="setting" class="padding10 col-md-7 col-md-offset-5 sidebar tab-pane fade in">
           <div id="updateserver">
-            <h4>Update</h4>
-              <p>If you'll overwrite server, please close it first.</p>
+            <h4>You have new Version.</h4>
               <div class="input-group input-group-sm">
-                <a class="alert-danger" id="updateserverhref" target="_blank">Download new Server</a>
+                <div class="btn btn-sm btn-success" id="updateserverhref">Update</div>
               </div>
               <hr>
           </div>
@@ -337,7 +348,6 @@
               <input id="sethttps" type="checkbox" checked>
             </div>
           <hr>
-          
         </div>
       </div>
     </div>  
