@@ -29,8 +29,12 @@ define(function(require, exports, module) {
 	});
 
 
-	$('#updateserverhref').on('click', function(){
-		System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+	$('#updateserverhref').attr('href',config.ServerPakage).on('click', function(e){
+		if(System.UpdateApplication){
+			System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+			e.stopPropagation();
+			e.preventDefault();
+		}
 	});
 
 

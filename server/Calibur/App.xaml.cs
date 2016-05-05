@@ -50,26 +50,22 @@ namespace Calibur
                 }
             }
             #region 判断是否重复运行
-            bool createdNew;
-            var mutex = new Mutex(false, "Calibur", out createdNew);
-
-            if (!createdNew)
+            
+            var currentProcess = Process.GetCurrentProcess();
+            var location = Assembly.GetExecutingAssembly().Location;
+            foreach (Process process in Process.GetProcessesByName(currentProcess.ProcessName))
             {
-                Process currentProcess = Process.GetCurrentProcess();
-                foreach (Process process in Process.GetProcessesByName(currentProcess.ProcessName))
+                if (process.Id != currentProcess.Id && location == currentProcess.MainModule.FileName)
                 {
-                    if ((process.Id != currentProcess.Id) &&
-                        (Assembly.GetExecutingAssembly().Location == currentProcess.MainModule.FileName))
+                    if (process != null)
                     {
-                        if (process != null)
-                        {
-                            MessageBox.Show("Program is running.");
-                            System.Windows.Forms.Application.Exit();
-                            return;
-                        }
+                        MessageBox.Show("Program is running.");
+                        System.Windows.Forms.Application.Exit();
+                        return;
                     }
                 }
             }
+            
             #endregion  
             base.OnStartup(e);
             SystemHelper.InitIcon(this, Calibur.Properties.Resources.calibur);
