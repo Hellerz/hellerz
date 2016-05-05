@@ -113,7 +113,7 @@ define(function(require, exports, module) {
 					if(isMatchRequest(session.FullUrl,reqmatch)){
 						resmatch = aynres(cursetting.response);
 						if(reqmatch.option === 'regex'){
-							reqmatch.text = session.FullUrl.replace(new RegExp(reqmatch.text,'i'),resmatch.text);
+							resmatch.text = session.FullUrl.replace(new RegExp(reqmatch.text,'i'),resmatch.text);
 						}
 						if(resmatch.option.indexOf('http')>-1){//web
 							session.SetfullUrl(resmatch.text);
@@ -294,10 +294,10 @@ define(function(require, exports, module) {
 	});
 	var extendcrt = function(height){
 		var mapHeight = $automap.outerHeight();
-		$autocrt.css({
-			height:500,
-			marginTop:-500
-		});
+		// $autocrt.css({
+		// 	height:height,
+		// 	marginTop:-height
+		// });
 		$autowrap.animate({bottom: mapHeight+height}, 'fast',function(){
 			$autopanel.resize();
 		} );
@@ -306,10 +306,10 @@ define(function(require, exports, module) {
 	};
 	var collapscrt = function(){
 		var mapHeight = $automap.outerHeight();
-		$autocrt.css({
-			height:500,
-			marginTop:-500
-		});
+		// $autocrt.css({
+		// 	height:500,
+		// 	marginTop:-500
+		// });
 		$autowrap.animate({bottom: mapHeight}, 'fast',function(){
 			$autopanel.resize();
 		} );
@@ -323,7 +323,7 @@ define(function(require, exports, module) {
 		var $a =$(e.target);
 		var oprate = $a.attr('oprate');
 		if(oprate === 'create'){
-			extendcrt(500);
+			extendcrt($autocrt.outerHeight());
 		}else if(oprate === 'find'){
 			File.OpenDialog("Select a response file",'','所有文件|*.*',0,function(msg){
 				if(msg.Result&&msg.Result.length){

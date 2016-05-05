@@ -19,6 +19,7 @@ requirejs.config({
 		qrcode:'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
+		guid: 'lib/guid',
 
 		//ztree
 		ztreecore:'ztree/jquery.ztree.core',
@@ -55,6 +56,7 @@ requirejs.config({
 		'grid': {
 			deps: ['jquery'],
 		},
+		
 
 		//ztree
 		'ztreecore':{
@@ -146,11 +148,13 @@ define(function(require, exports, module) {
 			if(!e.target.FailedConnected){
 				$.statusbar('WebSocket connection has closed.','warning');
 				logo.addClass('off');
+				window.close();
 			}
 		});
-		Calibur.webSocket.addEventListener('error',function(e){	
-			if(e.target.readyState === 3){
-				$.notifybar('WebSocket connection to '+e.target.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'"  target="_blank">click here</a>.',
+
+		var showSocketError = function(socket){
+			if(socket.readyState === 3){
+				$.notifybar('WebSocket connection to '+socket.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a>.',
 					'danger',
 					'downloadclient',
 					function(e){
@@ -159,10 +163,19 @@ define(function(require, exports, module) {
 						}
 						return false;
 					});
-				$.statusbar('WebSocket connection to '+e.target.url+' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED','danger');
-				e.target.FailedConnected = true;
+				$.statusbar('WebSocket connection to '+socket.url+' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED','danger');
+				socket.FailedConnected = true;
 			}
-		});
+		};
+
+		if(Calibur.webSocket&&Calibur.webSocket.readyState === 3){
+			showSocketError(Calibur.webSocket);
+		}else{
+			Calibur.webSocket.addEventListener('error',function(e){	
+				showSocketError(e.target);
+			});
+		}
+		
 		
 		$(window).on('unload',function(){
 			Fiddler.removeRequest();
