@@ -103,6 +103,11 @@ namespace CEF.Lib.Helper
             SystemHelper.RemoveIcon();
             FiddlerHelper.Stop();
             WebSocketHelper.Stop();
+            Exit(); 
+        }
+
+        public static void Exit()
+        {
             System.Windows.Forms.Application.Exit();
             Environment.Exit(0); 
         }

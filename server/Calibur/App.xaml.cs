@@ -60,7 +60,7 @@ namespace Calibur
                     if (process != null)
                     {
                         MessageBox.Show("Program is running.");
-                        System.Windows.Forms.Application.Exit();
+                        SystemHelper.Exit();
                         return;
                     }
                 }

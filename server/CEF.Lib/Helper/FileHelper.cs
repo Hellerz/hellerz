@@ -18,6 +18,11 @@ namespace CEF.Lib.Helper
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        /// <summary>    
+        /// 该函数将指定的窗口设置到Z序的顶部。    
+        /// </summary>    
+        [DllImport("User32.dll")]
+        public static extern int BringWindowToTop(IntPtr hWnd);  
 
         private static void SetForegroundDialog(CommonDialog dialog)
         {
@@ -28,6 +33,7 @@ namespace CEF.Lib.Helper
                 if (intptr is IntPtr && (IntPtr)intptr != IntPtr.Zero)
                 {
                     SetForegroundWindow((IntPtr)intptr);
+                    BringWindowToTop((IntPtr)intptr);
                 }
             }
         }
@@ -127,10 +133,11 @@ namespace CEF.Lib.Helper
             return null;
         }
         [JSchema]
-        public static List<string> SaveDialog(string title, string path, string filter, int filterIndex)
+        public static List<string> SaveDialog(string title, string path, string name, string filter, int filterIndex)
         {
             var dialog = new SaveFileDialog
             {
+                FileName = name,
                 CheckFileExists = false,
                 CheckPathExists = true,
                 AddExtension = true,

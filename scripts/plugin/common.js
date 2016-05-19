@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 		if(re_text.test(contentType))return "text";
 		return "text";
 	};
-
+	
 
 	$.showEditor = function(editor,content,mode){
 		editor.getSession().setMode("ace/mode/" + mode);
@@ -32,9 +32,12 @@ define(function(require, exports, module) {
 	$.statusbar = function(content,mode){
 		mode = mode||'success';
 		$('#statusbar')
-			.removeClass('alert-success alert-info alert-warning alert-danger')
+			.css({opacity: 1})
+			.removeClass('alert-success alert-info alert-warning alert-danger bold')
 			.addClass('alert-'+mode)
-			.html(content);
+			.html(content).addClass('bold').animate({ 
+			    opacity: 0.5
+			}, 1000 );
 	};
 
 	var popup = $('#popup');

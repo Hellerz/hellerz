@@ -288,7 +288,9 @@ iframe{
     color: white;
 }
 
-
+.bold{
+  font-weight: bold;
+}
 
 
  .wrapper-all .filter-all
@@ -535,5 +537,8 @@ iframe{
     right: 4px;
 }
 #updateserver{
+  display: none;
+}
+#editRule{
   display: none;
 }

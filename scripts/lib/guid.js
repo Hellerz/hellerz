@@ -1,4 +1,4 @@
-(function () {
+define(function(require, exports, module) {
   var validator = new RegExp("^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$", "i");
 
   function gen(count) {
@@ -60,4 +60,4 @@
   else if (typeof window != 'undefined') {
     window.Guid = Guid;
   }
-})();
+});

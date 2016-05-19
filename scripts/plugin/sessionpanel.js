@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 	var sessionfilter = {
 		regex:[{
 			re:/\/(.+?)?(json|javascript)/,
-			ext:' js json ',
+			ext:' js',
 			type:'js'
 		},{
 			re:/\/(.+?)?xml/,
@@ -83,7 +83,7 @@ define(function(require, exports, module) {
 			var reqHeaders =session.RequestHeaders;
 			var resHeaders =session.ResponseHeaders;
 			var ext = this.getUrlExtLower(session.RequestPath);
-			if(reqHeaders['X-Requested-With'] === 'XMLHttpRequest'){
+			if(reqHeaders['X-Requested-With'] === 'XMLHttpRequest'||ext === 'json'){
 				return 'filter-xhr';
 			}
 			var typeStr =resHeaders['Content-Type']||reqHeaders['Content-Type']||reqHeaders['accept'];
@@ -166,7 +166,7 @@ define(function(require, exports, module) {
 				$.each(klasses,function(i,itm){
 					$tbody.find('.'+ itm.replace('wrapper','filter')).remove(); 
 				});
-				Fiddler.ClearAllSession();
+				//Fiddler.ClearAllSession();
 			}
 		});
 	});

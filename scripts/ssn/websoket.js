@@ -1,4 +1,5 @@
-define(function() {
+define(function(require, exports, module) {
+  var Guid = require('guid');
   var type = ({}).toString;
   var invoke = function(constructor, argument) {
     var type = ({}).toString,
@@ -34,7 +35,7 @@ define(function() {
     if (!this.__shuttleCache[eventName]) {
       this.__shuttleCache[eventName] = [];
       this.__sendMessage(JSON.stringify({
-        ID: Math.random().toString(),
+        ID: Guid.raw(),
         Type: 2,
         Msg: {
           Name: "SessionHandler",
@@ -63,7 +64,7 @@ define(function() {
     }
     if (!events || events.length === 0) {
       this.__sendMessage(JSON.stringify({
-        ID: Math.random().toString(),
+        ID: Guid.raw(),
         Type: 2,
         Msg: {
           Name: "SessionHandler",
@@ -76,7 +77,7 @@ define(function() {
     }
   }
   WebSocket.prototype.shuttle = function(message, callback) {
-    var id = Math.random().toString();
+    var id = Guid.raw();
     this.__shuttleCache[id] = callback;
     message = JSON.stringify({
       ID: id,

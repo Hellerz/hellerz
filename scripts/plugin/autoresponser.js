@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
+	var Session = require("session");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 	var pausessn = require('sessionpanel').pausessn;
 	var File = require('file');
@@ -17,11 +18,14 @@ define(function(require, exports, module) {
 	var $importRule = $('#importRule');
 	var $exportRule = $('#exportRule');
 
+	var $editRule = $('#editRule');
 	var $saveRule = $('#saveRule');
 	var $deleteRule = $('#deleteRule');
 
+	var $saveascrt = $('#saveascrt');
 	var $savecrt = $('#savecrt');
-	var $cancelcrt = $('#cancelcrt');
+
+	var $closecrt = $('#closecrt');
 
 	var $autoRequest = $('#auto-request');
 	var $autoRespond = $('#auto-respond');
@@ -162,23 +166,44 @@ define(function(require, exports, module) {
 		}
 
 	};
+	var silentSaveEditor = function(editor){
+		var item = $automap.data('selectedItem');
+		if(item&&item.response){
+			File.Exists(item.response,function(msg){
+				if(msg.Result){
+					File.CreateFile(item.response,editor.getValue(),'UTF8',function(){
+						$autoRespond.val(item.response);
+						$.statusbar('file '+item.response+' saved successfully.','success');
+						$saveRule.trigger('click');
+					});
+				}else{
+					saveEditor(editor);
+				}
+			});
+		}else{
+			saveEditor(editor);
+		}
+
+	};
 	var saveEditor=function(editor){
-		File.SaveDialog("Save File",'','所有文件|*.*',0,function(msg){
+		var fileName = '';
+		var item = $automap.data('selectedItem');
+		if(item&&item.data){
+			fileName = item.data.SuggestedFilename;
+		}
+		File.SaveDialog("Save File",'',fileName,'所有文件|*.*',0,function(msg){
 			if(msg.Result&&msg.Result.length){
-				File.CreateFile(msg.Result[0],editor.getValue(),'UTF8',function(){
-					editor.setValue('');
-					var path = msg.Result[0];
+				var path = msg.Result[0];
+				File.CreateFile(path,editor.getValue(),'UTF8',function(){
 					$autoRespond.val(path);
 					$.statusbar('file '+path+' saved successfully.','success');
-					collapscrt();
 					$saveRule.trigger('click');
 				});
 			}
 		});
 	};
-	
 	crteditor.commands.addCommand({
-	    name: 'Cancel',
+	    name: 'Close',
 	    bindKey: {win: 'ESC',  mac: 'ESC'},
 	    exec: function(editor) {
 	        collapscrt();
@@ -189,11 +214,14 @@ define(function(require, exports, module) {
 	    name: 'Save',
 	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 	    exec: function(editor) {
-	        saveEditor(editor);
+	        silentSaveEditor(editor);
 	    },
 	    readOnly: false
 	});
 	$savecrt.on('click',function(e){
+		silentSaveEditor(crteditor,true);
+	});
+	$saveascrt.on('click',function(e){
 		saveEditor(crteditor);
 	});
 	
@@ -240,16 +268,26 @@ define(function(require, exports, module) {
 	$autopanel.on('cellAfterSelected',function(){
 		var  hasSelect = $autopanel.selectedRows().length>0;
 		 $automap.toggleClass('disabled',!hasSelect);
+		 collapscrt();
 		 if(!hasSelect){
 		 	$autoRequest.val('');
 			$autoRespond.val('');
+			$automap.data('selectedItem',null);
 		 }
 	}).on('selected', function(e, $trs) {
 		var item = $trs.data('item');
+		$automap.data('selectedItem',item);
 		$autoRequest.val(item.request);
 		$autoRespond.val(item.response);
 		$('#auto-cur-uid').val(item.uid);
-		$trs.eq(0).find('input').get(0).focus()
+		$trs.eq(0).find('input').get(0).focus();
+		if(item&&item.response){
+			File.Exists(item.response,function(fileExistMsg){
+				$editRule.toggle(fileExistMsg.Result);
+			});
+		}else{
+			$editRule.hide();
+		}
 	}).on('rowInserted', function(e, item, index, $tr) {
 		if(item.checked){
 			$autopanel.select($tr)
@@ -272,6 +310,8 @@ define(function(require, exports, module) {
 		var uid =Math.random().toString().replace(/0\.0*/,'');
 		if(selectItem&&selectItem.FullUrl){
 			item.request = selectItem.FullUrl;
+			item.brush = $.getMode(selectItem.ResponseHeaders['Content-Type']);
+			item.data = selectItem;
 		}else{
 			item.request = 'StringToMatch['+uid+']';
 		}
@@ -287,6 +327,20 @@ define(function(require, exports, module) {
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.updateRow(item,$curTr);
 	});
+	$editRule.on('click',function(e){
+		var item = $automap.data('selectedItem');
+		if(item&&item.response){
+			File.Exists(item.response,function(fileExistMsg){
+				if(fileExistMsg.Result){
+					extendcrt($autocrt.outerHeight());
+					File.ReadAllText(item.response,function(msg){
+						var fmt = $.format(msg.Result,{method: item.brush});
+						$.showEditor(crteditor,fmt,item.brush);
+					});
+				}
+			});
+		}
+	});
 	$deleteRule.on('click',function(e){
 		var uid = $('#auto-cur-uid').val();
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
@@ -294,10 +348,6 @@ define(function(require, exports, module) {
 	});
 	var extendcrt = function(height){
 		var mapHeight = $automap.outerHeight();
-		// $autocrt.css({
-		// 	height:height,
-		// 	marginTop:-height
-		// });
 		$autowrap.animate({bottom: mapHeight+height}, 'fast',function(){
 			$autopanel.resize();
 		} );
@@ -306,17 +356,13 @@ define(function(require, exports, module) {
 	};
 	var collapscrt = function(){
 		var mapHeight = $automap.outerHeight();
-		// $autocrt.css({
-		// 	height:500,
-		// 	marginTop:-500
-		// });
 		$autowrap.animate({bottom: mapHeight}, 'fast',function(){
 			$autopanel.resize();
 		} );
 		$automap.animate({marginTop: -mapHeight }, 'fast' );
 		crteditor.blur();
 	};
-	$cancelcrt.on('click',function(e){
+	$closecrt.on('click',function(e){
 		collapscrt();
 	});
 	$('.auto-respond-list').on('click','a',function(e){
@@ -324,6 +370,17 @@ define(function(require, exports, module) {
 		var oprate = $a.attr('oprate');
 		if(oprate === 'create'){
 			extendcrt($autocrt.outerHeight());
+			var item = $automap.data('selectedItem');
+			if(item!=null&&item.data!=null){
+				var session = item.data;
+				if(session instanceof Session)
+				{
+					session.GetResponseBodyAsString(function(msg){
+						var fmt = $.format(msg.Result.Return,{method: item.brush});
+						$.showEditor(crteditor,fmt,item.brush);
+					});
+				}
+			}
 		}else if(oprate === 'find'){
 			File.OpenDialog("Select a response file",'','所有文件|*.*',0,function(msg){
 				if(msg.Result&&msg.Result.length){
