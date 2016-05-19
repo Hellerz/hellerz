@@ -47,7 +47,7 @@ define(function(require, exports, module) {
 			type:'font'
 		},{
 			re:/\/(.+?)?html/,
-			ext:' html htm aspx ',
+			ext:' html htm aspx php ',
 			type:'doc'
 		}],
 		re_urlExt:/\/([^\/?]+?\.([^\/?\.]+?))(\?.+)?$/,

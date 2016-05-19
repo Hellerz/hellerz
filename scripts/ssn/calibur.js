@@ -181,7 +181,9 @@ define(["config",'websoket'], function(config,WebSocketEx) {
                 if(!finals.stopmet){
                   return invokeMethod(finals);
                 }else{
-                  return;
+                  return new Promise(function(resolve, reject) {
+                     resolve();
+                  });
                 }
               });
               return this;
