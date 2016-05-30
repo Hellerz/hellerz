@@ -530,15 +530,30 @@ namespace CEF.Lib.JavascriptObject
                     match = match.NextMatch();
                 }
             }
-        }
+        }
+
         [JSchema]
         public string GetRequestBodyAsBase64()
         {
             return Convert.ToBase64String(this.InnerSession.RequestBody);
-        }        [JSchema]
+        }
+        [JSchema]
         public string GetResponseBodyAsBase64()
         {
             return Convert.ToBase64String(this.InnerSession.ResponseBody);
+        }
+
+        [JSchema]
+        public void SetRequestBodyAsBase64(string base64)
+        {
+            var bytes = Convert.FromBase64String(base64);
+            this.InnerSession.requestBodyBytes = bytes;
+        }
+        [JSchema]
+        public void SetResponseBodyAsBase64(string base64)
+        {
+            var bytes = Convert.FromBase64String(base64);
+            this.InnerSession.responseBodyBytes = bytes;
         }
 
         #region HttpRequsetHeaders

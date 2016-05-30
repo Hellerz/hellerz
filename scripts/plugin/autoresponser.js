@@ -169,8 +169,8 @@ define(function(require, exports, module) {
 	var silentSaveEditor = function(editor){
 		var item = $automap.data('selectedItem');
 		if(item&&item.response){
-			File.Exists(item.response,function(msg){
-				if(msg.Result){
+			File.Exists(item.response,function(isExist){
+				if(isExist){
 					File.CreateFile(item.response,editor.getValue(),'UTF8',function(){
 						$autoRespond.val(item.response);
 						$.statusbar('file '+item.response+' saved successfully.','success');
@@ -191,9 +191,9 @@ define(function(require, exports, module) {
 		if(item&&item.data){
 			fileName = item.data.SuggestedFilename;
 		}
-		File.SaveDialog("Save File",'',fileName,'所有文件|*.*',0,function(msg){
-			if(msg.Result&&msg.Result.length){
-				var path = msg.Result[0];
+		File.SaveDialog("Save File",'',fileName,'所有文件|*.*',0,function(files){
+			if(files&&files.length){
+				var path = files[0];
 				File.CreateFile(path,editor.getValue(),'UTF8',function(){
 					$autoRespond.val(path);
 					$.statusbar('file '+path+' saved successfully.','success');
@@ -282,8 +282,8 @@ define(function(require, exports, module) {
 		$('#auto-cur-uid').val(item.uid);
 		$trs.eq(0).find('input').get(0).focus();
 		if(item&&item.response){
-			File.Exists(item.response,function(fileExistMsg){
-				$editRule.toggle(fileExistMsg.Result);
+			File.Exists(item.response,function(isExist){
+				$editRule.toggle(isExist);
 			});
 		}else{
 			$editRule.hide();
@@ -330,11 +330,11 @@ define(function(require, exports, module) {
 	$editRule.on('click',function(e){
 		var item = $automap.data('selectedItem');
 		if(item&&item.response){
-			File.Exists(item.response,function(fileExistMsg){
-				if(fileExistMsg.Result){
+			File.Exists(item.response,function(isExist){
+				if(isExist){
 					extendcrt($autocrt.outerHeight());
-					File.ReadAllText(item.response,function(msg){
-						var fmt = $.format(msg.Result,{method: item.brush});
+					File.ReadAllText(item.response,function(fileContent){
+						var fmt = $.format(fileContent,{method: item.brush});
 						$.showEditor(crteditor,fmt,item.brush);
 					});
 				}
@@ -375,16 +375,16 @@ define(function(require, exports, module) {
 				var session = item.data;
 				if(session instanceof Session)
 				{
-					session.GetResponseBodyAsString(function(msg){
-						var fmt = $.format(msg.Result.Return,{method: item.brush});
+					session.GetResponseBodyAsString(function(fileContent){
+						var fmt = $.format(fileContent.Return,{method: item.brush});
 						$.showEditor(crteditor,fmt,item.brush);
 					});
 				}
 			}
 		}else if(oprate === 'find'){
-			File.OpenDialog("Select a response file",'','所有文件|*.*',0,function(msg){
-				if(msg.Result&&msg.Result.length){
-					$autoRespond.val(msg.Result[0]);
+			File.OpenDialog("Select a response file",'','所有文件|*.*',0,function(files){
+				if(files&&files.length){
+					$autoRespond.val(files[0]);
 				}
 			});
 		}else{
@@ -406,10 +406,10 @@ define(function(require, exports, module) {
 		items : 30,
 		source: function(query, process) {
 			var corPath = correctPath(query);
-			Directory.Exists(corPath,function(msg){
-				if(msg.Result){
-					Directory.GetFileFolders(corPath,function(member){
-						process(member.Result||[]);
+			Directory.Exists(corPath,function(isExists){
+				if(isExists){
+					Directory.GetFileFolders(corPath,function(folders){
+						process(folders||[]);
 					});
 				}else{
 					var m =query.match(pathSplitRegex);
@@ -417,9 +417,9 @@ define(function(require, exports, module) {
 						var path =m[1];
 						var search =m[2]+'*';
 						Directory.Exists(path,function(exists){
-							if(exists.Result){
-								Directory.GetFileFoldersSearch(path,search,function(member){
-									process(member.Result||[]);
+							if(exists){
+								Directory.GetFileFoldersSearch(path,search,function(folders){
+									process(folders||[]);
 								});
 							}
 						});

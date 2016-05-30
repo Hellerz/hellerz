@@ -13,10 +13,7 @@ define(function(require, exports, module) {
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 
 	var showHeader=function(oheaders,wapper){
-		var headers = JSON.stringify(oheaders);
-		Utils.FormatMessage(headers).promise.then(function(msg){
-			$.showEditor(wapper,msg.Result,'javascript');
-		});
+		$.showEditor(wapper,$.format(JSON.stringify(oheaders),{method: 'javascript'}),'javascript');
 	};
 	
 	var hastext = function(contentType){
@@ -41,8 +38,8 @@ define(function(require, exports, module) {
 
 		reqtext:function(wapper){
 			if(hastext(this.session.RequestHeaders['Content-Type'])){
-				this.session.GetRequestBodyAsString(function(msg){
-					$.showEditor(wapper,msg.Result.Return,'text');
+				this.session.GetRequestBodyAsString(function(ssn){
+					$.showEditor(wapper,ssn.Return,'text');
 				});
 			}else{
 				$.showEditor(wapper,"Empty",'text');
@@ -50,8 +47,8 @@ define(function(require, exports, module) {
 		},
 		restext:function(wapper){
 			if(hastext(this.session.ResponseHeaders['Content-Type'])){
-				this.session.GetResponseBodyAsString(function(msg){
-					$.showEditor(wapper,msg.Result.Return,'text');
+				this.session.GetResponseBodyAsString(function(ssn){
+					$.showEditor(wapper,ssn.Return,'text');
 				});
 			}else{
 				$.showEditor(wapper,"Empty",'text');
@@ -68,9 +65,9 @@ define(function(require, exports, module) {
 		resweb:function(wapper){
 			var responseType = this.session.ResponseHeaders['Content-Type'];
 			if(responseType&&responseType!=='application/octet-stream'){
-				this.session.GetResponseBodyAsBase64(function(msg){
+				this.session.GetResponseBodyAsBase64(function(ssn){
 					responseType = responseType.split(';')[0];
-					var src = 'data:'+responseType+';base64,'+msg.Result.Return;
+					var src = 'data:'+responseType+';base64,'+ssn.Return;
 					wapper.html($('<iframe class="full-body" src='+src+' />'));
 				});
 			}
@@ -81,29 +78,29 @@ define(function(require, exports, module) {
 		},
 
 		reqraw:function(wapper){
-			this.session.GetRequest(function(msg){
-				$.showEditor(wapper,msg.Result.Return,'text');
+			this.session.GetRequest(function(ssn){
+				$.showEditor(wapper,ssn.Return,'text');
 			});
 		},
 
 
 
 		resraw:function(wapper){
-			this.session.GetResponse(function(msg){
-				$.showEditor(wapper,msg.Result.Return,'text');
+			this.session.GetResponse(function(ssn){
+				$.showEditor(wapper,ssn.Return,'text');
 			});
 		},
 
 		reqformat:function(wapper){
 			var brush = $.getMode(this.session.RequestHeaders['Content-Type']);
-			this.session.GetRequestBodyAsString(function(msg){
-				$.showEditor(wapper,$.format(msg.Result.Return,{method: brush}),brush);
+			this.session.GetRequestBodyAsString(function(ssn){
+				$.showEditor(wapper,$.format(ssn.Return,{method: brush}),brush);
 			});
 		},
 		resformat:function(wapper){
 			var brush = $.getMode(this.session.ResponseHeaders['Content-Type']);
-			this.session.GetResponseBodyAsString(function(msg){
-				var fmt = $.format(msg.Result.Return,{method: brush});
+			this.session.GetResponseBodyAsString(function(ssn){
+				var fmt = $.format(ssn.Return,{method: brush});
 				$.showEditor(wapper,fmt,brush);
 			});
 		},

@@ -84,6 +84,7 @@ define(function(require, exports, module) {
 	var $ = require("jquery")
 	  , Calibur = require("calibur")
 	  , Fiddler = require("fiddler")
+	  , System = require("system")
 	  , config = require("config");
 
 	//load jQuery Plugin
@@ -103,14 +104,14 @@ define(function(require, exports, module) {
 
 		var logo = $('#logo');
     	var timer = window.setInterval(function(){
-    		Fiddler.IsStarted&&Fiddler.IsStarted(function(msg){
+    		Fiddler.IsStarted&&Fiddler.IsStarted(function(isStart){
     			window.clearInterval(timer);
-	    		logo.toggleClass('off',!msg.Result);
+	    		logo.toggleClass('off',!isStart);
 	    	});
     	},100);
         logo.on('click', function(e) {
-        	Fiddler.IsStarted(function(msg){
-        		if(msg.Result){
+        	Fiddler.IsStarted(function(isStart){
+        		if(isStart){
         			Fiddler.Stop(function() {
 						$.statusbar("Proxy has stopped.",'warning');
 						logo.addClass('off');
@@ -124,21 +125,43 @@ define(function(require, exports, module) {
         	});
 		});
 
+        var re_exe = /\[(.+?)\]/;
+        var re_caliburName = /(calibur|rcgui).*.exe/i;
+        window.setInterval(function(){
+        	Fiddler.GetPort&&Fiddler.GetPort(function(port) {
+        		System.GetRunResult('netstat','-nbp tcp','',function(lines){
+					var searchPort = new RegExp('TCP\\s+127\\.0\\.0\\.1:'+port+'.+?ESTABLISHED','i');
+					var curExe = '';
+					for (var i = 0; i < lines.length; i++) {
+						if(re_exe.test(lines[i])){
+							curExe =  lines[i].replace(re_exe,'$1');
+							continue;
+						}
+						if(searchPort.test(lines[i])&&i>0){
+							if(!re_caliburName.test(curExe)){
+								$.statusbar('Port has occupied. ProcessName:'+ curExe +', Port:'+port,'danger');
+								break;
+							}
+						}
+					};		
+        		});
+			});
+    	},1000);
        
 
-		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(msg){
+		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(){
 			$.statusbar('The system was changed.','warning');
 			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning','thesystemwaschanged',function(e){
     			Fiddler.ReStart().GetPort(function(port) {
-					$.statusbar("Proxy has started. Port:"+port.Result,'info');
+					$.statusbar("Proxy has started. Port:"+port,'info');
 					logo.removeClass('off');
 				});
 			});
 		});
 		var timer = window.setInterval(function(){
-    		Fiddler.IsStarted&&Fiddler.IsStarted(function(msg){
+    		Fiddler.IsStarted&&Fiddler.IsStarted(function(isStart){
     			window.clearInterval(timer);
-	    		logo.toggleClass('off',!msg.Result);
+	    		logo.toggleClass('off',!isStart);
 	    	});
     	},100);
 		Calibur.webSocket.onServerError=function(evt){

@@ -37,7 +37,7 @@ define(function(require, exports, module) {
 			.addClass('alert-'+mode)
 			.html(content).addClass('bold').animate({ 
 			    opacity: 0.5
-			}, 1000 );
+			}, 3000 );
 	};
 
 	var popup = $('#popup');

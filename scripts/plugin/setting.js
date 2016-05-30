@@ -45,8 +45,8 @@ define(function(require, exports, module) {
 			$.statusbar("HTTPS proxy has "+(value?'open':'closed'),'info');
 		});
 	});
-	Fiddler.GetHttps&&Fiddler.GetHttps(function(msg){
-		$sethttps.bootstrapSwitch('state',msg.Result);
+	Fiddler.GetHttps&&Fiddler.GetHttps(function(isHttps){
+		$sethttps.bootstrapSwitch('state',isHttps);
 	});
 
 	var $portno = $('#portno')
@@ -75,9 +75,9 @@ define(function(require, exports, module) {
 		if(!$.isEmptyObject(System)&&!System.CompareVersion){
 			newVersion();
 		}
-		System.CompareVersion&&System.CompareVersion(version,function(msg){
+		System.CompareVersion&&System.CompareVersion(version,function(sysversion){
 			window.clearInterval(timerInject);
-			if(msg.Result < 0){
+			if(sysversion < 0){
 				if(localStorage.showUpdateVersion!==version){
 					var $popup = $.showPopup('Update',
 						'A new version can be updated.',
@@ -96,9 +96,16 @@ define(function(require, exports, module) {
 
 
    var timer = window.setInterval(function(){
-		Fiddler.GetPort&&Fiddler.GetPort(function(msg){
+		Fiddler.GetPort&&Fiddler.GetPort(function(port){
 			window.clearInterval(timer);
-    		$portno.val(msg.Result);
+    		$portno.val(port);	
     	});
+	},100);
+
+   var iptimer = window.setInterval(function(){
+		System.GetAddressIP&&System.GetAddressIP(function(ip){
+			window.clearInterval(iptimer);
+			$('#ipaddress').html(ip);
+		});
 	},100);
 });

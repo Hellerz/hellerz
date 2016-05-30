@@ -5,10 +5,11 @@ define(["calibur",'eventtarget'], function(Calibur,EventTarget) {
 	}
 
 	Session.prototype = {
+		manual:false,
 		getIncParam: function(array) {
 			return [this.Id];
 		},
-		onReturn:function(msg){
+		onReturn:function(res,msg){
 			if(msg){
 				Calibur.extend(this, msg.Id?msg:msg.Result);
 			}

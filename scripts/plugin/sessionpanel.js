@@ -135,16 +135,16 @@ define(function(require, exports, module) {
 	var $pausessn = $('#pausessn');
 	
 	var timer = window.setInterval(function(){
-		Fiddler.IsPauseSession&&Fiddler.IsPauseSession(function(msg){
+		Fiddler.IsPauseSession&&Fiddler.IsPauseSession(function(isPause){
 			window.clearInterval(timer);
-			$pausessn.toggleClass('off',!msg.Result);
-			$pausessn.trigger('switch',msg.Result);
+			$pausessn.toggleClass('off',!isPause);
+			$pausessn.trigger('switch',isPause);
 		});
 	},100);
 	
     $pausessn.on('click', function(e) {
-    	Fiddler.IsPauseSession(function(msg){
-    		if(msg.Result){
+    	Fiddler.IsPauseSession(function(isPause){
+    		if(isPause){
     			Fiddler.SetPauseSession(false,function() {
 					$.statusbar("AutoResponser has closed.",'info');
 					$pausessn.addClass('off');

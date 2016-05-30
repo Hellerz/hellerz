@@ -6,7 +6,9 @@ define(["calibur",'eventtarget','session'], function(Calibur,EventTarget,Session
 		_events.dispatchEvent("Request", {
 			session: session
 		});
-		session.Resume();
+		if(!session.manual){
+			session.Resume();
+		}
 	};
 	var _responseFun = function(res, evt) {
 		var session = new Session(res.Result);
@@ -14,9 +16,11 @@ define(["calibur",'eventtarget','session'], function(Calibur,EventTarget,Session
 			session: session
 		};
 		_events.dispatchEvent("Response", args);
-		session.Resume(function(){
-			args.callback&&args.callback();
-		});
+		if(!session.manual){
+			session.Resume(function(){
+				args.callback&&args.callback();
+			});
+		}
 	};
 	Fiddler.addRequest = function() {
 		if (!_events.hasEventListener("Request")) {

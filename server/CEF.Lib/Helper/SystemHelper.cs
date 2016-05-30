@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using CEF.Lib.Attributes;
 using Fiddler;
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace CEF.Lib.Helper
 {
@@ -17,7 +19,7 @@ namespace CEF.Lib.Helper
     {
         public static System.Windows.Forms.NotifyIcon Notify;
 
-        public static void InitIcon(System.Windows.Application app,Icon icon)
+        public static void InitIcon(System.Windows.Application app, Icon icon)
         {
             Notify = new System.Windows.Forms.NotifyIcon
             {
@@ -39,7 +41,7 @@ namespace CEF.Lib.Helper
             {
                 Utilities.RunExecutable("Chrome", "http://hellerz.github.io/hellerz/");
             };
-            
+
             menu.MenuItems.Add(openChromeItem);
             menu.MenuItems.Add(closeItem);
 
@@ -65,7 +67,7 @@ namespace CEF.Lib.Helper
             var tmpDirectory = Path.GetDirectoryName(tmpFileFullPath);
             var directory = Path.GetDirectoryName(tmpDirectory);
 
-            var batCode  = new StringBuilder();
+            var batCode = new StringBuilder();
             batCode.AppendFormat("cd \"{0}\"", directory).AppendLine();
             batCode.AppendFormat("CLS").AppendLine();
             batCode.AppendFormat("choice /t 1 /d y /n >nul").AppendLine();
@@ -78,7 +80,7 @@ namespace CEF.Lib.Helper
             batCode.AppendFormat("exit").AppendLine();
 
             var batPath = tmpDirectory + @"\install.bat";
-            File.WriteAllText(batPath,batCode.ToString());
+            File.WriteAllText(batPath, batCode.ToString());
             System.Diagnostics.Process.Start(tmpDirectory + @"\install.bat");
             Shutdown();
         }
@@ -91,9 +93,9 @@ namespace CEF.Lib.Helper
         [JSchema]
         public static int CompareVersion(string version)
         {
-            var webVersion = new Version(version); 
+            var webVersion = new Version(version);
             var serverVersion = new Version(System.Windows.Forms.Application.ProductVersion);
-            serverVersion = new Version(serverVersion.Major,serverVersion.Minor,serverVersion.Build);
+            serverVersion = new Version(serverVersion.Major, serverVersion.Minor, serverVersion.Build);
             return serverVersion.CompareTo(webVersion);
         }
 
@@ -103,14 +105,59 @@ namespace CEF.Lib.Helper
             SystemHelper.RemoveIcon();
             FiddlerHelper.Stop();
             WebSocketHelper.Stop();
-            Exit(); 
+            Exit();
         }
 
         public static void Exit()
         {
             System.Windows.Forms.Application.Exit();
-            Environment.Exit(0); 
+            Environment.Exit(0);
         }
 
+        [JSchema]
+        public static List<string> GetRunResult(string executable, string arg, string grep)
+        {
+            Regex re = null;
+            if (!string.IsNullOrWhiteSpace(grep))
+            {
+                re = new Regex(grep);
+            }
+            var process = new Process();
+            process.StartInfo.FileName = executable;
+            process.StartInfo.Arguments = arg;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+
+            var reader = process.StandardOutput;//截取输出流
+            var result = new List<string>();
+
+            var strLine = reader.ReadLine();
+            while (!reader.EndOfStream)
+            {
+                if (re == null || re.IsMatch(strLine))
+                {
+                    result.Add(strLine);
+                }
+                Debug.WriteLine(strLine);
+                strLine = reader.ReadLine();
+            }
+            return result;
+        }
+        [JSchema]
+        public static string GetAddressIP() 
+        { 
+            foreach (var ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    return ip.ToString();
+                }
+            }
+            return "";
+        }
     }
 }

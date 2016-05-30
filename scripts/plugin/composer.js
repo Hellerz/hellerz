@@ -13,12 +13,12 @@ define(function(require, exports, module) {
 		if(guid){
 			if(parsed_guid === guid){
 				var brush = $.getMode(session.ResponseHeaders['Content-Type']);
-				session.GetResponseBodyAsString(function(msg){
-					$.showEditor(cmpsr_resbd,$.format(msg.Result.Return,{method: brush}),brush);
+				session.GetResponseBodyAsString(function(ssn){
+					$.showEditor(cmpsr_resbd,$.format(ssn.Return,{method: brush}),brush);
 				});
 			}else if(raw_guid === guid){
-				session.GetResponse(function(msg){
-					$.showEditor(cmpsr_resraw,msg.Result.Return,'text');
+				session.GetResponse(function(ssn){
+					$.showEditor(cmpsr_resraw,ssn.Return,'text');
 				});
 			}
 		}
@@ -71,8 +71,8 @@ define(function(require, exports, module) {
 	var runComposer = function () {
 		if($('#composerraw').hasClass('active')){
 			cmpsr_resraw.setValue('');
-    		Fiddler.InjectRaw(cmpsr_reqraw.getValue(),function(msg){
-    			raw_guid = msg.Result;
+    		Fiddler.InjectRaw(cmpsr_reqraw.getValue(),function(guid){
+    			raw_guid = guid;
     		});
     	}else{
     		var url = $url.val();
@@ -81,7 +81,7 @@ define(function(require, exports, module) {
     		var header = cmpsr_reqhd.getValue();
     		var body = cmpsr_reqbd.getValue();
     		cmpsr_resbd.setValue('');
-    		Fiddler.Inject(url,method,contenttype,header,body,function(msg){
+    		Fiddler.Inject(url,method,contenttype,header,body,function(guid){
     			setParsed({
     				url:url,
     				method:method,
@@ -89,7 +89,7 @@ define(function(require, exports, module) {
     				requestheader:header,
     				requestbody:body
     			});
-    			parsed_guid = msg.Result;
+    			parsed_guid = guid;
     		});
     	}
     };

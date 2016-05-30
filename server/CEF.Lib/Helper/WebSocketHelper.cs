@@ -38,7 +38,7 @@ namespace CEF.Lib.Helper
         private static WebSocketServer _server;
         static WebSocketHelper()
         {
-            FleckLog.Level = LogLevel.Debug;
+            //FleckLog.Level = LogLevel.Debug;
         }
 
         public static void Start()

@@ -14,6 +14,7 @@ using Calibur.Model.IMessage;
 using CEF.Lib.Attributes;
 using Fiddler;
 using Newtonsoft.Json;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CEF.Lib.Helper
 {
@@ -262,6 +263,12 @@ namespace CEF.Lib.Helper
         }
 
 
+        [JSchema]
+        public static string GetBase64RootCertificate() 
+        {
+            return Convert.ToBase64String(CertMaker.GetRootCertificate().Export(X509ContentType.Cert));
+        }
+
         private static void NotifyProxyChanged(object sender, EventArgs e)
         {
             var message = new MessageInfo
@@ -274,7 +281,7 @@ namespace CEF.Lib.Helper
 
 
         #region ResetCertificate
-         [JSchema]
+        [JSchema]
         public static void ResetCertificate()
         {
             DecryptHttps();
