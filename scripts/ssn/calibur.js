@@ -109,7 +109,7 @@ define(["config",'websoket'], function(config,WebSocketEx) {
         res=res||{};
         var lastReturn = invokeParam.fn && invokeParam.fn(res.Result,res, socket);
         res.LastReturn=lastReturn;
-        resolve(res.Result,res, socket);
+        resolve(res);
       });
     });
   };
@@ -168,15 +168,16 @@ define(["config",'websoket'], function(config,WebSocketEx) {
               finals.path = path;
               this.promise = this.promise || Promise.resolve();
               this.promise = this.promise.then(function(msg) {
-                _this.onReturn&&_this.onReturn(msg.Result,msg);
+                var lastRet = msg&&msg.LastReturn;
+                _this.onReturn&&_this.onReturn.call(msg,lastRet,msg);
                 if(Calibur.IsType(finals.inc,"Function")){
-                  finals.inc = finals.inc(msg.Result,msg);
+                  finals.inc = finals.inc.call(msg,lastRet,msg);
                 }
                 if(Calibur.IsType(finals.met,"Function")){
-                  finals.met = finals.met(msg.Result,msg);
+                  finals.met = finals.met.call(msg,lastRet,msg);
                 }
                 if(Calibur.IsType(finals.stopmet,"Function")){
-                  finals.stopmet = finals.stopmet(msg.Result,msg);
+                  finals.stopmet = finals.stopmet.call(msg,lastRet,msg);
                 }
                 if(!finals.stopmet){
                   return invokeMethod(finals);

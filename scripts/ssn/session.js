@@ -9,9 +9,9 @@ define(["calibur",'eventtarget'], function(Calibur,EventTarget) {
 		getIncParam: function(array) {
 			return [this.Id];
 		},
-		onReturn:function(res,msg){
-			if(msg){
-				Calibur.extend(this, msg.Id?msg:msg.Result);
+		onReturn:function(res){
+			if(res){
+				Calibur.extend(this, res);
 			}
 		},
 		ClassPath: "CEF.Lib.JSession.",
