@@ -89,7 +89,6 @@ define(["config",'websoket'], function(config,WebSocketEx) {
         }
       }, function(res, socket) {
         resolve(res);
-        //reject(Error(req.statusText));
       });
     });
     return schemaCache[schema];

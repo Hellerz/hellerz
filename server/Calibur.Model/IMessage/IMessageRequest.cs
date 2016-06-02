@@ -1,6 +1,4 @@
-﻿using Fleck;
-
-namespace Calibur.Model.IMessage
+﻿namespace Calibur.Model.IMessage
 {
     public interface IMessageRequest
     {

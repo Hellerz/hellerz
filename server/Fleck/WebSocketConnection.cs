@@ -216,7 +216,7 @@ namespace Fleck
           FleckLog.Debug("Failed to send. Disconnecting.", e);
         else
           FleckLog.Info("Failed to send. Disconnecting.", e);
-        CloseSocket();
+        //CloseSocket();
       });
     }
 

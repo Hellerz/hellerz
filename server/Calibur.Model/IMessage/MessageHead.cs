@@ -1,5 +1,5 @@
-﻿using Fleck;
-
+﻿
+using Fleck;
 namespace Calibur.Model.IMessage
 {
     public class MessageHead

@@ -128,6 +128,7 @@ define(function(require, exports, module) {
 			$ssnpanel.updateRow(session,$.data($ssnpanel,'id_row')[session.Id]);
 		};
 	};
+	
 	$ssnpanel.on('selected', function(e, $trs) {
 		shownStatus.session = $trs.data('item');;
 		shownStatus.showSession();

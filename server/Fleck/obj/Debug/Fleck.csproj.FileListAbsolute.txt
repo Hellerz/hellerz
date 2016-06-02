@@ -13,3 +13,8 @@ C:\GIT\github\Calibur\Fleck\bin\Debug\Fleck.pdb
 C:\GIT\github\Calibur\Fleck\obj\Debug\Fleck.csprojResolveAssemblyReference.cache
 C:\GIT\github\Calibur\Fleck\obj\Debug\Fleck.dll
 C:\GIT\github\Calibur\Fleck\obj\Debug\Fleck.pdb
+D:\git\Hellerz\Hellerz\server\Fleck\bin\Debug\Fleck.dll
+D:\git\Hellerz\Hellerz\server\Fleck\bin\Debug\Fleck.pdb
+D:\git\Hellerz\Hellerz\server\Fleck\obj\Debug\Fleck.csprojResolveAssemblyReference.cache
+D:\git\Hellerz\Hellerz\server\Fleck\obj\Debug\Fleck.dll
+D:\git\Hellerz\Hellerz\server\Fleck\obj\Debug\Fleck.pdb

@@ -1,4 +1,7 @@
+window.WebVersion = '201606022045';
+window.ServiceVersion = '1.0.5994';
 requirejs.config({
+	urlArgs:"version=" + window.WebVersion,
 	paths: {
 		config: 'config',
 
@@ -178,7 +181,7 @@ define(function(require, exports, module) {
 
 		var showSocketError = function(socket){
 			if(socket.readyState === 3){
-				$.notifybar('WebSocket connection to '+socket.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a>.',
+				$.notifybar('WebSocket connection to '+socket.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a> to download.',
 					'danger',
 					'downloadclient',
 					function(e){
@@ -204,6 +207,7 @@ define(function(require, exports, module) {
 		$(window).on('unload',function(){
 			Fiddler.removeRequest();
 			Fiddler.removeResponse();
+			//Fiddler.removeComplete();
 		});
 
         $('#navFun a:first').tab('show');

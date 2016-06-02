@@ -27,6 +27,7 @@ define(function(require, exports, module) {
 
 	var $closecrt = $('#closecrt');
 
+	var $autoDescription = $('#auto-description');
 	var $autoRequest = $('#auto-request');
 	var $autoRespond = $('#auto-respond');
 
@@ -237,6 +238,7 @@ define(function(require, exports, module) {
 					return checkbox[0].outerHTML;
 				}
 			},
+			{title:'Description',name:'description',width:100,align:'left'},
 			{title:'If request matches',name:'request',width:400,align:'left'},
 			{title:'then respond with...',name:'response',width:400,align:'left'},
 			//{title:'Latency',name:'latency',width:75,align:'left'}
@@ -270,6 +272,7 @@ define(function(require, exports, module) {
 		 $automap.toggleClass('disabled',!hasSelect);
 		 collapscrt();
 		 if(!hasSelect){
+		 	$autoDescription.val('');
 		 	$autoRequest.val('');
 			$autoRespond.val('');
 			$automap.data('selectedItem',null);
@@ -277,6 +280,7 @@ define(function(require, exports, module) {
 	}).on('selected', function(e, $trs) {
 		var item = $trs.data('item');
 		$automap.data('selectedItem',item);
+		$autoDescription.val(item.description);
 		$autoRequest.val(item.request);
 		$autoRespond.val(item.response);
 		$('#auto-cur-uid').val(item.uid);
@@ -301,6 +305,7 @@ define(function(require, exports, module) {
 	}).on('rowsRemoved', function(e) {
 		autoNormalSetting = $autopanel.rows();
 		setAutoNormalSetting();
+		$autoDescription.val('');
 		$autoRequest.val('');
 		$autoRespond.val('');
 	}).load();
@@ -322,6 +327,7 @@ define(function(require, exports, module) {
 	$saveRule.on('click',function(e){
 		var uid =$('#auto-cur-uid').val();
 		var item =findNormalSetting(uid);
+		item.description=$autoDescription.val();
 		item.request=$autoRequest.val();
 		item.response=$autoRespond.val();
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');

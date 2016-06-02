@@ -93,7 +93,7 @@ namespace Calibur.Business
             var hasHandlerEvent = FiddlerHelper.EventHandlers.Keys.ToList().Exists(key => key.StartsWith(name));
             if (request.EventType == EventType.Add && !hasHandlerEvent)
             {
-                SessionStateHandler handler = session => SendSessionStateHandler(name, socket, session);
+                SessionStateHandler handler = session => SendSessionStateHandler(name, request.EventName, socket, session);
                 switch (request.EventName)
                 {
                     case EventName.BeforeRequest:
@@ -150,7 +150,7 @@ namespace Calibur.Business
             return null;
         }
 
-        public static void SendSessionStateHandler(string id,IWebSocketConnection socket, Session session)
+        public static void SendSessionStateHandler(string id, EventName eventName,IWebSocketConnection socket, Session session)
         {
             if (session.port == WebSocketHelper.WebSocketPort) return;
             var message = new MessageInfo
@@ -164,7 +164,7 @@ namespace Calibur.Business
             };
 
             socket.Send(JsonConvert.SerializeObject(message, Common.TimeFormat));
-            if (FiddlerHelper.IsPauseSession())
+            if (FiddlerHelper.IsPauseSession() && eventName != EventName.AfterSessionComplete)
             {
                 session.Pause();
             }
