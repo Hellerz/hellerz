@@ -72,12 +72,12 @@ define(["config",'websoket'], function(config,WebSocketEx) {
       }
     }
 
-    // Return the modified object
     return target;
   };
   Calibur.Fiddler = {}
 
   var schemaCache = {};
+  //获取服务端方法Schema集合
   var getJSchema = function(schema) {
     if (schemaCache[schema]) return schemaCache[schema];
     schemaCache[schema] = new Promise(function(resolve, reject) {
@@ -93,7 +93,7 @@ define(["config",'websoket'], function(config,WebSocketEx) {
     });
     return schemaCache[schema];
   };
-
+  //同步调用服务端方法,并执行回调
   var invokeMethod = function(invokeParam) {
     return new Promise(function(resolve, reject) {
       Calibur.webSocket.shuttle({
@@ -112,7 +112,12 @@ define(["config",'websoket'], function(config,WebSocketEx) {
       });
     });
   };
-
+  //预处理arguments，转换成对象形式
+  //{
+  //  inc:[fn,[a,b]],
+  //  met:[fn,[a,b]],
+  //  fn:fn
+  //}
   var preArguments = function() {
     var rest, finals = {};
     if (arguments.length === 0) return finals;
@@ -141,7 +146,7 @@ define(["config",'websoket'], function(config,WebSocketEx) {
   };
 
 
-
+  //注册服务端方法集合
   Calibur.ImplSchema = function(schemaName, callback) {
     Promise.resolve(getJSchema(schemaName)).then(function(schema) {
       var method = {},
@@ -195,6 +200,7 @@ define(["config",'websoket'], function(config,WebSocketEx) {
     });
   };
   
+  //初始化WebSocket对象
   Calibur.webSocket = new WebSocketEx(config.websocketUrl);
 
   return Calibur;

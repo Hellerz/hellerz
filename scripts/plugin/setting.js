@@ -61,6 +61,7 @@ define(function(require, exports, module) {
 	   	}
 	});
 
+	//更新
 	var timerInject = window.setInterval(function(){
 		var version = config.Version;
 		var newVersion = function(){
@@ -94,15 +95,15 @@ define(function(require, exports, module) {
 		});
 	},100);
 
-
-   var timer = window.setInterval(function(){
+	//设置初始化端口号
+    var timer = window.setInterval(function(){
 		Fiddler.GetPort&&Fiddler.GetPort(function(port){
 			window.clearInterval(timer);
     		$portno.val(port);	
     	});
 	},100);
-
-   var iptimer = window.setInterval(function(){
+	//设置初始化IP
+    var iptimer = window.setInterval(function(){
 		System.GetAddressIP&&System.GetAddressIP(function(ip){
 			window.clearInterval(iptimer);
 			$('#ipaddress').html(ip);

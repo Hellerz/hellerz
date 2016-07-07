@@ -47,6 +47,7 @@ define(function(require, exports, module) {
 	$autoIndicate.on('click',function(){
 		pausessn.trigger('click');
 	});
+	//AutoResponder下的Advanced下，修改请求和响应的
 	var autoAction=function(scriptName,context){
 		var setting =zTree.getNodes();
 		var resper =  setting[0];
@@ -100,7 +101,7 @@ define(function(require, exports, module) {
 		}
 		return false;
 	};
-
+	//AutoResponder下的Normal下，代理响应到本地或重定向到其他链接
 	var autoRedirect = function(context){
 		var setting =$autopanel.rows()
 		  , session = context.session

@@ -470,9 +470,9 @@ namespace CEF.Lib.JavascriptObject
             this.InnerSession.bypassGateway = true;
             this.InnerSession.utilCreateResponseAndBypassServer();
             var request = (HttpWebRequest)WebRequest.Create(this.InnerSession.fullUrl);
-            request.Proxy = new WebProxy(proxyServer, bypassOnlocal, bypasss.Split(';'));
+            request.Proxy = new WebProxy(proxyServer, bypassOnlocal, bypasss.Split('|'));
             request.Method = this.InnerSession.RequestMethod;
-            BuildHeader(request, InnerSession.GetRequestBodyAsString());
+            BuildHeader(request, InnerSession.RequestHeaders.ToString(true,false));
             using (var stream = request.GetRequestStream())
             {
                 stream.Write(InnerSession.requestBodyBytes, 0, InnerSession.requestBodyBytes.Length);
@@ -515,7 +515,7 @@ namespace CEF.Lib.JavascriptObject
         private static readonly Regex EachLine = new Regex(@"(?<name>.+?): +(?<value>.*)", RegexOptions.Compiled);
         private static void BuildHeader(HttpWebRequest request, string headers)
         {
-            if (_setSpecialHeaders != null)
+            if (_setSpecialHeaders == null)
             {
                 _setSpecialHeaders = typeof(HttpWebRequest).GetMethod("SetSpecialHeaders", BindingFlags.Instance | BindingFlags.NonPublic);
             }

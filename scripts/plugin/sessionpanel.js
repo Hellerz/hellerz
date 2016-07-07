@@ -4,9 +4,11 @@ define(function(require, exports, module) {
 	var $ = require("jquery");
 	require("grid");
 	require('common');
+	//整数前补齐0
 	var prefixInteger = function (num, length) { 
 		return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); 
 	}
+	//设置Session的Grid
 	var cols=[{title:'#',name:'Id',width:55,sortable:true,align:'center',renderer:function(val){return prefixInteger(val,5);}},{title:'Code',name:'ResponseCode',width:50,sortable:true,align:'center'},{title:'Prtcl',name:'UriScheme',width:45,sortable:true,align:'center'},{title:'Host',name:'Host',width:120,sortable:true,align:'right'},{title:'URL',name:'PathAndQuery',width:450,sortable:true,align:'left'}];
 	var $ssnpanel = $('#mmg').mmGrid({
 		height: '100%',
@@ -21,11 +23,12 @@ define(function(require, exports, module) {
 		isAutoScroll:true,
 		canSimpleUnselect:false
 	});
+	//Grid筛选过滤条件
 	var sessionfilter = {
 		regex:[{
-			re:/\/(.+?)?(json|javascript)/,
-			ext:' js',
-			type:'js'
+			re:/\/(.+?)?(json|javascript)/,//Content-Type或accept匹配
+			ext:' js',//后缀匹配
+			type:'js' //类型
 		},{
 			re:/\/(.+?)?xml/,
 			ext:' xml xhtml ',

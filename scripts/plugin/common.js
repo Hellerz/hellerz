@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 	var re_xml = /^(text|application)\/(.+?)?xml/;
 	var re_text = /^text\//;
 
+	//根据请求头的Content-Type判断报文数据格式
 	$.getMode = function(contentType){
 		if(!contentType)return "text";
 		if(re_html.test(contentType))return "html";
@@ -29,6 +30,7 @@ define(function(require, exports, module) {
 		editor.selection.moveCursorTo(0,0)
 	};
 
+	//展示状态栏（底部）
 	$.statusbar = function(content,mode){
 		mode = mode||'success';
 		$('#statusbar')
@@ -40,6 +42,7 @@ define(function(require, exports, module) {
 			}, 3000 );
 	};
 
+	//展示模态框
 	var popup = $('#popup');
 	$.showPopup = function(title,body,footer){
 		popup.find('.modal-title').html(title);
@@ -49,6 +52,7 @@ define(function(require, exports, module) {
 		return popup;
 	}
 
+	//展示通知栏（顶部）
 	$.notifybar = function(content,mode,indecator,callback){
 		if($.isFunction(mode)){
 			callback = mode;
@@ -73,6 +77,7 @@ define(function(require, exports, module) {
 		}).appendTo($('body'));
 	};
 
+	//创建ACE编辑器
 	$.CreateEditor = function($dom){
 		var editor = new Editor(new Renderer($dom.get(0)));
 		editor.getSession().setUndoManager(new UndoManager());

@@ -106,9 +106,9 @@ define(function(require, exports, module) {
 		
 
 		var logo = $('#logo');
-    	var timer = window.setInterval(function(){
+    	var logoTimer = window.setInterval(function(){
     		Fiddler.IsStarted&&Fiddler.IsStarted(function(isStart){
-    			window.clearInterval(timer);
+    			window.clearInterval(logoTimer);
 	    		logo.toggleClass('off',!isStart);
 	    	});
     	},100);
@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 			});
     	},1000);
        
-
+        //当网络代理端口被其他程序抢占时触发
 		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(){
 			$.statusbar('The system was changed.','warning');
 			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning','thesystemwaschanged',function(e){
@@ -207,7 +207,6 @@ define(function(require, exports, module) {
 		$(window).on('unload',function(){
 			Fiddler.removeRequest();
 			Fiddler.removeResponse();
-			//Fiddler.removeComplete();
 		});
 
         $('#navFun a:first').tab('show');
