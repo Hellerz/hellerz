@@ -90,8 +90,8 @@ namespace Calibur.Business
             var socketid = socket.ConnectionInfo.Id;
             var name = request.EventName.ToString();
             var id = name + "_" + socketid;
-            var hasHandlerEvent = FiddlerHelper.EventHandlers.Keys.ToList().Exists(key => key.StartsWith(name));
-            if (request.EventType == EventType.Add && !hasHandlerEvent)
+            //var hasHandlerEvent = FiddlerHelper.EventHandlers.Keys.ToList().Exists(key => key.StartsWith(name));
+            if (request.EventType == EventType.Add )//&& !hasHandlerEvent)
             {
                 SessionStateHandler handler = session => SendSessionStateHandler(name, request.EventName, socket, session);
                 switch (request.EventName)

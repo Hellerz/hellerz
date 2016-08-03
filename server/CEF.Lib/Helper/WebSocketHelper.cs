@@ -10,6 +10,7 @@ using CEF.Lib.Exceptions;
 using Fleck;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace CEF.Lib.Helper
 {
@@ -38,7 +39,7 @@ namespace CEF.Lib.Helper
         private static WebSocketServer _server;
         static WebSocketHelper()
         {
-            //FleckLog.Level = LogLevel.Debug;
+            FleckLog.Level = LogLevel.Debug;
         }
 
         public static void Start()
@@ -60,7 +61,7 @@ namespace CEF.Lib.Helper
                 };
                 socket.OnError = exception =>
                 {
-
+                    Debug.WriteLine(JsonConvert.SerializeObject(exception));
                 };
             });
         }
@@ -98,6 +99,5 @@ namespace CEF.Lib.Helper
             if (handler != null) handler(message, socket);
         }
 
-       
     }
 }

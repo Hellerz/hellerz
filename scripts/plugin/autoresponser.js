@@ -114,7 +114,7 @@ define(function(require, exports, module) {
 		if(setting.length>0){
 			for (; index < len; index++) {
 				cursetting=setting[index];
-				if(cursetting.checked&&cursetting.request&&cursetting.response){
+				if(cursetting&&cursetting.checked&&cursetting.request&&cursetting.response){
 					reqmatch = aynreq(cursetting.request);
 					if(isMatchRequest(session.FullUrl,reqmatch)){
 						resmatch = aynres(cursetting.response);

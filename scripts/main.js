@@ -1,4 +1,4 @@
-window.WebVersion = '201606022045';
+window.WebVersion = '201608031302';
 window.ServiceVersion = '1.0.5994';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
@@ -128,28 +128,28 @@ define(function(require, exports, module) {
         	});
 		});
 
-        var re_exe = /\[(.+?)\]/;
-        var re_caliburName = /(calibur|rcgui).*.exe/i;
-        window.setInterval(function(){
-        	Fiddler.GetPort&&Fiddler.GetPort(function(port) {
-        		System.GetRunResult('netstat','-nbp tcp','',function(lines){
-					var searchPort = new RegExp('TCP\\s+127\\.0\\.0\\.1:'+port+'.+?ESTABLISHED','i');
-					var curExe = '';
-					for (var i = 0; i < lines.length; i++) {
-						if(re_exe.test(lines[i])){
-							curExe =  lines[i].replace(re_exe,'$1');
-							continue;
-						}
-						if(searchPort.test(lines[i])&&i>0){
-							if(!re_caliburName.test(curExe)){
-								$.statusbar('Port has occupied. ProcessName:'+ curExe +', Port:'+port,'danger');
-								break;
-							}
-						}
-					};		
-        		});
-			});
-    	},1000);
+   //      var re_exe = /\[(.+?)\]/;
+   //      var re_caliburName = /(calibur|rcgui).*.exe/i;
+   //      window.setInterval(function(){
+   //      	Fiddler.GetPort&&Fiddler.GetPort(function(port) {
+   //      		System.GetRunResult('netstat','-nbp tcp','',function(lines){
+			// 		var searchPort = new RegExp('TCP\\s+127\\.0\\.0\\.1:'+port+'.+?ESTABLISHED','i');
+			// 		var curExe = '';
+			// 		for (var i = 0; i < lines.length; i++) {
+			// 			if(re_exe.test(lines[i])){
+			// 				curExe =  lines[i].replace(re_exe,'$1');
+			// 				continue;
+			// 			}
+			// 			if(searchPort.test(lines[i])&&i>0){
+			// 				if(!re_caliburName.test(curExe)){
+			// 					$.statusbar('Port has occupied. ProcessName:'+ curExe +', Port:'+port,'danger');
+			// 					break;
+			// 				}
+			// 			}
+			// 		};		
+   //      		});
+			// });
+   //  	},1000);
        
         //当网络代理端口被其他程序抢占时触发
 		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(){
