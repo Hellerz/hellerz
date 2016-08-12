@@ -1,5 +1,5 @@
-window.WebVersion = '201608031302';
-window.ServiceVersion = '1.0.5996';
+window.WebVersion = '201608121904';
+window.ServiceVersion = '1.0.6068';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
 	paths: {
@@ -41,6 +41,8 @@ requirejs.config({
 		setting:'plugin/setting',
 		sessionpanel:'plugin/sessionpanel',
 		inspector:'plugin/inspector',
+
+		autoresponsersetting:'plugin/config/autoresponser',
 	},
 	shim: {
 		'bootstrap': {

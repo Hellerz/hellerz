@@ -53,7 +53,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FiddlerCore4">
+    <Reference Include="FiddlerCore4, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FiddlerCoreAPI\DotNet4\FiddlerCore4.dll</HintPath>
     </Reference>
     <Reference Include="Gma.QrCodeNet.Encoding.Net45">

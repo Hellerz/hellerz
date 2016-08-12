@@ -11,7 +11,7 @@ D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\Calibur.Model.pdb
 D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\CEF.Lib.pdb
 D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\Fleck.pdb
 D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\Newtonsoft.Json.xml
-D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\FiddlerCore4.xml
 D:\git\Hellerz\Hellerz\server\Calibur.Service\obj\Release\Calibur.Service.csprojResolveAssemblyReference.cache
 D:\git\Hellerz\Hellerz\server\Calibur.Service\obj\Release\Calibur.Service.dll
 D:\git\Hellerz\Hellerz\server\Calibur.Service\obj\Release\Calibur.Service.pdb
+D:\git\Hellerz\Hellerz\server\Calibur.Service\bin\Release\FiddlerCore4.xml

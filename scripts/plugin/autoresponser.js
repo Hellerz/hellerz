@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 	var pausessn = require('sessionpanel').pausessn;
 	var File = require('file');
 	var Directory = require('directory');
-
+	var ARSettings = require('autoresponsersetting');
 	require('bootstraptypeahead');
 	require('common');
 	require("ztreecore");
@@ -69,17 +69,33 @@ define(function(require, exports, module) {
 		}
 	};
 
-	var autoReqRe = /((regex|exact):|)(.+)/i;
+	var  autoReqRe= /(\w+):((\/(.+?)\/([igm]*)\s)|(.+?\s(?=\w+:))|(.+\s))|(.+)/ig;
 	var autoResRe = /(\*|\w:\\|http(s?):\/\/|).+/i;
 	var aynreq = function(reqPattern){
-		var match = reqPattern.match(autoReqRe);
-		if(match&&match.length===4){
-			return {
-				"option":(match[2]||'exact').toLowerCase(),
-				"text":match[3],
-			} 
+		var match,matchRules=[];
+		while(match,match = autoReqRe.exec(reqPattern+' ')){
+			if(match&&match.length===9){
+				if(match[1]){
+					match[1] = match[1].toLowerCase();
+					if(match[1] === 'https'||match[1] === 'http'){
+						match[1]= 'url' ;
+						match[2] = match[1]+match[2];
+					} 
+				}
+				var rule = {
+					"option":match[8]?'url':match[1],
+					"regex":match[4],
+					"flags":match[5],
+					"text":match[8]||match[7]||match[6],
+				};
+				rule.option = rule.option&&rule.option.trim();
+				rule.regex = rule.regex&&rule.regex.trim();
+				rule.flags = rule.flags&&rule.flags.trim();
+				rule.text = rule.text&&rule.text.trim();
+				matchRules.push(rule);
+			}
 		}
-		return null;
+		return matchRules;
 	};
 	var aynres = function(resPattern){
 		var match = resPattern.match(autoResRe);
@@ -91,15 +107,37 @@ define(function(require, exports, module) {
 		}
 		return null;
 	};
-	var isMatchRequest = function(url,reqmatch){
-		if(reqmatch&&url){
-			if(reqmatch.option==='regex'){
-				return new RegExp(reqmatch.text,'i').test(url);
-			}else{
-				return url.indexOf(reqmatch.text) >- 1;
+	var reqRule = {
+		url : function(session,rule){
+			return session.FullUrl;
+		},
+		method : function(session,rule){
+			return session.Method;
+		},
+		body : function(session,rule){
+			return session.RequesetBody;
+		},
+		head : function(session,rule){
+			return JSON.stringify(session.RequestHeaders);
+		},
+	};
+	
+	var isMatchRequest = function(session,rules){
+		var valid = rules.length;
+		for (var i = rules.length - 1; i >= 0; i--) {
+			var rule = rules[i];
+			var ioperate = reqRule[rule.option](session);
+			if(rule&&ioperate){
+				if(rule.regex&&new RegExp(rule.regex,rule.flags).test(ioperate)){
+				}
+				else if(ioperate.indexOf(rule.text) >- 1){
+				}
+				else{
+					return false;
+				}
 			}
-		}
-		return false;
+		};
+		return valid;
 	};
 	//AutoResponder下的Normal下，代理响应到本地或重定向到其他链接
 	var autoRedirect = function(context){
@@ -109,18 +147,25 @@ define(function(require, exports, module) {
 		  , index = 0
 		  , cursetting
 		  , match
-		  , reqmatch
+		  , reqmatches
 		  , resmatch
 		if(setting.length>0){
 			for (; index < len; index++) {
 				cursetting=setting[index];
 				if(cursetting&&cursetting.checked&&cursetting.request&&cursetting.response){
-					reqmatch = aynreq(cursetting.request);
-					if(isMatchRequest(session.FullUrl,reqmatch)){
+					reqmatches = aynreq(cursetting.request);
+					if(isMatchRequest(session,reqmatches)){
 						resmatch = aynres(cursetting.response);
-						if(reqmatch.option === 'regex'){
-							resmatch.text = session.FullUrl.replace(new RegExp(reqmatch.text,'i'),resmatch.text);
+
+						if(reqmatches){
+							for (var matchIndex = reqmatches.length - 1; matchIndex >= 0; matchIndex--) {
+								var ireqmatch = reqmatches[matchIndex];
+								if(ireqmatch&&ireqmatch.option==='url'&&ireqmatch.regex){
+									resmatch.text = session.FullUrl.replace(new RegExp(ireqmatch.regex,'i'),resmatch.text);
+								}
+							};
 						}
+
 						if(resmatch.text.indexOf('http')>-1){//web
 							session.SetfullUrl(resmatch.text);
 						}else if(resmatch.option.indexOf(':\\')>-1){//file
@@ -160,10 +205,11 @@ define(function(require, exports, module) {
 		localStorage['autoNormalSetting'] =JSON.stringify(autoNormalSetting);
 	};
 	var findNormalSetting = function(uid){
-		var len=autoNormalSetting.length,i=0;
+		var iautoNormalSetting = $autopanel.rows();
+		var len=iautoNormalSetting.length,i=0;
 		for(;i<len;i++){
-			if(uid === autoNormalSetting[i].uid){
-				return autoNormalSetting[i];
+			if(uid === iautoNormalSetting[i].uid){
+				return iautoNormalSetting[i];
 			}
 		}
 
@@ -266,6 +312,7 @@ define(function(require, exports, module) {
 		var curItem = findNormalSetting(uid);
 		curItem&&(curItem.checked = $checkbox.prop('checked'));
 		setAutoNormalSetting();
+		var ss =$autopanel.rows();
         e.stopPropagation();
 	});
 	$autopanel.on('cellAfterSelected',function(){
@@ -438,12 +485,12 @@ define(function(require, exports, module) {
 	
 
 	//ADVANCED
-	var newCount = 1;
-	var editorTreeNode;
-	var setting = {
+	var newCount = 1,
+		editorTreeNode,
+		zNodes = JSON.parse(localStorage['AutoResponserSettings']||'{}'),
+		setting = {
         view: {
             addHoverDom: function (treeId, treeNode) {
-            	localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
             	if(treeNode.level === 0){
             		$("#"+treeNode.tId+"_edit").hide();
             		$("#"+treeNode.tId+"_remove").hide();
@@ -513,9 +560,13 @@ define(function(require, exports, module) {
 		}
     };
     
-    var zNodes = localStorage['AutoResponserSettings']||'[{"id": 1,"name": "AutoResponser","drag": false,"open": true,"level": 0, "isParent": true,"zAsync": true,"isFirstNode": true,"isLastNode": true,"isAjaxing": false,"isHover": true,"editNameFlag": false,"checked": true,"checkedOld": true,"nocheck": false,"chkDisabled": false,"halfCheck": false,"check_Child_State": 1,"check_Focus": false}]';
+    if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
+    	zNodes = ARSettings.config;
+    	localStorage['AutoResponserSettings'] = JSON.stringify(zNodes);
+    }
+    
 
-    var zTree = $.fn.zTree.init($("#autoResponserTree"), setting,JSON.parse(zNodes));
+    var zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
 
 
     var requester = $.CreateEditor($('#requester'));
@@ -535,6 +586,7 @@ define(function(require, exports, module) {
 	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 	    exec: function(editor) {
 	        editorTreeNode.responseScript = editor.getValue();
+	        localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
 	    },
 	    readOnly: false 
 	});

@@ -8,8 +8,8 @@ D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\Newtonsoft.Json.dll
 D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\Calibur.Model.pdb
 D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\CEF.Lib.pdb
 D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\Fleck.pdb
-D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\FiddlerCore4.xml
 D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\Newtonsoft.Json.xml
 D:\git\Hellerz\Hellerz\server\Calibur.Business\obj\Release\Calibur.Business.csprojResolveAssemblyReference.cache
 D:\git\Hellerz\Hellerz\server\Calibur.Business\obj\Release\Calibur.Business.dll
 D:\git\Hellerz\Hellerz\server\Calibur.Business\obj\Release\Calibur.Business.pdb
+D:\git\Hellerz\Hellerz\server\Calibur.Business\bin\Release\FiddlerCore4.xml

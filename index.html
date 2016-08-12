@@ -155,14 +155,14 @@
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right auto-request-list">
-                      <li><a href="javascript:void(0)">regex:(?inx).+\.jpg$ #Match string ending with JPG</a></li>
-                      <li><a href="javascript:void(0)">regex:(?inx).+\.(gif|png|jpg)$ #Match string ending with img types</a></li>
-                      <li><a href="javascript:void(0)">regex:(?inx)^http://.+\.gif$ #Match HTTPS-delivered GIFs</a></li>
-                      <li><a href="javascript:void(0)">URL WithBody:Upload.php regex:^.*Body Text.*$</a></li>
-                      <li><a href="javascript:void(0)">method:OPTIONS XHRCors.php</a></li>
-                      <li><a href="javascript:void(0)">flag:x-ProcessInfo=iexplore</a></li>
-                      <li><a href="javascript:void(0)">Header:Accept=html</a></li>
-                      <li><a href="javascript:void(0)">65%PartialUrl</a></li>
+                      <li><a href="javascript:void(0)">url:/(http|https):\/\/.+/ig</a></li>
+                      <li><a href="javascript:void(0)">url:http://www.calibur.com</a></li>
+                      <li><a href="javascript:void(0)">method:/GET|OPTIONS/</a></li>
+                      <li><a href="javascript:void(0)">method:GET</a></li>
+                      <li><a href="javascript:void(0)">head:/content-type:application\/json/ig</a></li>
+                      <li><a href="javascript:void(0)">head:application/json</a></li>
+                      <li><a href="javascript:void(0)">body:/\d{5,10}/</a></li>
+                      <li><a href="javascript:void(0)">body:1234567</a></li>
                     </ul>
                   </div>
                 </div>

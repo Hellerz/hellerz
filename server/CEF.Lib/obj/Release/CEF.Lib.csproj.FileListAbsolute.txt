@@ -7,10 +7,10 @@ D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Gma.QrCodeNet.Encoding.Net45.d
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Newtonsoft.Json.dll
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Calibur.Model.pdb
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Fleck.pdb
-D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\FiddlerCore4.xml
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Gma.QrCodeNet.Encoding.Net45.pdb
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Gma.QrCodeNet.Encoding.Net45.xml
 D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\Newtonsoft.Json.xml
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Release\CEF.Lib.csprojResolveAssemblyReference.cache
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Release\CEF.Lib.dll
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Release\CEF.Lib.pdb
+D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Release\FiddlerCore4.xml

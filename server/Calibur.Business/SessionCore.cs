@@ -76,6 +76,7 @@ namespace Calibur.Business
                 RequestPath = session.RequestPath,
                 GetHttpResponseStatus = session.GetHttpResponseStatus,
                 GetStatusDescription = session.GetStatusDescription,
+                RequesetBody = session.GetRequestBodyAsString(),
                 UrlParam=session.UrlParam,
                 RequestHeaders = session.RequestHeaders,
                 ResponseHeaders = session.ResponseHeaders

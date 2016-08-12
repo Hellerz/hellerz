@@ -42,10 +42,10 @@ namespace Calibur.Model
         public string RequestPath { get; set; }
         public string GetHttpResponseStatus { get; set; }
         public string GetStatusDescription { get; set; }
+        public string RequesetBody { get; set; }
         public Dictionary<string, string> UrlParam { get; set; }
         public Dictionary<string, object> ResponseHeaders { get; set; }
         public Dictionary<string,string> RequestHeaders { get; set; }
-
     }
 
     public class SessionInfoTimers
