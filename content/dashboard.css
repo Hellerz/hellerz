@@ -542,3 +542,29 @@ iframe{
 #editRule{
   display: none;
 }
+
+#mmg-filter{
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 2px;
+}
+
+#filter-search{
+    display: inline;
+    width: 20%;
+    height: 21px;
+    margin-top: 2px;
+    padding: 0 4px;
+}
+
+#load_screen{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -80px;
+  bottom: 0;
+  z-index: 100000000;
+  padding-top: 25%;
+  background: #333;
+}

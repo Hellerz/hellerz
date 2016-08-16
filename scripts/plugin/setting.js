@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 	var $ = require("jquery");
 	var config = require("config");
 	var System = require("system");
-
+	var Calibur = require("calibur");
 	require("bootstrap");
 	require("bootstrapswitch");
 	require('common');
@@ -61,8 +61,9 @@ define(function(require, exports, module) {
 	   	}
 	});
 
+
 	//更新
-	var timerInject = window.setInterval(function(){
+	Calibur.SyncTimer(function(clear){
 		var version = config.Version;
 		var newVersion = function(){
 			var $popup = $.showPopup('Update',
@@ -77,7 +78,7 @@ define(function(require, exports, module) {
 			newVersion();
 		}
 		System.CompareVersion&&System.CompareVersion(version,function(sysversion){
-			window.clearInterval(timerInject);
+			clear();
 			if(sysversion < 0){
 				if(localStorage.showUpdateVersion!==version){
 					var $popup = $.showPopup('Update',
@@ -93,20 +94,20 @@ define(function(require, exports, module) {
 				$('#updateserver').show();
 			}
 		});
-	},100);
+	});
 
 	//设置初始化端口号
-    var timer = window.setInterval(function(){
+    Calibur.SyncTimer(function(clear){
 		Fiddler.GetPort&&Fiddler.GetPort(function(port){
-			window.clearInterval(timer);
-    		$portno.val(port);	
+			clear();
+    		$portno.val(port);
     	});
-	},100);
+	});
 	//设置初始化IP
-    var iptimer = window.setInterval(function(){
+    Calibur.SyncTimer(function(clear){
 		System.GetAddressIP&&System.GetAddressIP(function(ip){
-			window.clearInterval(iptimer);
+			clear();
 			$('#ipaddress').html(ip);
 		});
-	},100);
+	});
 });

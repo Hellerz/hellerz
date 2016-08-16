@@ -1,4 +1,4 @@
-window.WebVersion = '201608121904';
+window.WebVersion = '201608162208';
 window.ServiceVersion = '1.0.6068';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
@@ -43,6 +43,7 @@ requirejs.config({
 		inspector:'plugin/inspector',
 
 		autoresponsersetting:'plugin/config/autoresponser',
+		loading:'lib/loading',
 	},
 	shim: {
 		'bootstrap': {
@@ -62,6 +63,9 @@ requirejs.config({
 			deps: ['jquery'],
 		},
 		
+		'loading': {
+			deps: ['jquery'],
+		},
 
 		//ztree
 		'ztreecore':{
@@ -106,14 +110,14 @@ define(function(require, exports, module) {
 		require('autoresponser');
 		require('setting');
 		
-
+		$('#load_screen').hide();
 		var logo = $('#logo');
-    	var logoTimer = window.setInterval(function(){
+    	Calibur.SyncTimer(function(clear){
     		Fiddler.IsStarted&&Fiddler.IsStarted(function(isStart){
-    			window.clearInterval(logoTimer);
+    			clear();
 	    		logo.toggleClass('off',!isStart);
 	    	});
-    	},100);
+    	});
         logo.on('click', function(e) {
         	Fiddler.IsStarted(function(isStart){
         		if(isStart){
@@ -163,12 +167,13 @@ define(function(require, exports, module) {
 				});
 			});
 		});
-		var timer = window.setInterval(function(){
+
+    	Calibur.SyncTimer(function(clear){
     		Fiddler.IsStarted&&Fiddler.IsStarted(function(isStart){
-    			window.clearInterval(timer);
+    			clear();
 	    		logo.toggleClass('off',!isStart);
 	    	});
-    	},100);
+    	});
 		Calibur.webSocket.onServerError=function(evt){
         	console.dir(JSON.parse(evt.data));
         };

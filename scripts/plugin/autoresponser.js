@@ -161,7 +161,7 @@ define(function(require, exports, module) {
 							for (var matchIndex = reqmatches.length - 1; matchIndex >= 0; matchIndex--) {
 								var ireqmatch = reqmatches[matchIndex];
 								if(ireqmatch&&ireqmatch.option==='url'&&ireqmatch.regex){
-									resmatch.text = session.FullUrl.replace(new RegExp(ireqmatch.regex,'i'),resmatch.text);
+									resmatch.text = session.FullUrl.replace(new RegExp(ireqmatch.regex,reqmatches.flags),resmatch.text);
 								}
 							};
 						}

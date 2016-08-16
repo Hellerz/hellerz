@@ -27,6 +27,13 @@ define(["config",'websoket'], function(config,WebSocketEx) {
     }  
     return out;  
   };
+  Calibur.SyncTimer = function(action){
+    var timer = window.setInterval(function(){
+      action(function(){
+        window.clearInterval(timer);
+      });
+    },100);
+  };
   Calibur.extend = function() {
     var options, name, src, copy, copyIsArray, clone,
       target = arguments[0] || {},

@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
+	var Calibur = require("calibur");
 	require("grid");
 	require('common');
 	//整数前补齐0
@@ -137,13 +138,13 @@ define(function(require, exports, module) {
 	});
 	var $pausessn = $('#pausessn');
 	
-	var timer = window.setInterval(function(){
+	Calibur.SyncTimer(function(clear){
 		Fiddler.IsPauseSession&&Fiddler.IsPauseSession(function(isPause){
-			window.clearInterval(timer);
+			clear();
 			$pausessn.toggleClass('off',!isPause);
 			$pausessn.trigger('switch',isPause);
 		});
-	},100);
+	});
 	
     $pausessn.on('click', function(e) {
     	Fiddler.IsPauseSession(function(isPause){
