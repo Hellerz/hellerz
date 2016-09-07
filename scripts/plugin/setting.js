@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	var config = require("config");
 	var System = require("system");
 	var Calibur = require("calibur");
+	var Storage = require("storage");
 	require("bootstrap");
 	require("bootstrapswitch");
 	require('common');
@@ -45,8 +46,24 @@ define(function(require, exports, module) {
 			$.statusbar("HTTPS proxy has "+(value?'open':'closed'),'info');
 		});
 	});
-	Fiddler.GetHttps&&Fiddler.GetHttps(function(isHttps){
-		$sethttps.bootstrapSwitch('state',isHttps);
+	Calibur.SyncTimer(function(clear){
+		Fiddler.GetHttps&&Fiddler.GetHttps(function(isHttps){
+			$sethttps.bootstrapSwitch('state',isHttps);
+		});
+	});
+
+	var $setForceProxys = $('#setForceProxys')
+	.bootstrapSwitch('size','small')
+	.on('switchChange.bootstrapSwitch', function (e, value) {
+		Storage.Set("AutoForceProxy",(value?'true':''),function(isopen){
+			$.statusbar("Auto Force Proxy has "+(value?'open':'closed'),'info');
+		});
+	});
+	Calibur.SyncTimer(function(clear){
+		Storage.Get&&Storage.Get("AutoForceProxy",function(isopen){
+			$setForceProxys.bootstrapSwitch('state',(!!isopen).toString());
+			clear();
+		});
 	});
 
 	var $portno = $('#portno')

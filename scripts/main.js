@@ -1,5 +1,5 @@
-window.WebVersion = '201608162208';
-window.ServiceVersion = '1.0.6068';
+window.WebVersion = '201609071755';
+window.ServiceVersion = '1.0.6070';//'1.0.6068';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
 	paths: {
@@ -33,6 +33,8 @@ requirejs.config({
 		file:'ssn/file',
 		directory:'ssn/directory',
 		system:'ssn/system',
+		storage:'ssn/storage',
+		
 
 
 		common:'plugin/common',
@@ -94,7 +96,8 @@ define(function(require, exports, module) {
 	  , Calibur = require("calibur")
 	  , Fiddler = require("fiddler")
 	  , System = require("system")
-	  , config = require("config");
+	  , config = require("config")
+	  , Storage = require('storage');
 
 	//load jQuery Plugin
 	require("bootstrap");
@@ -159,13 +162,22 @@ define(function(require, exports, module) {
        
         //当网络代理端口被其他程序抢占时触发
 		Calibur.webSocket.addMessageEvent('DetachedUnexpectedly',function(){
-			$.statusbar('The system was changed.','warning');
-			$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning','thesystemwaschanged',function(e){
-    			Fiddler.ReStart().GetPort(function(port) {
-					$.statusbar("Proxy has started. Port:"+port,'info');
-					logo.removeClass('off');
-				});
+			Storage.Get("AutoForceProxy",function(isopen){
+				if(isopen){
+					Fiddler.ReStart().GetPort(function(port) {
+						logo.removeClass('off');
+					});
+				}else{
+					$.statusbar('The system was changed.','warning');
+					$.notifybar('The system was changed.Click to reenable Fiddler capture.','warning','thesystemwaschanged',function(e){
+		    			Fiddler.ReStart().GetPort(function(port) {
+							$.statusbar("Proxy has started. Port:"+port,'info');
+							logo.removeClass('off');
+						});
+					});
+				}
 			});
+			
 		});
 
     	Calibur.SyncTimer(function(clear){
