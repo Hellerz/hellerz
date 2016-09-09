@@ -97,7 +97,7 @@ namespace CEF.Lib.Helper
         [JSchema]
         public static void SetHttps(bool isHttps)
         {
-            StorageHelper.SetValue("fiddlerport", isHttps.ToString().ToLower());
+            StorageHelper.SetValue("ishttps", isHttps.ToString().ToLower());
             _isHttps = isHttps;
         }
         [JSchema]
