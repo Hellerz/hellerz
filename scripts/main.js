@@ -11,7 +11,6 @@ requirejs.config({
 		session: 'ssn/session',
 		fiddler: 'ssn/fiddler',
 		utils: 'ssn/utils',
-		storage:'ssn/storage',
 
 		jquery: 'lib/jquery-2.1.4',
 		bootstrap: 'lib/bootstrap',
