@@ -16,7 +16,7 @@ define(function(require, exports, module) {
     for (arg = [], len = argument.length, i = 0; i < len; i++) {
       arg.push('argument[' + i + ']');
     };
-    eval('instance = new ' + constructor.name + '(' + arg.join(',') + ');');
+    eval('instance = new ' + constructor.prototype.toString().replace(/\[object/ig,"").replace("]","") + '(' + arg.join(',') + ');');
     return instance;
   };
   WebSocket.prototype.__shuttleCache = {};
@@ -88,7 +88,7 @@ define(function(require, exports, module) {
   };
  
   return function WebSocketEx() {
-    var webSocket = invoke(window.WebSocket || window.MozWebSocket, arguments);
+    var webSocket = new window.WebSocket(arguments[0]);// invoke(window.WebSocket || window.MozWebSocket, arguments);
     var invokeReadyStatusCallback = function() {
       while (webSocket.__readyStateCallbackCache[0]) {
         webSocket.send(webSocket.__readyStateCallbackCache.pop());

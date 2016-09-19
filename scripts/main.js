@@ -1,4 +1,4 @@
-window.WebVersion = '201609071755';
+window.WebVersion = '201609192318';
 window.ServiceVersion = '1.0.6096';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
