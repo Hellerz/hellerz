@@ -130,9 +130,13 @@ define(function(require, exports, module) {
 		}
 		var initInfo =function(){
 			var setting = JSON.parse(localStorage['setting']);
-			$query_env.selectpicker('val',setting.env)
+			if(!setting.author){
+				setting.author = $query_operator.val();
+				localStorage['setting'] = JSON.stringify(setting);
+			}
+			$info_env.selectpicker('val',setting.env)
 			$info_operator.val(setting.author);
-			$query_appid.val(setting.appid);
+			$info_appid.val(setting.appid);
 
 		    $info_desc.focus().val('');
 		    $info_deviceid.val('');
