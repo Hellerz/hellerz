@@ -65,6 +65,8 @@ define(function(require, exports, module) {
 		var $Add = $('#AddMockUI');
 		var $Update = $('#UpdateMockInfo');
 		var $Submit = $('#AddMockInfo');
+		var $Duplicate = $('#DuplicateMockInfo');
+		var $ReplaceCID = $('#ReplaceCID');
 
 		//筛选项
 		var $query_deviceid = $('#query_deviceid');
@@ -87,6 +89,11 @@ define(function(require, exports, module) {
 		var $info_isvalid = $('#info_isvalid');
 		var $info_responser = $('#responser');
 
+
+		var $replace_cid = $('#replace_cid');
+
+
+			
 		var fws_pre = 'http://gateway.m.fws.qa.nt.ctripcorp.com/restapi/soa2/10124/';
 		var uat_pre = 'http://gateway.m.uat.qa.nt.ctripcorp.com/restapi/soa2/10124/';
 
@@ -106,6 +113,7 @@ define(function(require, exports, module) {
 		var isAddNew = true;//增加info时，选中增加的tr
 		$Update.hide();
 	    $Submit.hide();
+	    $Duplicate.hide();
 		responserEditor.getSession().setMode("ace/mode/javascript");
 		responserEditor.on('paste',function(e){
 			window.setTimeout(function(){formatEditer(responserEditor,"javascript");},400);
@@ -120,21 +128,7 @@ define(function(require, exports, module) {
 		if(!localStorage['setting']){
 			localStorage['setting'] = JSON.stringify({"author":"","appid":"860501","env":"FWS"});
 		}
-		var setting = JSON.parse(localStorage['setting']);
-		$query_env.selectpicker('val',setting.env)
-		$query_operator.val(setting.author);
-		$query_appid.val(setting.appid);
-
-		$info_env.selectpicker('val',setting.env);
-		$info_operator.val(setting.author);
-		$info_appid.val(setting.appid);
-
-
-		$Search.on('click', function() {
-			search();
-		});
-
-		$Add.on('click', function() {
+		var initInfo =function(){
 			var setting = JSON.parse(localStorage['setting']);
 			$query_env.selectpicker('val',setting.env)
 			$info_operator.val(setting.author);
@@ -149,10 +143,30 @@ define(function(require, exports, module) {
 		    $info_mid.html('');
 		    responserEditor.setValue('');
 		    $Update.hide();
+		    $Duplicate.hide();
 		    $Submit.show();
+		};
+		var setting = JSON.parse(localStorage['setting']);
+
+		$query_env.selectpicker('val',setting.env)
+		$query_operator.val(setting.author);
+		$query_appid.val(setting.appid);
+
+		$info_env.selectpicker('val',setting.env);
+		$info_operator.val(setting.author);
+		$info_appid.val(setting.appid);
+
+
+		$Search.on('click', function() {
+			search();
+		});
+
+		$Add.on('click', function() {
+			initInfo();
 		});
 
 		$Submit.on('click', function() {
+			$Submit.hide();
 			var url = 'GetMockInfo.json';
 			if ($info_env.val() === 'FWS') {
 				url = fws_pre + url;
@@ -179,13 +193,15 @@ define(function(require, exports, module) {
 				Operation: "INSERT"
 			}; 
 			$.post(url,JSON.stringify(request) , function(respose) {
+				$Submit.show();
 				if(respose&&respose.ResponseStatus){
 					if(respose.ResponseStatus.Ack==='Success'){
 						var info =respose.Data.MockInfoList[0];
 						isAddNew =true;
-						$mockpanel.addRow(rinfo, $mockpanel.rowsLength());
+						$mockpanel.addRow(info, $mockpanel.rowsLength());
 						$info_mid.html(info.Mid);
 						$Update.show();
+						$Duplicate.show();
 		    			$Submit.hide();
 						$.statusbar("Insert Success",'info');
 					}else if(respose.ResponseStatus.Errors&&respose.ResponseStatus.Errors.length){
@@ -197,7 +213,6 @@ define(function(require, exports, module) {
 					$.statusbar('No Data Insert','danger');
 				}
 			});
-
 		});
 
 		$Update.on('click', function() {
@@ -243,8 +258,28 @@ define(function(require, exports, module) {
 			});
 		});
 
+		$Duplicate.on('click', function() {
+			$Duplicate.hide();
+			$Update.hide();
+			$Submit.show();
+			$info_mid.html('');
+		});
+
+		$ReplaceCID.on('click', function() {
+			if(!$replace_cid.val()){
+				$.notifybar('请输入要替换的设备号!','warning');
+			}
+
+			$.notifybar('请选择要替换的Mock!按住Ctrl可多选','warning');
+
+		});
+
 
 		var search =function(){
+			if(!$query_operator.val()){
+				$.notifybar('请在搜索栏创建人输入你的名字！','warning');
+				return;
+			}
 			var url = 'GetMockInfo.json';
 			if ($query_env.val() === 'FWS') {
 				url = fws_pre + url;
@@ -273,6 +308,10 @@ define(function(require, exports, module) {
 						$mockpanel.removeRow(function($tbody ){
 							$tbody.find('tr').remove(); 
 						});
+						if(respose.Data.MockInfoList.length===0){
+							initInfo();
+							return;
+						}
 						for (var i = 0 ,len = respose.Data.MockInfoList.length; i < len ; i++) {
 							$mockpanel.addRow(respose.Data.MockInfoList[i], $mockpanel.rowsLength());
 						};
@@ -363,6 +402,7 @@ define(function(require, exports, module) {
 			$.showEditor(responserEditor,item.Response,'javascript');
 			$info_isregex.prop('checked',item.IsRegex);
 			$Update.show();
+			$Duplicate.show();
 		    $Submit.hide();
 		});
 		$Search.trigger('click');

@@ -598,3 +598,7 @@ iframe{
 .bootstrap-select.btn-group{
   margin: 0;
 }
+
+.bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]) {
+    width: 100px;
+}

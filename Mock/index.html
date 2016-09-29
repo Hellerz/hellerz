@@ -25,11 +25,11 @@
             <button type="submit" class="btn btn-sm btn-primary" id="QueryMockInfoList">搜索</button>
             <div class="form-group input-group input-group-sm">
               <label class="sr-only" for="query_deviceid">设备号</label>
-              <input type="text" class="form-control" id="query_deviceid" title="设备号"  placeholder="设备号" style="width:250px;">
+              <input type="text" class="form-control" id="query_deviceid" title="设备号"  placeholder="设备号" style="width:200px;">
             </div>
             <div class="form-group input-group input-group-sm">
               <label class="sr-only" for="query_name">接口名</label>
-              <input type="text" class="form-control" id="query_name" title="接口名"  placeholder="接口名" style="width:250px;">
+              <input type="text" class="form-control" id="query_name" title="接口名"  placeholder="接口名" style="width:200px;">
             </div>
             <div class="form-group input-group input-group-sm">
               <select id="query_env" name="type" class="selectpicker">
@@ -39,17 +39,27 @@
             </div>
             <div class="form-group input-group input-group-sm">
               <label class="sr-only" for="query_operator">创建人</label>
-              <input type="text" class="form-control" id="query_operator" title="创建人"  placeholder="创建人">
+              <input type="text" class="form-control" id="query_operator" title="创建人"  placeholder="创建人" style="width:100px;">
             </div>
             <div class="form-group input-group input-group-sm">
               <label class="sr-only" for="query_mid">编号</label>
-              <input type="text" class="form-control" id="query_mid" title="编号"  placeholder="编号">
+              <input type="text" class="form-control" id="query_mid" title="编号"  placeholder="编号" style="width:100px;">
             </div>
             <div class="form-group input-group input-group-sm">
               <label class="sr-only" for="query_appid">应用程序号</label>
-              <input type="text" class="form-control" id="query_appid" title="应用程序号"  placeholder="应用程序号">
+              <input type="text" class="form-control" id="query_appid" title="应用程序号"  placeholder="应用程序号" style="width:100px;">
             </div>
-            <button type="submit" class="btn btn-sm btn-primary pull-right" id="AddMockUI">+</button>
+
+            <button type="submit" class="btn btn-sm btn-primary pull-right" id="AddMockUI" style="margin-left:30px;">+</button>
+
+            <button type="submit" class="btn btn-sm btn-success pull-right margin10-x hide" id="ReplaceCID">批量替换CID</button>
+            <div class="form-group input-group input-group-sm pull-right hide">
+              <label class="sr-only" for="query_appid">设备号</label>
+              <input type="text" class="form-control" id="replace_cid" title="设备号"  placeholder="设备号" style="width:200px;">
+            </div>
+            
+
+            
           </div>
         </div> 
       </div> 
@@ -143,6 +153,7 @@
           <div class="col-md-2">
             <div class="input-group input-group-sm margin5">
               <button type="submit" class="btn btn-sm btn-primary" id="UpdateMockInfo">更新</button>
+              <button type="submit" class="btn btn-sm btn-warning margin10-x" id="DuplicateMockInfo">复制</button>
               <button type="submit" class="btn btn-sm btn-success" id="AddMockInfo">提交</button>
             </div>
           </div>
