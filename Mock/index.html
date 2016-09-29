@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+  <head> 
+    <title>Mock</title> 
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="content/normalize.css" /> 
+    <link rel="stylesheet" href="content/bootstrap.css" /> 
+    <link rel="stylesheet" href="content/bootstrap-switch.css" /> 
+    <link rel="stylesheet" href="content/bootstrap-select.css" /> 
+    <link rel="stylesheet" href="content/bootstrap-theme.css" /> 
+    <link rel="stylesheet" href="content/mmGrid.css" /> 
+    <link rel="stylesheet" href="content/loading.css" /> 
+    <link rel="stylesheet" href="content/dashboard.css" /> 
+    <script data-main="scripts/main" src="scripts/require_2.1.22.js"></script> 
+  </head> 
+  <body class="dashboard" onselectstart="return !1;"> 
+    <div id="load_screen" class="loading">
+      <div class="loader"><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div id="notifybar" class="notifybar navbar navbar-fixed-top"></div>
+    <nav class="navbar navbar-fixed-top"> 
+      <div class="container-fluid dashboard-header"> 
+        <div id="navbar" class="collapse navbar-collapse"> 
+          <div class="form-inline margin5">
+            <button type="submit" class="btn btn-sm btn-primary" id="QueryMockInfoList">搜索</button>
+            <div class="form-group input-group input-group-sm">
+              <label class="sr-only" for="query_deviceid">设备号</label>
+              <input type="text" class="form-control" id="query_deviceid" title="设备号"  placeholder="设备号" style="width:250px;">
+            </div>
+            <div class="form-group input-group input-group-sm">
+              <label class="sr-only" for="query_name">接口名</label>
+              <input type="text" class="form-control" id="query_name" title="接口名"  placeholder="接口名" style="width:250px;">
+            </div>
+            <div class="form-group input-group input-group-sm">
+              <select id="query_env" name="type" class="selectpicker">
+                <option>FWS</option>
+                <option>UAT</option>
+              </select>
+            </div>
+            <div class="form-group input-group input-group-sm">
+              <label class="sr-only" for="query_operator">创建人</label>
+              <input type="text" class="form-control" id="query_operator" title="创建人"  placeholder="创建人">
+            </div>
+            <div class="form-group input-group input-group-sm">
+              <label class="sr-only" for="query_mid">编号</label>
+              <input type="text" class="form-control" id="query_mid" title="编号"  placeholder="编号">
+            </div>
+            <div class="form-group input-group input-group-sm">
+              <label class="sr-only" for="query_appid">应用程序号</label>
+              <input type="text" class="form-control" id="query_appid" title="应用程序号"  placeholder="应用程序号">
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary pull-right" id="AddMockUI">+</button>
+          </div>
+        </div> 
+      </div> 
+    </nav> 
+    <div id="container" class="container-fluid">
+      <div class="col-md-3 sidebar mockList"> 
+        <table id="mockTable" class="mockTable"></table> 
+      </div> 
+      <div id="mockResponeContainer" class="col-md-9 col-md-offset-3 sidebar"> 
+        <div class="row">
+          <div class="col-md-10">
+            <div class="input-group input-group-sm margin5">
+              <span class="input-group-addon">
+                标题
+              </span>
+              <input type="text" class="form-control" id="info_desc">
+            </div>
+          </div>
+          <div class="col-md-1 col-md-offset-1">
+            <div id="info_mid" class="can-select"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              设备号
+            </span>
+              <input type="text" class="form-control" id="info_deviceid">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              创建人
+            </span>
+              <input type="text" class="form-control" id="info_operator">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="input-group input-group-sm margin5">
+              <label><input type="checkbox" id="info_isvalid" checked="checked"> 是否有效</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              接口名
+            </span>
+              <input type="text" class="form-control" id="info_name">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              环 &nbsp; &nbsp;境
+            </span>
+              <select id="info_env" name="type" class="selectpicker">
+                <option>FWS</option>
+                <option>UAT</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              应用程序号
+            </span>
+              <input type="text" class="form-control" id="info_appid">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group input-group-sm margin5">
+            <span class="input-group-addon">
+              请求匹配
+            </span>
+              <input type="text" class="form-control" id="info_match">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="input-group input-group-sm margin5">
+              <label><input type="checkbox" id="info_isregex"> 是否使用正则匹配</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="input-group input-group-sm margin5">
+              <button type="submit" class="btn btn-sm btn-primary" id="UpdateMockInfo">更新</button>
+              <button type="submit" class="btn btn-sm btn-success" id="AddMockInfo">提交</button>
+            </div>
+          </div>
+        </div>
+        <div id="responser" class="col-md-12 margin5-x"></div>
+      </div> 
+    </div>
+    <div id="statusbar" class="statusbar navbar navbar-fixed-bottom"></div>
+  </body>
+</html>
