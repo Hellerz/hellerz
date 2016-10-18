@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 	});
 	Calibur.SyncTimer(function(clear){
 		Storage.Get&&Storage.Get("AutoForceProxy",function(isopen){
-			$setForceProxys.bootstrapSwitch('state',(!!isopen).toString());
+			$setForceProxys.bootstrapSwitch('state',!!isopen);
 			clear();
 		});
 	});
