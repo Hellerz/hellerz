@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 
 	var showHeader=function(oheaders,wapper){
-		$.showEditor(wapper,$.format(JSON.stringify(oheaders),{method: 'javascript'}),'javascript');
+		$.showEditor(wapper,$.format(JSON.stringify(oheaders),{method: 'json'}),'json');
 	};
 	
 	var hastext = function(contentType){
