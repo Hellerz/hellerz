@@ -148,5 +148,9 @@ namespace Calibur.Model
         /// 
         /// </summary>
         public int HTTPSHandshakeTime;
+
+        public double Elapsed {
+            get { return (ServerDoneResponse - ClientBeginRequest).TotalMilliseconds; }
+        }
     }
 }
