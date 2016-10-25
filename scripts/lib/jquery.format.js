@@ -192,7 +192,7 @@
 			var str = this.preserveComments ? text
 					: text.replace(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g,"")
 					.replace(/[ \r\n\t]{1,}xmlns/g, ' xmlns');
-			return  str.replace(/>\s{0,}</g,"><");
+			return  str.replace(/>\s{0,}</g,"><").replace(/[\r\n]+[\r\n\s]*</g,"><");
 		},
 
 		json: function(text) {

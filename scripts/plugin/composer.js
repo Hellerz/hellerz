@@ -40,16 +40,7 @@ define(function(require, exports, module) {
 		editor.commands.addCommand(command);
 		return editor;
     };
-    var formatEditer=function(editor,mode){
-		var body = editor.getValue();
-		try{
-			body = $.format(body,{method: mode});
-			editor.setValue(body);
-			editor.selection.moveCursorTo(0,0)
-		}catch(e){
-			//ignore
-		}
-    };
+    
     var getParsed = function(){
     	var settings = localStorage['ComposerParsed']||'[]';
     	return JSON.parse(settings);
@@ -130,12 +121,12 @@ define(function(require, exports, module) {
 		var mode = $(e.target).find('option:selected').attr('mode');
 		cmpsr_reqbd.getSession().setMode("ace/mode/"+mode||'text');
 		cmpsr_resbd.getSession().setMode("ace/mode/"+mode||'text');
-		formatEditer(cmpsr_reqbd,mode);
+		$.formatEditer(cmpsr_reqbd,mode);
 	});
-	[cmpsr_reqbd,cmpsr_resbd].forEach(function(itm){
-		itm.on('paste',function(e){
-			var mode = $cmpsr_type.find('option:selected').attr('mode');
-			window.setTimeout(function(){formatEditer(cmpsr_reqbd,mode);},400);
-		});
-	});
+	// [cmpsr_reqbd,cmpsr_resbd].forEach(function(itm){
+	// 	itm.on('paste',function(e){
+	// 		var mode = $cmpsr_type.find('option:selected').attr('mode');
+	// 		window.setTimeout(function(){$.formatEditer(cmpsr_reqbd,mode);},400);
+	// 	});
+	// });
 });

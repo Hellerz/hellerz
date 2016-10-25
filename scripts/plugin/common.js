@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 	var Renderer = require("ace/virtual_renderer").VirtualRenderer;
 
 	var $ = require("jquery");
+			require('format');
 
 	var re_html = /^text\/(.+?)?html/;
 	var re_js = /^(text|application)\/(.+?)?(json|javascript)/;
@@ -23,7 +24,16 @@ define(function(require, exports, module) {
 		return "text";
 	};
 	
-
+	$.formatEditer=function(editor,mode){
+		var body = editor.getValue();
+		try{
+			body = $.format(body,{method: mode});
+			editor.setValue(body);
+			editor.selection.moveCursorTo(0,0)
+		}catch(e){
+			//ignore
+		}
+    };
 	$.showEditor = function(editor,content,mode){
 		editor.getSession().setMode("ace/mode/" + mode);
 		editor.setValue(content);
@@ -97,6 +107,36 @@ define(function(require, exports, module) {
 		    	}
 		    	ieditor.resize(true);
 		    	ieditor.focus();
+		    },
+		    readOnly: false
+		});
+		editor.commands.addCommand({
+		    name: 'Format',
+		    bindKey: {win: 'Ctrl-B',  mac: 'Command-B'},
+		    exec: function(ieditor) {
+		    	var value = ieditor.getValue();
+		    	if(value&&value.startsWith('{')){
+		    		$.formatEditer(ieditor,"json");
+		    		editor.getSession().setMode("ace/mode/json");
+		    	}
+		    	if(value&&value.startsWith('<')){
+		    		$.formatEditer(ieditor,"xml");
+		    		editor.getSession().setMode("ace/mode/xml");
+		    	}
+		    },
+		    readOnly: false
+		});
+		editor.commands.addCommand({
+		    name: 'UnFormat',
+		    bindKey: {win: 'Ctrl-Shift-B',  mac: 'Command-Shift-B'},
+		    exec: function(ieditor) {
+		    	var value = ieditor.getValue();
+		    	if(value&&value.startsWith('{')){
+		    		$.formatEditer(ieditor,"jsonmin");
+		    	}
+		    	if(value&&value.startsWith('<')){
+		    		$.formatEditer(ieditor,"xmlmin");
+		    	}
 		    },
 		    readOnly: false
 		});
