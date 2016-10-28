@@ -10,13 +10,13 @@ define(function(require, exports, module) {
 		return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); 
 	}
 	var prefixMilliseconds = function (num) {
-		if(num < 0){
+		if(num < 0||isNaN(+num)){
 			return '--';
 		}
 		if(num > 1000){
 			return (num/1000).toFixed(2)+'s';
 		}
-		return num+'ms';
+		return Math.round(num)+'ms';
 	}
 	//设置Session的Grid
 	var cols=[
