@@ -3,6 +3,7 @@ define(function(require, exports, module) {
 	var Fiddler = require("fiddler");
 	var $ = require("jquery");
 	var Calibur = require("calibur");
+	var Storage = require("storage");
 	require("grid");
 	require('common');
 	//整数前补齐0
@@ -152,6 +153,10 @@ define(function(require, exports, module) {
 		var klass = $tr.attr('class');
 		klass = klass.replace(/\bfilter-.+?\b/g,'');
 		$tr.attr('class',klass + ' filter-all '+ sessionfilter.getFilterType(newItem));
+	}).on('rowsRemoved', function(e, items, indexs) {
+		for (var i = items.length - 1; i >= 0; i--) {
+			Fiddler.ClearSession(items[i].Id)
+		};
 	});
 	var $pausessn = $('#pausessn');
 	
@@ -162,6 +167,21 @@ define(function(require, exports, module) {
 			$pausessn.trigger('switch',isPause);
 		});
 	});
+
+	window.setInterval(function(){
+		Storage.Get&&Storage.Get("MaxLines",function(maxLines){
+			maxLines =parseInt(maxLines);
+			var $tbody = $ssnpanel.$body.find('tbody');
+				delPos=0,dels=[];
+			if(maxLines>0){
+				delPos = $tbody.children().length-maxLines;
+			}
+			for (var i = 0; i < delPos; i++) {
+				dels.push(i);
+			};
+            $ssnpanel.removeRow(dels);
+		})
+	},60000);
 	
     $pausessn.on('click', function(e) {
     	Fiddler.IsPauseSession(function(isPause){
@@ -181,15 +201,8 @@ define(function(require, exports, module) {
     	});
 	});
 	var clearssn = $('#clearssn').on('click',function(e){
-		$ssnpanel.removeRow(function($tbody ){
-			var klasses = $ssnpanel.$bodyWrapper.attr('class').match(/\bwrapper-(.+?)\b/g);
-			if(klasses&&klasses.length){
-				$.each(klasses,function(i,itm){
-					$tbody.find('.'+ itm.replace('wrapper','filter')).remove(); 
-				});
-				//Fiddler.ClearAllSession();
-			}
-		});
+		$ssnpanel.removeRow();
+		Fiddler.ClearAllSession();
 	});
 	exports.SessionPanel = $ssnpanel;
 	exports.pausessn=$pausessn;

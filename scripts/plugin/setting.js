@@ -127,4 +127,26 @@ define(function(require, exports, module) {
 			$('#ipaddress').html(ip);
 		});
 	});
+
+    //设置Clear Session Strategy
+    var $setMaxLines = $('#setMaxLines').on('click',function(){
+    	var maxLines = +$('#ssnMaxLines').val();
+    	Storage.Set("MaxLines",(isNaN(maxLines)?'1000':''+maxLines));
+    });
+    // var $setMaxLines = $('#setMaxSpan').on('click',function(){
+    // 	var maxSpan = +$('#ssnMaxSpan').val();
+    // 	Storage.Set("MaxTimeSpan",(isNaN(maxSpan)?'600':''+maxSpan));
+    // });
+
+    //初始化Clear Session Strategy
+	Calibur.SyncTimer(function(clear){
+		Storage.Get&&Storage.Get("MaxLines",function(maxLines){
+			$('#ssnMaxLines').val(maxLines);
+			clear();
+		});
+		//&&Storage.Get("MaxTimeSpan",function(maxSpan){
+		// 	$('#ssnMaxSpan').val(maxSpan);
+		// 	clear();
+		// });
+	});
 });

@@ -20,13 +20,13 @@ namespace CEF.Lib.Helper
 {
     public static class FiddlerHelper
     {
-        public readonly static Dictionary<string, SessionStateHandler> EventHandlers = new Dictionary<string, SessionStateHandler>();
+        public static readonly Dictionary<string, SessionStateHandler> EventHandlers = new Dictionary<string, SessionStateHandler>();
         private static int _port = Common.ConvertToStruct(StorageHelper.AchiveValue("fiddlerport", "5389"),5389);
         private const string AppName = "Calibur";
-        private readonly static MethodInfo ThreadPauseMethod = typeof(Session).GetMethod("ThreadPause", BindingFlags.Instance | BindingFlags.NonPublic);
-        private readonly static Regex SplitLine = new Regex(@"[\r\n]+", RegexOptions.Compiled);
-        private readonly static Regex HasPrtl = new Regex(@"^http(s)?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly static Regex SplitHdBd = new Regex(@"\r\n\r\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly MethodInfo ThreadPauseMethod = typeof(Session).GetMethod("ThreadPause", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly Regex SplitLine = new Regex(@"[\r\n]+", RegexOptions.Compiled);
+        private static readonly Regex HasPrtl = new Regex(@"^http(s)?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SplitHdBd = new Regex(@"\r\n\r\n", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         static FiddlerHelper()
         {
             FiddlerApplication.SetAppDisplayName(AppName);
@@ -48,6 +48,18 @@ namespace CEF.Lib.Helper
         public static void ClearAllSession()
         {
             SessionHelper.OpSession(mapping => mapping.Clear());
+        }
+
+        [JSchema]
+        public static void ClearSession(int sessionId)
+        {
+            SessionHelper.OpSession((mapping, id) =>
+            {
+                if (mapping.ContainsKey(id))
+                {
+                    mapping.Remove(id);
+                }
+            }, sessionId);
         }
 
         private static bool _isPauseSession = Common.ConvertToStruct(StorageHelper.AchiveValue("isautoresponser", "false"), false);

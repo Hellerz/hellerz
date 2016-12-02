@@ -1396,24 +1396,28 @@
 
         //删除行，参数可以为索引数组
         , removeRow: function(index){
-            var that = this;
-            var $tbody = that.$body.find('tbody');
-
-            if(index === undefined){
-                var $trs = $tbody.find('tr');
-                for(var i=$trs.length-1; i >= 0; i--){
-                    that.removeRow(i);
+            var that = this,
+                items=[],
+                $tbody = that.$body.find('tbody');
+            if($.isNumeric(index)){
+                index=[index];
+            }else if(index === undefined){
+                index=[];
+                for(var i=$tbody.find('tr').length-1; i >= 0; i--){
+                    index.push(i);
                 }
-            }else if($.isFunction(index)){
+            }
+
+            if($.isFunction(index)){
                 index($tbody);
             }else if($.isArray(index)){
                 for(var i=index.length-1; i >= 0; i--){
                     var item = that.row(index[i]);
+                    items.push(item);
                     $tbody.find('tr').eq(index[i]).remove();
-                    this.$body.triggerHandler('rowRemoved', [item, index[i]]);
                 }
-            }
-            this.$body.triggerHandler('rowsRemoved',[index]);
+            } 
+            this.$body.triggerHandler('rowsRemoved',[items,index]);
             this._setStyle();
             if(this.rowsLength() === 0){
                 this._showNoData();

@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 	var $	    = require("jquery");
 				  require('bootstrapselect');
 				  require('bootstraptypeahead');
-				  require('format');
+				  require('beautify');
 				  require('common');
 
 	Fiddler.addResponse(function(e, args) {
@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 			if(parsed_guid === guid){
 				var brush = $.getMode(session.ResponseHeaders['Content-Type']);
 				session.GetResponseBodyAsString(function(ssn){
-					$.showEditor(cmpsr_resbd,$.format(ssn.Return,{method: brush}),brush);
+					$.showEditor(cmpsr_resbd,$.vkbeautify[brush](ssn.Return),brush);
 				});
 			}else if(raw_guid === guid){
 				session.GetResponse(function(ssn){

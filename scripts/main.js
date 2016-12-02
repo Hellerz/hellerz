@@ -1,5 +1,5 @@
-window.WebVersion = '201610251741';
-window.ServiceVersion = '1.0.6142';
+window.WebVersion = '201612022125';
+window.ServiceVersion = '1.0.6180';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
 	paths: {
@@ -17,7 +17,8 @@ requirejs.config({
 		bootstrapswitch: 'lib/bootstrap-switch',
 		bootstrapselect: 'lib/bootstrap-select',
 		bootstraptypeahead: 'lib/bootstrap-typeahead',
-		format:'lib/jquery.format',
+		//format:'lib/jquery.format',
+		beautify:'lib/vkbeautify',
 		qrcode:'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
@@ -86,7 +87,9 @@ requirejs.config({
 		'qrcode':{
 			deps: ['jquery'],
 		},
-		
+		'beautify':{
+			deps: ['jquery'],
+		},
 	}
 });
 define(function(require, exports, module) {

@@ -5,11 +5,11 @@ define(function(require, exports, module) {
 	var Utils = require("utils");
 	var $ = require("jquery");
 			require('common');
-			require("format");
+			require('beautify');
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 
 	var showHeader=function(oheaders,wapper){
-		$.showEditor(wapper,$.format(JSON.stringify(oheaders),{method: 'json'}),'json');
+		$.showEditor(wapper,$.vkbeautify['json'](JSON.stringify(oheaders)),'json');
 	};
 	
 	var hastext = function(contentType){
@@ -90,13 +90,13 @@ define(function(require, exports, module) {
 		reqformat:function(wapper){
 			var brush = $.getMode(this.session.RequestHeaders['Content-Type']);
 			this.session.GetRequestBodyAsString(function(ssn){
-				$.showEditor(wapper,$.format(ssn.Return,{method: brush}),brush);
+				$.showEditor(wapper,$.vkbeautify[brush](ssn.Return),brush);
 			});
 		},
 		resformat:function(wapper){
 			var brush = $.getMode(this.session.ResponseHeaders['Content-Type']);
 			this.session.GetResponseBodyAsString(function(ssn){
-				var fmt = $.format(ssn.Return,{method: brush});
+				var fmt = $.vkbeautify[brush](ssn.Return);
 				$.showEditor(wapper,fmt,brush);
 			});
 		},
@@ -137,8 +137,10 @@ define(function(require, exports, module) {
 		Fiddler.addResponse(beforeResponse);
 	}).on('rowInserted', function(e, item, index, $tr) {
 		$.data($ssnpanel,'id_row')[item.Id] = $tr;
-	}).on('rowRemoved', function(e, item, index) {
-		delete $.data($ssnpanel,'id_row')[item.Id];
+	}).on('rowsRemoved', function(e, items, indexs) {
+		for (var i = items.length - 1; i >= 0; i--) {
+			delete $.data($ssnpanel,'id_row')[items[i].Id];
+		};
 	}).load();
 	$ssnpanel.$body.on('dblclick','td',function(e){
 	    $('#navFun a[href="#inspectors"]').tab('show');

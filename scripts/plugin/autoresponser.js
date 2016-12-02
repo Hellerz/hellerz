@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 	require("ztreecore");
 	require("ztreeexcheck");
 	require("ztreeexedit");
-
+	require('beautify');
 	var $autoResponder = $('#autoResponder');
 	var $addRule = $('#addRule');
 	var $importRule = $('#importRule');
@@ -388,7 +388,7 @@ define(function(require, exports, module) {
 				if(isExist){
 					extendcrt($autocrt.outerHeight());
 					File.ReadAllText(item.response,function(fileContent){
-						var fmt = $.format(fileContent,{method: item.brush});
+						var fmt = $.vkbeautify[item.brush](fileContent);
 						$.showEditor(crteditor,fmt,item.brush);
 					});
 				}
@@ -430,7 +430,7 @@ define(function(require, exports, module) {
 				if(session instanceof Session)
 				{
 					session.GetResponseBodyAsString(function(fileContent){
-						var fmt = $.format(fileContent.Return,{method: item.brush});
+						var fmt = $.vkbeautify[item.brush](fileContent.Return);
 						$.showEditor(crteditor,fmt,item.brush);
 					});
 				}

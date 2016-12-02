@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	var Renderer = require("ace/virtual_renderer").VirtualRenderer;
 
 	var $ = require("jquery");
-			require('format');
+			require('beautify');
 
 	var re_html = /^text\/(.+?)?html/;
 	var re_js = /^(text|application)\/(.+?)?(json|javascript)/;
@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 	$.formatEditer=function(editor,mode){
 		var body = editor.getValue();
 		try{
-			body = $.format(body,{method: mode});
+			body = $.vkbeautify[mode](body);
 			editor.setValue(body);
 			editor.selection.moveCursorTo(0,0)
 		}catch(e){
