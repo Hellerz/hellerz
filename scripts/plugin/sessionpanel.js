@@ -155,7 +155,7 @@ define(function(require, exports, module) {
 		$tr.attr('class',klass + ' filter-all '+ sessionfilter.getFilterType(newItem));
 	}).on('rowsRemoved', function(e, items, indexs) {
 		for (var i = items.length - 1; i >= 0; i--) {
-			Fiddler.ClearSession(items[i].Id)
+			Fiddler.ClearSession&&Fiddler.ClearSession(items[i].Id)
 		};
 	});
 	var $pausessn = $('#pausessn');

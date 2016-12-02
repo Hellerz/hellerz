@@ -1406,6 +1406,7 @@
                 for(var i=$tbody.find('tr').length-1; i >= 0; i--){
                     index.push(i);
                 }
+                index=index.sort(function(x,y){return x-y;});
             }
 
             if($.isFunction(index)){
