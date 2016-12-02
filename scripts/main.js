@@ -18,7 +18,7 @@ requirejs.config({
 		bootstrapselect: 'lib/bootstrap-select',
 		bootstraptypeahead: 'lib/bootstrap-typeahead',
 		//format:'lib/jquery.format',
-		beautify:'lib/vkbeautify',
+		beautify:'lib/jquery.vkbeautify',
 		qrcode:'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
