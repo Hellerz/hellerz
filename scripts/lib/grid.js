@@ -553,7 +553,7 @@
                     $colResizePointer.hide();
                     $colResizePointerBefore.hide();
                     document.body.onselectstart = function(){
-                        return true;//开启文字选择
+                        return false;//开启文字选择
                     };
                     $headWrapper.css('-moz-user-select','text');
                 });

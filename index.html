@@ -246,8 +246,8 @@
           </div>
         </div> 
         <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <div class="input-group input-group-sm margin10">
-            <button type="button" id="exeInject" title="Ctrl+R" class="btn btn-sm btn-primary">Run</button>
+          <!-- <div class="input-group input-group-sm margin10">
+            <button type="button" title="Ctrl+R" class="exeInject btn btn-sm btn-primary ">Run</button>
             <span class="input-group-addon">
               <input  type="checkbox">
             </span>
@@ -277,7 +277,7 @@
                 <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
               </ul>
             </div>
-          </div>
+          </div> -->
           <nav> 
             <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
               <li><a href="#parsed" data-toggle="tab">Parsed</a></li>
@@ -305,7 +305,7 @@
                       <option>VIEW</option>
                     </select>
                   </div>
-                  <div class="col-md-9 paddingx5">
+                  <div class="col-md-8 paddingx5">
                     <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://" spellcheck="false">
                   </div>
                   <div class="col-md-2 padding0">
@@ -318,14 +318,18 @@
                       <option value="text/html" mode="html">HTML</option>
                     </select>
                   </div>
+                  <div class="col-md-1 padding0">
+                    <span type="button" class="exeInject nor-exeInject label label-btn label-info">Run</span>
+                  </div>
                 </div>
                 <div class="parsed-content rest-body">
-                  <div id ="cmpsr_reqhd" class ="full-body row-1"></div>
-                  <div id ="cmpsr_reqbd" class ="full-body row-4"></div>
-                  <div id ="cmpsr_resbd" class ="full-body row-7"></div>
+                  <!-- <div id ="cmpsr_reqhd" class ="full-body row-1"></div> -->
+                  <div id ="cmpsr_reqbd" class ="full-body gold-y0"></div>
+                  <div id ="cmpsr_resbd" class ="full-body gold-y1"></div>
                 </div>
               </div> 
               <div class="tab-pane fade in" id="composerraw">
+                <button type="button" title="Ctrl+R" class="exeInject raw-exeInject btn btn-sm btn-primary ">Run</button>
                 <div id ="cmpsr_reqraw" class ="full-body gold-y0"></div>
                 <div id ="cmpsr_resraw" class ="full-body gold-y1"></div>
               </div> 

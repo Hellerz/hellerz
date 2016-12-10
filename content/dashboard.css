@@ -436,7 +436,7 @@ iframe{
 }
 
 .composer-content{
-  top:75px;
+  top:29px;
 }
 #parsed .dropdown-toggle,#parsed .bootstrap-select{
   margin: 0px;
@@ -567,4 +567,16 @@ iframe{
   z-index: 100000000;
   padding-top: 25%;
   background: #333;
+}
+
+.nor-exeInject{
+    padding: 4px;
+    display: block;
+    margin-top: 1px;
+}
+.raw-exeInject{
+  position: absolute;
+  top: 30px;
+  z-index: 1000;
+  right: 15px;
 }

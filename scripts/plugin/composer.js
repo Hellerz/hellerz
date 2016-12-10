@@ -85,7 +85,7 @@ define(function(require, exports, module) {
     	}
     };
 
-    $('#exeInject').on('click',function (e) {
+    $('.exeInject').on('click',function (e) {
     	runComposer();
     });
 

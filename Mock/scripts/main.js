@@ -2,21 +2,21 @@ window.WebVersion = '201609192318';
 window.ServiceVersion = '1.0.6096';
 requirejs.config({
 	urlArgs: "version=" + window.WebVersion,
+	baseUrl: '../scripts',
 	paths: {
 		config: 'config',
-		common: 'common',
+		common: 'plugin/common',
 
 		jquery: 'lib/jquery-2.1.4',
 		bootstrap: 'lib/bootstrap',
 		bootstrapswitch: 'lib/bootstrap-switch',
 		bootstrapselect: 'lib/bootstrap-select',
 		bootstraptypeahead: 'lib/bootstrap-typeahead',
-		format: 'lib/jquery.format',
 		qrcode: 'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
 		guid: 'lib/guid',
-
+		beautify:'lib/jquery.vkbeautify',
 	},
 	shim: {
 		'bootstrap': {
@@ -35,12 +35,11 @@ requirejs.config({
 		'grid': {
 			deps: ['jquery'],
 		},
-
-		//format
-		'format': {
+		
+		'qrcode': {
 			deps: ['jquery'],
 		},
-		'qrcode': {
+		'beautify':{
 			deps: ['jquery'],
 		},
 
@@ -56,7 +55,7 @@ define(function(require, exports, module) {
 	require("grid");
 	require("bootstrap");
 	require('bootstrapselect');
-	require('format');
+	require('beautify');
 	$(document).ready(function() {
 		$('#load_screen').hide();
 		$.ajaxSetup({ dataType: "json",contentType:'application/json'});
@@ -97,8 +96,6 @@ define(function(require, exports, module) {
 		var fws_pre = 'http://gateway.m.fws.qa.nt.ctripcorp.com/restapi/soa2/10124/';
 		var uat_pre = 'http://gateway.m.uat.qa.nt.ctripcorp.com/restapi/soa2/10124/';
 
-		//var fws_pre = 'http://localhost:3915/';
-		//var uat_pre = 'http://bookingws.package.uat.qa.nt.ctripcorp.com/tour-h5-h5service/';
 		var formatEditer=function(editor,mode){
 			var body = editor.getValue();
 			try{
@@ -345,9 +342,15 @@ define(function(require, exports, module) {
 				return prefixInteger(val, 4);
 			}
 		}, {
+			title: 'title',
+			name: 'Description',
+			width: 120,
+			sortable: true,
+			align: 'center'
+		}, {
 			title: 'Env',
 			name: 'AppEnv',
-			width: 30,
+			width: 40,
 			sortable: true,
 			align: 'center'
 		}, {

@@ -22,9 +22,9 @@ define(function(require, exports, module) {
 	//设置Session的Grid
 	var cols=[
 		{title:'#',name:'Id',width:55,sortable:true,align:'center',renderer:function(val){return prefixInteger(val,5);}},
-		{title:'Elpsd',name:'Timers',width:50,sortable:true,align:'center',renderer:function(val){return prefixMilliseconds(val.Elapsed);}},
-		{title:'Methd',name:'Method',width:50,sortable:true,align:'center'},
-		{title:'Code',name:'ResponseCode',width:50,sortable:true,align:'center'},
+		{title:'Elpsd',name:'Timers',width:60,sortable:true,align:'center',renderer:function(val){return prefixMilliseconds(val.Elapsed);}},
+		{title:'Methd',name:'Method',width:75,sortable:true,align:'center'},
+		{title:'Code',name:'ResponseCode',width:40,sortable:true,align:'center'},
 		{title:'Prtcl',name:'UriScheme',width:45,sortable:true,align:'center'},
 		{title:'Host',name:'Host',width:120,sortable:true,align:'right'},
 		{title:'URL',name:'PathAndQuery',width:450,sortable:true,align:'left'}

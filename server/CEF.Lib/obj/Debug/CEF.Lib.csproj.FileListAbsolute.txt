@@ -74,3 +74,4 @@ D:\git\Hellerz\Hellerz\server\CEF.Lib\bin\Debug\Newtonsoft.Json.xml
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.csprojResolveAssemblyReference.cache
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.dll
 D:\git\Hellerz\Hellerz\server\CEF.Lib\obj\Debug\CEF.Lib.pdb
+C:\GIT\github\hellerz\server\CEF.Lib\bin\Debug\FiddlerCore4.pdb

@@ -202,7 +202,7 @@ define(function(require, exports, module) {
 
 	//NORMAL
 	var setAutoNormalSetting = function(){
-		localStorage['autoNormalSetting'] =JSON.stringify(autoNormalSetting);
+		localStorage['autoNormalSetting'] =JSON.stringify($autopanel.rows());
 	};
 	var findNormalSetting = function(uid){
 		var iautoNormalSetting = $autopanel.rows();
@@ -222,6 +222,7 @@ define(function(require, exports, module) {
 					File.CreateFile(item.response,editor.getValue(),'UTF8',function(){
 						$autoRespond.val(item.response);
 						$.statusbar('file '+item.response+' saved successfully.','success');
+						$editRule.show();
 						$saveRule.trigger('click');
 					});
 				}else{
@@ -245,6 +246,7 @@ define(function(require, exports, module) {
 				File.CreateFile(path,editor.getValue(),'UTF8',function(){
 					$autoRespond.val(path);
 					$.statusbar('file '+path+' saved successfully.','success');
+					$editRule.show();
 					$saveRule.trigger('click');
 				});
 			}
@@ -557,6 +559,9 @@ define(function(require, exports, module) {
 					responser.setValue(treeNode.responseScript||''); 
 				}
 			},
+			onCheck(e, treeId, treeNode) {
+				setAutoResponserSettings();
+			}
 		}
     };
     
@@ -567,7 +572,9 @@ define(function(require, exports, module) {
     
 
     var zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
-
+    var setAutoResponserSettings = function(){
+    	localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
+    }
 
     var requester = $.CreateEditor($('#requester'));
 	requester.getSession().setMode("ace/mode/javascript");
@@ -576,6 +583,7 @@ define(function(require, exports, module) {
 	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 	    exec: function(editor) {
 	        editorTreeNode.requestScript = editor.getValue();
+	        setAutoResponserSettings();
 	    },
 	    readOnly: false
 	});
@@ -586,7 +594,7 @@ define(function(require, exports, module) {
 	    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 	    exec: function(editor) {
 	        editorTreeNode.responseScript = editor.getValue();
-	        localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
+	        setAutoResponserSettings();
 	    },
 	    readOnly: false 
 	});

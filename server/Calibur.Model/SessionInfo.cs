@@ -149,8 +149,13 @@ namespace Calibur.Model
         /// </summary>
         public int HTTPSHandshakeTime;
 
-        public double Elapsed {
-            get { return (ServerDoneResponse - ClientBeginRequest).TotalMilliseconds; }
+        public double Elapsed
+        {
+            get
+            {
+                var elaped = (ServerDoneResponse - ClientBeginRequest).TotalMilliseconds;
+                return elaped > 0 ? elaped : TCPConnectTime;
+            }
         }
     }
 }
