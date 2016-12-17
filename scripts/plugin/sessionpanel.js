@@ -46,9 +46,13 @@ define(function(require, exports, module) {
 	//Grid筛选过滤条件
 	var sessionfilter = {
 		regex:[{
-			re:/\/(.+?)?(json|javascript)/,//Content-Type或accept匹配
-			ext:' js',//后缀匹配
+			re:/\/(.+?)?javascript/,//Content-Type或accept匹配
+			ext:' js ',//后缀匹配
 			type:'js' //类型
+		},{
+			re:/\/(.+?)?json/,//Content-Type或accept匹配
+			ext:' json ',//后缀匹配
+			type:'xhr' //类型
 		},{
 			re:/\/(.+?)?xml/,
 			ext:' xml xhtml ',
@@ -66,11 +70,11 @@ define(function(require, exports, module) {
 			ext:' mp3 ',
 			type:'media'
 		},{
-			ext:' ttf otf svg eot woff woff2  ',
+			ext:' ttf otf svg eot woff woff2 ',
 			type:'font'
 		},{
 			re:/\/(.+?)?html/,
-			ext:' html htm aspx php ',
+			ext:' html htm aspx php jsp ',
 			type:'doc'
 		}],
 		re_urlExt:/\/([^\/?]+?\.([^\/?\.]+?))(\?.+)?$/,
@@ -106,7 +110,7 @@ define(function(require, exports, module) {
 			var reqHeaders =session.RequestHeaders;
 			var resHeaders =session.ResponseHeaders;
 			var ext = this.getUrlExtLower(session.RequestPath);
-			if(reqHeaders['X-Requested-With'] === 'XMLHttpRequest'||ext === 'json'){
+			if(reqHeaders['X-Requested-With'] === 'XMLHttpRequest'){
 				return 'filter-xhr';
 			}
 			var typeStr =resHeaders['Content-Type']||reqHeaders['Content-Type']||reqHeaders['accept'];

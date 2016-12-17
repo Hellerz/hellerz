@@ -131,7 +131,7 @@ define(function(require, exports, module) {
     //设置Clear Session Strategy
     var $setMaxLines = $('#setMaxLines').on('click',function(){
     	var maxLines = +$('#ssnMaxLines').val();
-    	Storage.Set("MaxLines",(isNaN(+maxLines)?'1000':''+maxLines));
+    	Storage.Set("MaxLines",(isNaN(maxLines)?'1000':''+maxLines));    
     });
     // var $setMaxLines = $('#setMaxSpan').on('click',function(){
     // 	var maxSpan = +$('#ssnMaxSpan').val();
