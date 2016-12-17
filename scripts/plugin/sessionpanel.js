@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	var $ = require("jquery");
 	var Calibur = require("calibur");
 	var Storage = require("storage");
+	var System = require("system");
 	require("grid");
 	require('common');
 	//整数前补齐0
@@ -155,7 +156,7 @@ define(function(require, exports, module) {
 		$tr.attr('class',klass + ' filter-all '+ sessionfilter.getFilterType(newItem));
 	}).on('rowsRemoved', function(e, items, indexs) {
 		for (var i = items.length - 1; i >= 0; i--) {
-			Fiddler.ClearSession&&Fiddler.ClearSession(items[i].Id)
+			items[i]&&Fiddler.ClearSession&&Fiddler.ClearSession(items[i].Id)
 		};
 	});
 	var $pausessn = $('#pausessn');
@@ -203,6 +204,12 @@ define(function(require, exports, module) {
 	var clearssn = $('#clearssn').on('click',function(e){
 		$ssnpanel.removeRow();
 		Fiddler.ClearAllSession();
+		System.GetWorkingSet(function(size){
+			if(size>768*1024*1024){
+				Calibur.Status = "restart";
+				System.ReStart();
+			}
+		});
 	});
 	exports.SessionPanel = $ssnpanel;
 	exports.pausessn=$pausessn;

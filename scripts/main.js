@@ -6,7 +6,7 @@ requirejs.config({
 		config: 'config',
 
 		eventtarget: 'ssn/eventtarget',
-		websoket: 'ssn/websoket',
+		websocket: 'ssn/websoket',
 		calibur: 'ssn/calibur',
 		session: 'ssn/session',
 		fiddler: 'ssn/fiddler',
@@ -106,6 +106,7 @@ define(function(require, exports, module) {
 	require('qrcode');
 
 	$(document).ready(function() {
+		window.name = 'caibur';
 		var $ssnpanel = require('sessionpanel').SessionPanel;
 		require('common');
 		//Calibur Plugin
@@ -192,7 +193,10 @@ define(function(require, exports, module) {
         	console.dir(JSON.parse(evt.data));
         };
 		Calibur.webSocket.addEventListener('close',function(e){
-			if(!e.target.FailedConnected){
+			if(Calibur.Status == "restart"){
+				Calibur.Status = "started";
+				window.location.reload();
+			}else if(!e.target.FailedConnected){
 				$.statusbar('WebSocket connection has closed.','warning');
 				logo.addClass('off');
 				window.open(' ','_self',' ');    

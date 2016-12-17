@@ -5,9 +5,13 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
+using System.Security.Permissions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using CEF.Lib.Attributes;
 using Fiddler;
 using System.Text.RegularExpressions;
@@ -18,6 +22,10 @@ namespace CEF.Lib.Helper
     public static class SystemHelper
     {
         public static System.Windows.Forms.NotifyIcon Notify;
+
+        private static readonly Process CurProcess = Process.GetCurrentProcess();
+
+        private static readonly MethodInfo ExitInternalMethod = typeof(System.Windows.Forms.Application).GetMethod("ExitInternal", BindingFlags.Static | BindingFlags.NonPublic);
 
         public static void InitIcon(System.Windows.Application app, Icon icon)
         {
@@ -68,6 +76,7 @@ namespace CEF.Lib.Helper
             var directory = Path.GetDirectoryName(tmpDirectory);
 
             var batCode = new StringBuilder();
+            batCode.AppendFormat("@echo off").AppendLine();
             batCode.AppendFormat("cd \"{0}\"", directory).AppendLine();
             batCode.AppendFormat("CLS").AppendLine();
             batCode.AppendFormat("choice /t 1 /d y /n >nul").AppendLine();
@@ -99,6 +108,34 @@ namespace CEF.Lib.Helper
             return serverVersion.CompareTo(webVersion);
         }
 
+
+        //private readonly static  PerformanceCounter curpcp = new PerformanceCounter("Process", "Working Set - Private", CurProcess.ProcessName);
+        private readonly static PerformanceCounter WorkingSetCounte = new PerformanceCounter("Process", "Working Set", CurProcess.ProcessName);
+        [JSchema]
+        public static long GetWorkingSet()
+        {
+            return (long)WorkingSetCounte.NextValue();
+        }
+
+        [JSchema]
+        public static void ReStart()
+        {
+            var strAppFileName = CurProcess.MainModule.FileName;
+            var myNewProcess = new Process
+            {
+                StartInfo =
+                {
+                    FileName = strAppFileName,
+                    Arguments = "restart kill:" + CurProcess.Id,
+                    CreateNoWindow = true,
+                    WorkingDirectory = System.Windows.Forms.Application.ExecutablePath
+                }
+            };
+
+            myNewProcess.Start();
+            Shutdown();
+        }
+
         [JSchema]
         public static void Shutdown()
         {
@@ -110,6 +147,7 @@ namespace CEF.Lib.Helper
 
         public static void Exit()
         {
+            
             System.Windows.Forms.Application.Exit();
             Environment.Exit(0);
         }

@@ -83,6 +83,7 @@
     <Compile Include="Attributes\JSchemaAttribute.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Exceptions\NoMessageIdException.cs" />
+    <Compile Include="Helper\ProcessSatisticHelper.cs" />
     <Compile Include="Helper\DirectoryHelper.cs" />
     <Compile Include="Helper\FiddlerHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />

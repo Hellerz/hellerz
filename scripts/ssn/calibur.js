@@ -1,4 +1,4 @@
-define(["config",'websoket'], function(config,WebSocketEx) {
+define(["config",'websocket'], function(config,WebSocketEx) {
   var type = ({}).toString;
   var arr = [];
   var slice = arr.slice;
@@ -206,9 +206,12 @@ define(["config",'websoket'], function(config,WebSocketEx) {
       callback && callback(method);
     });
   };
-  
+  Calibur.Status = "init";//init:初始化，started：已启动，restart:表示处于重启状态
+  Calibur.StartSocket = function(){
+    Calibur.webSocket = new WebSocketEx(config.websocketUrl);
+  }
   //初始化WebSocket对象
-  Calibur.webSocket = new WebSocketEx(config.websocketUrl);
-
+  Calibur.StartSocket();
+  Calibur.Status = "started";
   return Calibur;
 })

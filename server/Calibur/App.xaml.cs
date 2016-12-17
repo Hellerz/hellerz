@@ -38,26 +38,44 @@ namespace Calibur
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            
+            var isReStart = false;
             if (e.Args.CanBeCount())
             {
-                if (!string.IsNullOrWhiteSpace(e.Args[0]))
+                e.Args.ForEachOfUnNone(arg=>
                 {
-                    var opt = e.Args[0].Split(':');
-                    if (opt.Length == 2 && opt[0].Equals("del"))
+                    if (arg.StartsWith("restart"))
                     {
-                        DirectoryHelper.DeleteRecursive(opt[1]);
+                        isReStart = true;
                     }
-                }
+                    if (arg.StartsWith("kill"))
+                    {
+                        var opt = arg.Split(':');
+                        int id;
+                        if (opt.Length == 2 && int.TryParse(opt[1],out id))
+                        {
+                            Process.GetProcessById(id).Kill();
+                        }
+                    }
+                    if (arg.StartsWith("del"))
+                    {
+                        var opt = arg.Split(':');
+                        if (opt.Length == 2)
+                        {
+                            DirectoryHelper.DeleteRecursive(opt[1]);
+                        }
+                    }
+                });
             }
-            #region 判断是否重复运行
-            
-            var currentProcess = Process.GetCurrentProcess();
-            var location = Assembly.GetExecutingAssembly().Location;
-            foreach (Process process in Process.GetProcessesByName(currentProcess.ProcessName))
+            #region 判断是否重复运行（重启模式不再判断）
+
+            if (!isReStart)
             {
-                if (process.Id != currentProcess.Id && location == currentProcess.MainModule.FileName)
+                var currentProcess = Process.GetCurrentProcess();
+                var location = Assembly.GetExecutingAssembly().Location;
+                foreach (var process in Process.GetProcessesByName(currentProcess.ProcessName))
                 {
-                    if (process != null)
+                    if (process.Id != currentProcess.Id && location == currentProcess.MainModule.FileName)
                     {
                         MessageBox.Show("Program is running.");
                         SystemHelper.Exit();
@@ -65,15 +83,18 @@ namespace Calibur
                     }
                 }
             }
-            
+
             #endregion  
+
             base.OnStartup(e);
             SystemHelper.InitIcon(this, Calibur.Properties.Resources.calibur);
             FiddlerHelper.Start();
             WebSocketHelper.Start();
             CaliburService.InitialEntry();
-            Utilities.RunExecutable("Chrome", "http://hellerz.github.io/hellerz/");
-           
+            if (!isReStart)
+            {
+                Utilities.RunExecutable("Chrome", "http://hellerz.github.io/hellerz/");
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

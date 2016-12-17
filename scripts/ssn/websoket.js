@@ -32,7 +32,7 @@ define(function(require, exports, module) {
     this.__shuttleCache[id] = callback;
   };
   WebSocket.prototype.addEvent = function(eventName, callback) {
-    if (!this.__shuttleCache[eventName]) {
+    if (!(this.__shuttleCache[eventName]&&this.__shuttleCache[eventName].length)) {
       this.__shuttleCache[eventName] = [];
       this.__sendMessage(JSON.stringify({
         ID: Guid.raw(),
@@ -86,7 +86,6 @@ define(function(require, exports, module) {
     });
     this.__sendMessage(message);
   };
- 
   return function WebSocketEx() {
     var webSocket = new window.WebSocket(arguments[0]);// invoke(window.WebSocket || window.MozWebSocket, arguments);
     var invokeReadyStatusCallback = function() {

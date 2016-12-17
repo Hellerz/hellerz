@@ -139,7 +139,7 @@ define(function(require, exports, module) {
 		$.data($ssnpanel,'id_row')[item.Id] = $tr;
 	}).on('rowsRemoved', function(e, items, indexs) {
 		for (var i = items.length - 1; i >= 0; i--) {
-			delete $.data($ssnpanel,'id_row')[items[i].Id];
+			items[i]&&(delete $.data($ssnpanel,'id_row')[items[i].Id]);
 		};
 	}).load();
 	$ssnpanel.$body.on('dblclick','td',function(e){
@@ -161,4 +161,5 @@ define(function(require, exports, module) {
     	shownStatus.showSession($(e.delegateTarget));
     });
     $('#req-nav a:first,#res-nav a:first').tab('show');
+
 });
