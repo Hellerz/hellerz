@@ -92,6 +92,9 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
+# log directory
+log/
+
 # Click-Once directory
 publish/
 
@@ -100,7 +103,13 @@ publish/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+
+Pay/packages/
+YBPay/packages/
+CMS.Pay/packages/
+!Pay/packages/repositories.config
+!YBPay/packages/repositories.config
+!CMS.Pay/packages/repositories.config
 
 # Windows Azure Build Output
 csx
@@ -157,3 +166,8 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+packages
+packages
+/CMS.Pay/CMS.Pay/CMS.Pay/App_Data
+/掌柜通-移动收银台.zip
+/掌柜通-移动收银台
