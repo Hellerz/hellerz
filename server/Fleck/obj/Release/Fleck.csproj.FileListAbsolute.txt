@@ -1,5 +1,0 @@
-D:\git\Hellerz\Hellerz\server\Fleck\bin\Release\Fleck.dll
-D:\git\Hellerz\Hellerz\server\Fleck\bin\Release\Fleck.pdb
-D:\git\Hellerz\Hellerz\server\Fleck\obj\Release\Fleck.csprojResolveAssemblyReference.cache
-D:\git\Hellerz\Hellerz\server\Fleck\obj\Release\Fleck.dll
-D:\git\Hellerz\Hellerz\server\Fleck\obj\Release\Fleck.pdb

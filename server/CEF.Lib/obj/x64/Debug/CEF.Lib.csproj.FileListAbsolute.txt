@@ -1,1 +1,0 @@
-D:\git\Hellerz\Calibur\CEF.Lib\obj\x64\Debug\CEF.Lib.csprojResolveAssemblyReference.cache

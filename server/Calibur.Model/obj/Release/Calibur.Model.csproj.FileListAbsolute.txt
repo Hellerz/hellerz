@@ -1,9 +1,0 @@
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Calibur.Model.dll
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Calibur.Model.pdb
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Fleck.dll
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Newtonsoft.Json.dll
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Fleck.pdb
-D:\git\Hellerz\Hellerz\server\Calibur.Model\bin\Release\Newtonsoft.Json.xml
-D:\git\Hellerz\Hellerz\server\Calibur.Model\obj\Release\Calibur.Model.csprojResolveAssemblyReference.cache
-D:\git\Hellerz\Hellerz\server\Calibur.Model\obj\Release\Calibur.Model.dll
-D:\git\Hellerz\Hellerz\server\Calibur.Model\obj\Release\Calibur.Model.pdb
