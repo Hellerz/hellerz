@@ -207,7 +207,6 @@ define(function(require, exports, module) {
 	});
 	var clearssn = $('#clearssn').on('click',function(e){
 		$ssnpanel.removeRow();
-		Fiddler.ClearAllSession();
 		System.GetWorkingSet(function(size){
 			if(size>768*1024*1024){
 				Calibur.Status = "restart";
