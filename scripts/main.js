@@ -1,4 +1,4 @@
-window.WebVersion = '201612172215';
+window.WebVersion = '201701181952';
 window.ServiceVersion = '1.0.6195';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
@@ -16,9 +16,10 @@ requirejs.config({
 		bootstrap: 'lib/bootstrap',
 		bootstrapswitch: 'lib/bootstrap-switch',
 		bootstrapselect: 'lib/bootstrap-select',
+		bootstraptab: 'lib/bootstrap-tab',
 		bootstraptypeahead: 'lib/bootstrap-typeahead',
 		//format:'lib/jquery.format',
-		beautify:'lib/jquery.vkbeautify',
+		beautify:'lib/jquery.vkbeautify', 
 		qrcode:'lib/jquery.qrcode.min',
 		//Grid
 		grid: 'lib/grid',
@@ -35,8 +36,6 @@ requirejs.config({
 		system:'ssn/system',
 		storage:'ssn/storage',
 		
-
-
 		common:'plugin/common',
 		autoresponser:'plugin/autoresponser',
 		composer:'plugin/composer',
@@ -52,6 +51,9 @@ requirejs.config({
 			deps: ['jquery'],
 		},
 		'bootstrapselect': {
+			deps: ['jquery','bootstrap'],
+		},
+		'bootstraptab': {
 			deps: ['jquery','bootstrap'],
 		},
 		'bootstrapswitch': {
@@ -180,7 +182,6 @@ define(function(require, exports, module) {
 					});
 				}
 			});
-			
 		});
 
     	Calibur.SyncTimer(function(clear){
@@ -195,8 +196,11 @@ define(function(require, exports, module) {
 		Calibur.webSocket.addEventListener('close',function(e){
 			if(Calibur.Status == "restart"){
 				Calibur.Status = "started";
-				window.location.reload();
-			}else if(!e.target.FailedConnected){
+				Calibur.webSocket.reConnection(function(){
+					Calibur.RestartSchema();
+					require('sessionpanel').SessionPanel.trigger('restart');
+				});
+			}else if(!e.target.getFailedConnected()){
 				$.statusbar('WebSocket connection has closed.','warning');
 				logo.addClass('off');
 				window.open(' ','_self',' ');    
@@ -205,8 +209,9 @@ define(function(require, exports, module) {
 		});
 
 		var showSocketError = function(socket){
-			if(socket.readyState === 3){
-				$.notifybar('WebSocket connection to '+socket.url+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a> to download.',
+			var socket = Calibur.webSocket;
+			if(socket.getReadyState() === 3){
+				$.notifybar('WebSocket connection to '+socket.getUrl()+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a> to download.',
 					'danger',
 					'downloadclient',
 					function(e){
@@ -215,16 +220,16 @@ define(function(require, exports, module) {
 						}
 						return false;
 					});
-				$.statusbar('WebSocket connection to '+socket.url+' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED','danger');
-				socket.FailedConnected = true;
+				$.statusbar('WebSocket connection to '+socket.getUrl()+' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED','danger');
+				socket.setFailedConnected(true);
 			}
 		};
 
-		if(Calibur.webSocket&&Calibur.webSocket.readyState === 3){
-			showSocketError(Calibur.webSocket);
+		if(Calibur.webSocket&&Calibur.webSocket.getReadyState() === 3){
+			showSocketError();
 		}else{
 			Calibur.webSocket.addEventListener('error',function(e){	
-				showSocketError(e.target);
+				showSocketError();
 			});
 		}
 		

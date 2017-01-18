@@ -57,7 +57,7 @@ define(function(require, exports, module) {
 				"check_Child_State": -1,
 				"check_Focus": false,
 				"responseScript": "",
-				"requestScript": "var session = context.session;\nif(/.+\\/10124\\/(.+?)\\?.*/.test(session.FullUrl))\n{\n session.SetfullUrl(session.FullUrl.replace(\n /.+\\/10124\\/(.+?)\\?.*/,\n \"http://localhost:3915/$1\")\n );\n}\n"
+				"requestScript": "var session = context.session;\nif(/.+\\/10124\\/(.+?)(\\?.*)?/.test(session.FullUrl))\n{\n session.SetfullUrl(session.FullUrl.replace(\n /.+\\/10124\\/(.+?)(\\?.*)?/,\n \"http://localhost:3915/$1\")\n );\n}\n"
 			}, {
 				"id": 113,
 				"pId": 11,

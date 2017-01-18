@@ -27,12 +27,12 @@ define(["config",'websocket'], function(config,WebSocketEx) {
     }  
     return out;  
   };
-  Calibur.SyncTimer = function(action){
+  Calibur.SyncTimer = function(action,timer){
     var timer = window.setInterval(function(){
       action(function(){
         window.clearInterval(timer);
       });
-    },100);
+    },timer||100);
   };
   Calibur.extend = function() {
     var options, name, src, copy, copyIsArray, clone,
@@ -85,8 +85,8 @@ define(["config",'websocket'], function(config,WebSocketEx) {
 
   var schemaCache = {};
   //获取服务端方法Schema集合
-  var getJSchema = function(schema) {
-    if (schemaCache[schema]) return schemaCache[schema];
+  var getJSchema = function(schema,isFlush) {
+    if (schemaCache[schema]&&!isFlush) return schemaCache[schema];
     schemaCache[schema] = new Promise(function(resolve, reject) {
       Calibur.webSocket.shuttle({
         Name: "JSchema",
@@ -152,10 +152,13 @@ define(["config",'websocket'], function(config,WebSocketEx) {
     return fnCallback;
   };
 
-
+  var promiseCache = {};
+  Calibur.RestartSchema = function(){
+    promiseCache={};
+  };
   //注册服务端方法集合
-  Calibur.ImplSchema = function(schemaName, callback) {
-    Promise.resolve(getJSchema(schemaName)).then(function(schema) {
+  Calibur.ImplSchema = function(schemaName, callback,isFlush) {
+    Promise.resolve(getJSchema(schemaName,isFlush)).then(function(schema) {
       var method = {},
         i, len;
       if (schema && schema.MemberList) {
@@ -177,7 +180,12 @@ define(["config",'websocket'], function(config,WebSocketEx) {
               finals.inc = hasCtor ? finals.inc : undefined;
               finals.met = hasParam ? finals.met : undefined;
               finals.path = path;
-              this.promise = this.promise || Promise.resolve();
+              if(promiseCache[schemaName]){
+                this.promise = promiseCache[schemaName];
+              }else{
+                this.promise = Promise.resolve();
+                promiseCache[schemaName]=this.promise;
+              }
               this.promise = this.promise.then(function(msg) {
                 var lastRet = msg&&msg.LastReturn;
                 _this.onReturn&&_this.onReturn.call(msg,lastRet,msg);
@@ -208,7 +216,7 @@ define(["config",'websocket'], function(config,WebSocketEx) {
   };
   Calibur.Status = "init";//init:初始化，started：已启动，restart:表示处于重启状态
   Calibur.StartSocket = function(){
-    Calibur.webSocket = new WebSocketEx(config.websocketUrl);
+    Calibur.webSocket = WebSocketEx(config.websocketUrl);
   }
   //初始化WebSocket对象
   Calibur.StartSocket();

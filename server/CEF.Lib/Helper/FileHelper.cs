@@ -70,7 +70,12 @@ namespace CEF.Lib.Helper
             }
         }
 
-
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         [JSchema]
         public static string HttpDownloadFile(string url, string path)
         {
@@ -78,7 +83,6 @@ namespace CEF.Lib.Helper
             var request = WebRequest.Create(url) as HttpWebRequest;
             //发送请求并获取相应回应数据
             var response = request.GetResponse() as HttpWebResponse;
-            //直到request.GetResponse()程序才开始向目标网页发送Post请求
             using (var responseStream = response.GetResponseStream())
             {
                 var filePath = Path.GetFullPath(path);

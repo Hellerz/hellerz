@@ -135,6 +135,11 @@ define(function(require, exports, module) {
 	}).on('loadSuccess', function(e, data) {
 		Fiddler.addRequest(beforeRequest);
 		Fiddler.addResponse(beforeResponse);
+	}).on('restart', function(e, data) {
+		Fiddler.removeRequest();
+		Fiddler.removeResponse();
+		Fiddler.addRequest(beforeRequest);
+		Fiddler.addResponse(beforeResponse);
 	}).on('rowInserted', function(e, item, index, $tr) {
 		$.data($ssnpanel,'id_row')[item.Id] = $tr;
 	}).on('rowsRemoved', function(e, items, indexs) {
