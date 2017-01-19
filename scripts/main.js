@@ -198,9 +198,10 @@ define(function(require, exports, module) {
 				Calibur.Status = "started";
 				Calibur.webSocket.reConnection(function(){
 					Calibur.RestartSchema();
-					require('sessionpanel').SessionPanel.trigger('restart');
+					Fiddler.RestartRequest();
+					Fiddler.RestartResponse();
 				});
-			}else if(!e.target.getFailedConnected()){
+			}else if(!e.target.FailedConnected){
 				$.statusbar('WebSocket connection has closed.','warning');
 				logo.addClass('off');
 				window.open(' ','_self',' ');    
