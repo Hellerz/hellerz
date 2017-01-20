@@ -496,6 +496,27 @@ define(function(require, exports, module) {
 			});
 		}
     });
+	function getStorageValueByKey(key,callback){
+    	//return localStorage['AutoResponserSettings'];
+		//换成本地文件 发送请求
+		key&&Storage.Get&&Storage.Get(key,function(msg){
+			callback(JSON.parse(msg));
+		});
+	}
+
+	getStorageValueByKey("AutoResponserSettings",function(zNodes){
+		//if(typeof zNodes != Object) return;
+		if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
+	    	zNodes = ARSettings.config;
+	    	//换成本地文件实现 author:zkj time:2017 1 19
+	    	//localStorage['AutoResponserSettings'] = JSON.stringify(zNodes);
+			setStorageValueByKey("AutoResponserSettings",zNodes,function(){
+		    	$.statusbar("AutoResponserSettings设置成功");
+		    });
+	   	 }
+    	 zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
+
+	});
 
 	//ADVANCED
 	var newCount = 1,
@@ -596,6 +617,23 @@ define(function(require, exports, module) {
     		$.statusbar("AutoResponserSettings设置成功");
     	})
     }
+
+
+    function setStorageValueByKey(key,value,callback){
+    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
+    	if( key && value){
+	    	if(typeof value != "string"){
+	    		value = JSON.stringify(value);
+	    	}
+	    	Storage.Set(key,value,function(isopen){
+	    		if(typeof callback == 'function' && isopen){
+	    			callback();
+	    		}
+			});
+	    }
+    }
+
+
 
     var requester = $.CreateEditor($('#requester'));
 	requester.getSession().setMode("ace/mode/javascript");
