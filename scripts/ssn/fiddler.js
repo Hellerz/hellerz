@@ -30,6 +30,16 @@ define(["calibur",'eventtarget','session'], function(Calibur,EventTarget,Session
 	// 	args.callback&&args.callback();
 	// };
 
+	Fiddler.RestartRequest = function(){
+		Calibur.webSocket.removeEvent("BeforeRequest");
+		Calibur.webSocket.addEvent("BeforeRequest", _requestFun);
+	};
+	Fiddler.RestartResponse = function(){
+		Calibur.webSocket.removeEvent("BeforeResponse");
+		Calibur.webSocket.addEvent("BeforeResponse", _responseFun);
+	};
+
+
 	Fiddler.addRequest = function() {
 		if (!_events.hasEventListener("Request")) {
 			Calibur.webSocket.addEvent("BeforeRequest", _requestFun);
