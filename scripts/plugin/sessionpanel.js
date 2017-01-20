@@ -173,7 +173,7 @@ define(function(require, exports, module) {
 		});
 	});
 
-	window.setInterval(function(){
+	Calibur.SyncTimer(function(clear){
 		Storage.Get&&Storage.Get("MaxLines",function(maxLines){
 			maxLines =parseInt(maxLines);
 			var $tbody = $ssnpanel.$body.find('tbody');
