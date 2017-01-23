@@ -1,6 +1,4 @@
-window.WebVersion = '201702071324';
-window.ServiceVersion = '1.0.6232';
-requirejs.config({
+window.ServiceVersion = '1.0.6195';requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
 	paths: {
 		config: 'config',
