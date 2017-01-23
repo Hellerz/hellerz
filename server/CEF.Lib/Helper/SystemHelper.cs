@@ -47,7 +47,7 @@ namespace CEF.Lib.Helper
             var openChromeItem = new System.Windows.Forms.MenuItem { Text = "Open in Chrome" };
             openChromeItem.Click += (sender, arg) =>
             {
-                Utilities.RunExecutable("Chrome", "http://hellerz.github.io/hellerz/");
+                Utilities.RunExecutable("Chrome", StorageHelper.AchiveValue("pageloading", "http://hellerz.github.io/hellerz/"));
             };
 
             menu.MenuItems.Add(openChromeItem);

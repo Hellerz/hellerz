@@ -580,3 +580,7 @@ iframe{
   z-index: 1000;
   right: 15px;
 }
+
+#defaulturl{
+  width: 250px;
+}

@@ -30,11 +30,13 @@ define(function(require, exports, module) {
 	});
 
 
-	$('#updateserverhref').attr('href',config.ServerPakage).on('click', function(e){
+	$('#updateserverhref').on('click', function(e){
 		if(System.UpdateApplication){
-			System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
-			e.stopPropagation();
-			e.preventDefault();
+			Fiddler.SetPauseSession(false,function(){
+				System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+				e.stopPropagation();
+				e.preventDefault();
+			});
 		}
 	});
 
@@ -87,7 +89,9 @@ define(function(require, exports, module) {
 				'A new version can be updated.',
 				'<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-success updatenewversion">Update</button>');
 			$popup.find('.updatenewversion').on('click',function(){
-				System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+				Fiddler.SetPauseSession(false,function(){
+					System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+				});
 			});
 			localStorage.showUpdateVersion=version;
 		};
@@ -150,5 +154,26 @@ define(function(require, exports, module) {
 		// 	$('#ssnMaxSpan').val(maxSpan);
 		// 	clear();
 		// });
+	});
+
+
+	//设置启动的url
+	var $setdefaulturl = $('#setdefaulturl').on('click',function(){
+    	var defaulturl = $('#defaulturl').val();
+    	if(/\b(http:\/\/.+)/.test(defaulturl)){
+    		Storage.Set("pageloading",defaulturl,function(){
+    			$.statusbar("The pageloading url is setup to '"+defaulturl+"'.",'info');
+    			window.location.href=defaulturl;
+    		}); 
+    	}else{
+    		$.statusbar("The format('"+defaulturl+"') of url is invalid.",'danger');
+    	}
+    });
+	//初始化启动的url
+	Calibur.SyncTimer(function(clear){
+		Storage.Get&&Storage.Get("pageloading",function(url){
+			$('#defaulturl').val(url);
+			clear();
+		});
 	});
 });
