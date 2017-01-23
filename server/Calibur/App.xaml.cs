@@ -93,7 +93,7 @@ namespace Calibur
             CaliburService.InitialEntry();
             if (!isReStart)
             {
-                Utilities.RunExecutable("Chrome", "http://hellerz.github.io/hellerz/");
+                Utilities.RunExecutable("Chrome", StorageHelper.AchiveValue("pageloading", "http://hellerz.github.io/hellerz/"));
             }
         }
 
