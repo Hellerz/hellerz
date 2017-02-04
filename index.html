@@ -84,8 +84,17 @@
 
         <input type="text" id="filter-search" style="display:none;" class="form-control pull-right" placeholder="Search" tabIndex="-1" spellcheck="false"/>
       </div>
+      <div id="context-menu">
+        <ul class="dropdown-menu" role="menu">
+          <!-- <li class="dropdown-header">MENU</li>
+          <li class="divider"></li> -->
+          <li data-type="resend"><a tabindex="-1" href="#">Resend</a></li>
+          <li data-type="edit_parsed"><a tabindex="-1" href="#">Edit in parsed</a></li>
+          <li data-type="edit_raw"><a tabindex="-1" href="#">Edit in raw</a></li>
+        </ul>
+      </div>
       <div class="col-md-5 sidebar ssnview"> 
-        <table id="mmg" class="mmg"></table> 
+        <table id="mmg" class="mmg" data-toggle="context" data-target="#context-menu"></table> 
       </div> 
       <div class="tab-content">
         <div id="inspectors" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
@@ -246,38 +255,6 @@
           </div>
         </div> 
         <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <!-- <div class="input-group input-group-sm margin10">
-            <button type="button" title="Ctrl+R" class="exeInject btn btn-sm btn-primary ">Run</button>
-            <span class="input-group-addon">
-              <input  type="checkbox">
-            </span>
-            <input type="text" class="form-control" spellcheck="false"/>
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-default border-radius0"  tabindex="-1">Proxy</button>
-              <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
-                <span class="caret"></span>
-                <span class="sr-only">Proxy</span>
-              </button>
-            <ul class="dropdown-menu pull-right">
-              <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
-              <li class="divider"></li>
-              <li><a href="javascript:void(0)">http://coreproxysite.ctripcorp.com:8080</a></li>
-            </ul>
-            </div>
-            <input type="text" class="form-control" spellcheck="false">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-default"  tabindex="-1">Bypass</button>
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                <span class="caret"></span>
-                <span class="sr-only">Bypass</span>
-              </button>
-              <ul class="dropdown-menu pull-right">
-                <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
-                <li class="divider"></li>
-                <li><a href="javascript:void(0)">10.32.*;192.168.*;*.qa.nt.ctripcorp.com</a></li>
-              </ul>
-            </div>
-          </div> -->
           <nav> 
             <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
               <li><a href="#parsed" data-toggle="tab">Parsed</a></li>
@@ -292,7 +269,7 @@
                     <select id="cmpsr_method" name="type" class="selectpicker">
                       <option>GET</option>
                       <option>POST</option>
-                      <option>OPTION</option>
+                      <option>OPTIONS</option>
                       <option>PUT</option>
                       <option>DELETE</option>
                       <option>COPY</option>
@@ -310,7 +287,6 @@
                   </div>
                   <div class="col-md-2 padding0">
                     <select id="cmpsr_type" name="type" class="selectpicker">
-                      <option value="" mode="">Raw</option>
                       <option value="text/plain" mode="text">Text</option>
                       <option value="application/json" mode="json">JSON</option>
                       <option value="application/javascript" mode="javascript">Javascript</option>
@@ -323,7 +299,7 @@
                   </div>
                 </div>
                 <div class="parsed-content rest-body">
-                  <!-- <div id ="cmpsr_reqhd" class ="full-body row-1"></div> -->
+                  <div id ="cmpsr_reqhd" class ="full-body row-1 hidden"></div>
                   <div id ="cmpsr_reqbd" class ="full-body gold-y0"></div>
                   <div id ="cmpsr_resbd" class ="full-body gold-y1"></div>
                 </div>

@@ -9,7 +9,8 @@ define(function(require, exports, module) {
 	var Storage = require("storage");
 
 	var re_html = /^text\/(.+?)?html/;
-	var re_js = /^(text|application)\/(.+?)?(json|javascript)/;
+	var re_js = /^(text|application)\/(.+?)?(javascript)/;
+	var re_json = /^(text|application)\/(.+?)?(json)/;
 	var re_css = /^text\/css/;
 	var re_xml = /^(text|application)\/(.+?)?xml/;
 	var re_text = /^text\//;
@@ -19,6 +20,7 @@ define(function(require, exports, module) {
 		if(!contentType)return "text";
 		if(re_html.test(contentType))return "html";
 		if(re_js.test(contentType))return "javascript";
+		if(re_json.test(contentType))return "json";
 		if(re_xml.test(contentType))return "xml";
 		if(re_css.test(contentType))return "css";
 		if(re_text.test(contentType))return "text";

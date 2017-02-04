@@ -288,6 +288,15 @@ iframe{
     color: white;
 }
 
+.mmGrid .mmg-bodyWrapper .mmg-body tr.composer td {
+    color: #428bca;
+    background: white;
+}
+.mmGrid .mmg-bodyWrapper .mmg-body tr.selected.composer td {
+    background: rgba(66,139,202,0.7);
+    color: white;
+}
+
 .bold{
   font-weight: bold;
 }

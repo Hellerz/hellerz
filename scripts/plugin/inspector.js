@@ -125,12 +125,16 @@ define(function(require, exports, module) {
 		var session = args.session;
 		args.callback=function(){
 			//session 完成时触发，在Grid中填充StatusCode
-			$ssnpanel.updateRow(session,$.data($ssnpanel,'id_row')[session.Id]);
+			var $tr = $.data($ssnpanel,'id_row')[session.Id];
+			if(session.RequestHeaders['Calibur-Composer']){
+				$tr.addClass('composer');
+			}
+			$ssnpanel.updateRow(session,$tr);
 		};
 	};
 	
 	$ssnpanel.on('selected', function(e, $trs) {
-		shownStatus.session = $trs.data('item');;
+		shownStatus.session = $trs.data('item');
 		shownStatus.showSession();
 	}).on('loadSuccess', function(e, data) {
 		Fiddler.addRequest(beforeRequest);
@@ -161,5 +165,5 @@ define(function(require, exports, module) {
     	shownStatus.showSession($(e.delegateTarget));
     });
     $('#req-nav a:first,#res-nav a:first').tab('show');
-
+ 
 });

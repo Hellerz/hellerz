@@ -5,8 +5,10 @@ define(function(require, exports, module) {
 	var Calibur = require("calibur");
 	var Storage = require("storage");
 	var System = require("system");
+	var composerEditor = require('composer').editor;
 	require("grid");
 	require('common');
+	require('bootstrapcontextmenu');
 	//整数前补齐0
 	var prefixInteger = function (num, length) { 
 		return (Array(length).join('0') + num.toString(16).toUpperCase()).slice(-length); 
@@ -164,7 +166,56 @@ define(function(require, exports, module) {
 		};
 	});
 	var $pausessn = $('#pausessn');
-	
+	//右键菜单
+	$ssnpanel.contextmenu({
+	  scopes : '.filter-all',
+	  before: function(e,context) {
+	  	$ssnpanel.select($(e.currentTarget));
+	    return true;
+	  },
+	  onItem: function(context,e) {
+	  	var selectType = $(e.currentTarget).data('type');
+	  	var session = $(context).data('item');
+	  	switch(selectType){
+	  		case 'resend':
+	  			session.GetRequest(function(ssn){
+	  				Fiddler.InjectRaw(ssn.Return);
+				});
+	  			break;
+	  		case 'edit_parsed':
+	  			$('#navFun a[href="#composer"]').tab('show');
+	  			$('#composer-nav a[href="#parsed"]').tab('show');
+
+	  			composerEditor.ParsedRequest.setValue(session.RequesetBody);
+	        	composerEditor.ParsedResponse.setValue('');
+
+	  			composerEditor.Url.val(session.FullUrl);
+	        	composerEditor.Method.selectpicker('val',session.Method);
+	        	session.RequestHeadersToString3(true,true,true,function(ssn){
+	  				composerEditor.ParsedHeader.setValue(ssn.Return);
+				});
+
+	        	var type = $.getMode(session.RequestHeaders&&session.RequestHeaders['Content-Type']);
+	        	if(type==='text'){
+	        		type = 'text/plain';
+	        	}else if(type==='html'){
+	        		type = 'text/html';
+	        	}else{
+	        		type = 'application/'+ type;
+	        	}
+	        	composerEditor.ContentType.selectpicker('val', type);
+	  			break;
+	  		case 'edit_raw':
+	  			$('#navFun a[href="#composer"]').tab('show');
+	  			$('#composer-nav a[href="#composerraw"]').tab('show');
+	  			session.GetRequest(function(ssn){
+	  				composerEditor.RawRequest.setValue(ssn.Return);
+				});
+	  			break;
+	  	}
+	  }
+	});
+
 	Calibur.SyncTimer(function(clear){
 		Fiddler.IsPauseSession&&Fiddler.IsPauseSession(function(isPause){
 			clear();

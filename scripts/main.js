@@ -18,6 +18,7 @@ requirejs.config({
 		bootstrapselect: 'lib/bootstrap-select',
 		bootstraptab: 'lib/bootstrap-tab',
 		bootstraptypeahead: 'lib/bootstrap-typeahead',
+		bootstrapcontextmenu:'lib/bootstrap-contextmenu',
 		//format:'lib/jquery.format',
 		beautify:'lib/jquery.vkbeautify', 
 		qrcode:'lib/jquery.qrcode.min',
@@ -62,7 +63,9 @@ requirejs.config({
 		'bootstraptypeahead': {
 			deps: ['jquery','bootstrap'],
 		},
-		
+		'bootstrapcontextmenu': {
+			deps: ['jquery','bootstrap'],
+		},
 		'grid': {
 			deps: ['jquery'],
 		},

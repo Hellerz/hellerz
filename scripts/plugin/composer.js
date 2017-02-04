@@ -128,4 +128,14 @@ define(function(require, exports, module) {
 	// 		window.setTimeout(function(){$.formatEditer(cmpsr_reqbd,mode);},400);
 	// 	});
 	// });
+	exports.editor={
+		Url:$url,
+		Method:$cmpsr_method,
+		ContentType:$cmpsr_type,
+		RawRequest:cmpsr_reqraw,
+		RawResponse:cmpsr_resraw,
+		ParsedHeader:cmpsr_reqhd,
+		ParsedRequest:cmpsr_reqbd,
+		ParsedResponse:cmpsr_resbd
+	};
 });
