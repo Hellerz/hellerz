@@ -127,31 +127,6 @@ define(function(require, exports, module) {
 		});
 	});
 
-    function setStorageValueByKey(key,value,callback){
-    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
-    	if( key!=null && value!=null){
-	    	if(typeof value != "string"){
-	    		value = JSON.stringify(value);
-	    	}
-	    	Storage.Set(key,value,function(isopen){
-	    		if(callback != null && typeof callback == 'function' && isopen){
-	    			callback();
-	    		}
-			});
-	    }
-    }
-
-    function getStorageValueByKey(key){
-    	//return localStorage['AutoResponserSettings'];
-		//换成本地文件 发送请求
-		var retVal = "";
-		
-		key!=null&&Storage.Get&&Storage.Get(key,function(msg){
-			retVal = msg;
-		});
-		return retVal;
-	}
-
 	//设置初始化端口号
     Calibur.SyncTimer(function(clear){
 		Fiddler.GetPort&&Fiddler.GetPort(function(port){
