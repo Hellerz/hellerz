@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 				  require('beautify');
 				  require('common');
 	var Storage = require("storage");
+	var ConfigKeyHelper = $.storageHelper;
 	Fiddler.addResponse(function(e, args) {
 		var session = args.session;
 		var guid = session.RequestHeaders['Calibur-Composer'];
@@ -41,42 +42,12 @@ define(function(require, exports, module) {
 		return editor;
     };
     
-
-    function setStorageValueByKey(key,value,callback){
-    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
-    	if(key && value){
-	    	if(typeof value != "string"){
-	    		value = JSON.stringify(value);
-	    	}
-	    	Storage.Set(key,value,function(isopen){
-	    		if(callback!=null && typeof callback == 'function' && isopen){
-	    			callback();
-	    		}
-			});
-	    }
-    }
-
-    function getStorageValueByKey(key){
-    	//return localStorage['AutoResponserSettings'];
-		//换成本地文件 发送请求
-		var retVal = "";
-		
-		key && Storage.Get&&Storage.Get(key,function(msg){
-			retVal = msg;
-		});
-		return retVal;
-	}
-
-    var getParsed = function(){
-    	var settings = getStorageValueByKey('ComposerParsed')||'[]';
-    	return JSON.parse(settings);
-    };
     var setParsed = function(item){
-    	var settings = getParsed();
-    	settings.push(item);
-    	//localStorage['ComposerParsed']=JSON.stringify(settings);
-    	setStorageValueByKey('ComposerParsed',settings,function (){
-    	})
+    	ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
+	    		settings.push(item);
+		    	ConfigKeyHelper.setStorageValueByKey('ComposerParsed',settings,function (){
+	    	});
+    	});
     };
     var parsed_guid = '';
     var raw_guid = '';

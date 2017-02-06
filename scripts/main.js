@@ -45,7 +45,6 @@ requirejs.config({
 
 		autoresponsersetting:'plugin/config/autoresponser',
 		loading:'lib/loading',
-		
 	},
 	shim: {
 		'bootstrap': {

@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 	var File = require('file');
 	var Directory = require('directory');
 	var ARSettings = require('autoresponsersetting');
+
 	require('bootstraptypeahead');
 	require('common');
 	require("ztreecore");
@@ -18,6 +19,7 @@ define(function(require, exports, module) {
 	var $addRule = $('#addRule');
 	var $importRule = $('#importRule');
 	var $exportRule = $('#exportRule');
+	var ConfigKeyHelper = $.storageHelper;
 
 	var $editRule = $('#editRule');
 	var $saveRule = $('#saveRule');
@@ -200,17 +202,14 @@ define(function(require, exports, module) {
 		}
 	});
 	
-
 	//NORMAL
 	var setAutoNormalSetting = function(){
 		//localStorage['autoNormalSetting'] =JSON.stringify($autopanel.rows());
-		setStorageValueByKey('autoNormalSetting',$autopanel.rows(),function(){
+		ConfigKeyHelper.setStorageValueByKey('autoNormalSetting',$autopanel.rows(),function(){
 			//回调函数
 			$.statusbar("autoNormalSetting设置成功!!");
 		})
 	};
-
-
 
 	var findNormalSetting = function(uid){
 		var iautoNormalSetting = $autopanel.rows();
@@ -284,7 +283,10 @@ define(function(require, exports, module) {
 		saveEditor(crteditor);
 	});
 	
-	var autoNormalSetting=JSON.parse(getStorageValueByKey['autoNormalSetting']||'[]');
+	var autoNormalSetting;
+	ConfigKeyHelper.getStorageValueByKey("autoNormalSetting",function(data){
+			autoNormalSetting = data;
+	});
 	var cols=[
 			{
 				title:'#',name:'checked',width:24,align:'center',
@@ -493,33 +495,11 @@ define(function(require, exports, module) {
 			});
 		}
     });
-    var zTree ;
-	
-	function getStorageValueByKey(key,callback){
-    	//return localStorage['AutoResponserSettings'];
-		//换成本地文件 发送请求
-		key&&Storage.Get&&Storage.Get(key,function(msg){
-			callback(JSON.parse(msg));
-		});
-	}
-
-	getStorageValueByKey("AutoResponserSettings",function(zNodes){
-		//if(typeof zNodes != Object) return;
-		if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
-	    	zNodes = ARSettings.config;
-	    	//换成本地文件实现 author:zkj time:2017 1 19
-	    	//localStorage['AutoResponserSettings'] = JSON.stringify(zNodes);
-			setStorageValueByKey("AutoResponserSettings",zNodes,function(){
-		    	$.statusbar("AutoResponserSettings设置成功");
-		    });
-	   	 }
-    	 zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
-
-	});
 
 	//ADVANCED
 	var newCount = 1,
 		editorTreeNode,
+		zTree,
 		setting = {
         view: {
             addHoverDom: function (treeId, treeNode) {
@@ -596,29 +576,25 @@ define(function(require, exports, module) {
     };
     
     
+    //换成本地文件实现 author:zkj time:2017 1 19
+	//localStorage['AutoResponserSettings'] = JSON.stringify(zNodes);
+	ConfigKeyHelper.getStorageValueByKey("AutoResponserSettings",function(zNodes){
+		if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
+	    	zNodes = ARSettings.config;
+			ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zNodes,function(){
+		    	$.statusbar("AutoResponserSettings设置成功");
+		    });
+	   	 }
+    	 zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
+
+	});
+	
     var setAutoResponserSettings = function(){
     	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
-    	setStorageValueByKey("AutoResponserSettings",zTree.getNodes(),function(){
+    	ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zTree.getNodes(),function(){
     		$.statusbar("AutoResponserSettings设置成功");
     	})
     }
-
-
-    function setStorageValueByKey(key,value,callback){
-    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
-    	if( key && value){
-	    	if(typeof value != "string"){
-	    		value = JSON.stringify(value);
-	    	}
-	    	Storage.Set(key,value,function(isopen){
-	    		if(typeof callback == 'function' && isopen){
-	    			callback();
-	    		}
-			});
-	    }
-    }
-
-
 
     var requester = $.CreateEditor($('#requester'));
 	requester.getSession().setMode("ace/mode/javascript");

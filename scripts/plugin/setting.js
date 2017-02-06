@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 	require("bootstrap");
 	require("bootstrapswitch");
 	require('common');
+	var ConfigKeyHelper = $.storageHelper;
 	$('#status').on('click', function(e) {
 		Fiddler.ResetCertificate(function() {
 			$.statusbar("Root Certificate has been reset.",'info');
@@ -90,7 +91,7 @@ define(function(require, exports, module) {
 				System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
 			});
 
-			setStorageValueByKey("showUpdateVersion",version,function(){
+			ConfigKeyHelper.setStorageValueByKey("showUpdateVersion",version,function(){
 
 			});
 			//localStorage.showUpdateVersion=version;
@@ -101,47 +102,24 @@ define(function(require, exports, module) {
 		System.CompareVersion&&System.CompareVersion(version,function(sysversion){
 			clear();
 			if(sysversion < 0){
-				if(getStorageValueByKey('showUpdateVersion')!==version){
-					var $popup = $.showPopup('Update',
+				ConfigKeyHelper.getStorageValueByKey("showUpdateVersion",function(cversion){
+					if(version!==cversion){
+						var $popup = $.showPopup('Update',
 						'A new version can be updated.',
 						'<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-success updatenewversion">Update</button>');
-					$popup.find('.updatenewversion').on('click',function(){
-						System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
-					});
-					setStorageValueByKey("showUpdateVersion",version,function(){
-					});
-					//localStorage.showUpdateVersion=version;
-				}
+						$popup.find('.updatenewversion').on('click',function(){
+							System.UpdateApplication('Calibur.exe',config.ServerPakage,null);
+						});
+						ConfigKeyHelper.setStorageValueByKey("showUpdateVersion",version,function(){
+						});
+						//localStorage.showUpdateVersion=version;
+					}
+				});
 				$('#settingtab').html('.');		
 				$('#updateserver').show();
 			}
 		});
 	});
-
-    function setStorageValueByKey(key,value,callback){
-    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
-    	if( key!=null && value!=null){
-	    	if(typeof value != "string"){
-	    		value = JSON.stringify(value);
-	    	}
-	    	Storage.Set(key,value,function(isopen){
-	    		if(callback != null && typeof callback == 'function' && isopen){
-	    			callback();
-	    		}
-			});
-	    }
-    }
-
-    function getStorageValueByKey(key){
-    	//return localStorage['AutoResponserSettings'];
-		//换成本地文件 发送请求
-		var retVal = "";
-		
-		key!=null&&Storage.Get&&Storage.Get(key,function(msg){
-			retVal = msg;
-		});
-		return retVal;
-	}
 
 	//设置初始化端口号
     Calibur.SyncTimer(function(clear){

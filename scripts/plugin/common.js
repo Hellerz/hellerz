@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
 	var $ = require("jquery");
 			require('beautify');
+	var Storage = require("storage");
 
 	var re_html = /^text\/(.+?)?html/;
 	var re_js = /^(text|application)\/(.+?)?(json|javascript)/;
@@ -24,6 +25,36 @@ define(function(require, exports, module) {
 		return "text";
 	};
 	
+	//将localstorage保存的数据放到本地配置文件里面
+	var storageHelper = {};
+	storageHelper.setStorageValueByKey=function(key,value,callback){
+    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
+	    if( key && value){
+		    if(typeof value != "string"){
+		    	value = JSON.stringify(value);
+		    }
+		    Storage.Set(key,value,function(isopen){
+		    	if(typeof callback == 'function' && isopen){
+		    		callback();
+		    	}
+			});
+		   }
+	};
+	storageHelper.getStorageValueByKey=function(key,callback){
+	    //return localStorage['AutoResponserSettings'];
+		//换成本地文件 发送请求
+		key&&Storage.Get&&Storage.Get(key,function(msg){
+			if(msg==null||msg==undefined){
+				storageHelper.setStorageValueByKey(key,localStorage[key],function(){
+				});
+				callback(JSON.parse(localStorage[key]));
+			}else{
+				callback(JSON.parse(msg));
+			}				
+		});
+	};
+	
+	$.storageHelper = storageHelper;
 	$.formatEditer=function(editor,mode){
 		var body = editor.getValue();
 		try{
