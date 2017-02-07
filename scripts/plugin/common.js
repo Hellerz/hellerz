@@ -33,8 +33,8 @@ define(function(require, exports, module) {
 		    if(typeof value != "string"){
 		    	value = JSON.stringify(value);
 		    }
-		    Storage.Set(key,value,function(isopen){
-		    	if(typeof callback == 'function' && isopen){
+		    Storage.Set(key,value,function(){
+		    	if(typeof callback == 'function'){
 		    		callback();
 		    	}
 			});
@@ -45,8 +45,7 @@ define(function(require, exports, module) {
 		//换成本地文件 发送请求
 		key&&Storage.Get&&Storage.Get(key,function(msg){
 			if(msg==null||msg==undefined){
-				storageHelper.setStorageValueByKey(key,localStorage[key],function(){
-				});
+				storageHelper.setStorageValueByKey(key,localStorage[key]);
 				callback(JSON.parse(localStorage[key]));
 			}else{
 				callback(JSON.parse(msg));
