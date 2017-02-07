@@ -46,9 +46,19 @@ define(function(require, exports, module) {
 		key&&Storage.Get&&Storage.Get(key,function(msg){
 			if(msg==null||msg==undefined){
 				storageHelper.setStorageValueByKey(key,localStorage[key]);
-				callback(JSON.parse(localStorage[key]));
+				try{
+					callback(JSON.parse(localStorage[key]));
+				}catch(e){
+					callback(localStorage[key]);
+				}
+				
 			}else{
-				callback(JSON.parse(msg));
+				try{
+					callback(JSON.parse(msg));
+				}catch(e){
+					callback(msg);
+				}
+				
 			}				
 		});
 	};

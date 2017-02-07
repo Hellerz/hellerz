@@ -96,7 +96,7 @@ define(function(require, exports, module) {
 			});
 
 			ConfigKeyHelper.setStorageValueByKey("showUpdateVersion",version,function(){
-
+				$.statusbar("showUpdateVersion设置成功");
 			});
 			//localStorage.showUpdateVersion=version;
 		};
@@ -117,10 +117,12 @@ define(function(require, exports, module) {
 						ConfigKeyHelper.setStorageValueByKey("showUpdateVersion",version,function(){
 						});
 						//localStorage.showUpdateVersion=version;
+						$('#settingtab').html('.');		
+						$('#updateserver').show();
 					}
+					
 				});
-				$('#settingtab').html('.');		
-				$('#updateserver').show();
+				
 			}
 		});
 	});
