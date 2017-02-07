@@ -286,6 +286,7 @@ define(function(require, exports, module) {
 	var autoNormalSetting;
 	ConfigKeyHelper.getStorageValueByKey("autoNormalSetting",function(data){
 			autoNormalSetting = data;
+			$autopanel.load(data);
 	});
 	var cols=[
 			{
