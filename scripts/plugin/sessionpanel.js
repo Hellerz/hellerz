@@ -191,7 +191,7 @@ define(function(require, exports, module) {
 
 	  			composerEditor.Url.val(session.FullUrl);
 	        	composerEditor.Method.selectpicker('val',session.Method);
-	        	session.RequestHeadersToString3(true,true,true,function(ssn){
+	        	session.RequestHeadersToString3(false,true,true,function(ssn){
 	  				composerEditor.ParsedHeader.setValue(ssn.Return);
 				});
 
