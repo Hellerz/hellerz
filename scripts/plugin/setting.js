@@ -106,6 +106,8 @@ define(function(require, exports, module) {
 		System.CompareVersion&&System.CompareVersion(version,function(sysversion){
 			clear();
 			if(sysversion < 0){
+				$('#settingtab').html('.');		
+				$('#updateserver').show();
 				ConfigKeyHelper.getStorageValueByKey("showUpdateVersion",function(cversion){
 					if(version!==cversion){
 						var $popup = $.showPopup('Update',
@@ -116,13 +118,8 @@ define(function(require, exports, module) {
 						});
 						ConfigKeyHelper.setStorageValueByKey("showUpdateVersion",version,function(){
 						});
-						//localStorage.showUpdateVersion=version;
-						$('#settingtab').html('.');		
-						$('#updateserver').show();
 					}
-					
 				});
-				
 			}
 		});
 	});
