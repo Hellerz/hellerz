@@ -3,6 +3,7 @@ define(function(require, exports, module) {
 	var $ = require("jquery");
 	var Session = require("session");
 	var Storage = require("storage");
+	var Calibur = require("calibur");
 	var $ssnpanel = require('sessionpanel').SessionPanel;
 	var pausessn = require('sessionpanel').pausessn;
 	var File = require('file');
@@ -284,10 +285,15 @@ define(function(require, exports, module) {
 	});
 	
 	var autoNormalSetting;
-	ConfigKeyHelper.getStorageValueByKey("autoNormalSetting",function(data){
+	Calibur.SyncTimer(function(clear){
+		ConfigKeyHelper.getStorageValueByKey("autoNormalSetting",function(data){
+			clear();
 			autoNormalSetting = data;
 			$autopanel.load(data);
+		});
 	});
+
+
 	var cols=[
 			{
 				title:'#',name:'checked',width:24,align:'center',
@@ -496,13 +502,6 @@ define(function(require, exports, module) {
 			});
 		}
     });
-	function getStorageValueByKey(key,callback){
-    	//return localStorage['AutoResponserSettings'];
-		//换成本地文件 发送请求
-		key&&Storage.Get&&Storage.Get(key,function(msg){
-			callback(JSON.parse(msg));
-		});
-	}
 
 	//ADVANCED
 	var newCount = 1,
@@ -586,15 +585,17 @@ define(function(require, exports, module) {
     
     //换成本地文件实现 author:zkj time:2017 1 19
 	//localStorage['AutoResponserSettings'] = JSON.stringify(zNodes);
-	ConfigKeyHelper.getStorageValueByKey("AutoResponserSettings",function(zNodes){
-		if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
-	    	zNodes = ARSettings.config;
-			ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zNodes,function(){
-		    	$.statusbar("AutoResponserSettings设置成功");
-		    });
-	   	 }
-    	 zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
-
+	Calibur.SyncTimer(function(clear){
+		ConfigKeyHelper.getStorageValueByKey("AutoResponserSettings",function(zNodes){
+			clear();
+			if(!(zNodes&&zNodes[0]&&zNodes[0].children)){
+		    	zNodes = ARSettings.config;
+				ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zNodes,function(){
+			    	$.statusbar("AutoResponserSettings设置成功");
+			    });
+		   	 }
+	    	 zTree = $.fn.zTree.init($("#autoResponserTree"), setting, zNodes);
+		});
 	});
 	
     var setAutoResponserSettings = function(){
