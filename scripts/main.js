@@ -1,5 +1,5 @@
-window.WebVersion = '201702071538';
-window.ServiceVersion = '1.0.6232';
+window.WebVersion = '201702101722';
+window.ServiceVersion = '1.0.6250';
 requirejs.config({
 	urlArgs:"version=" + window.WebVersion,
 	paths: {
@@ -197,12 +197,14 @@ define(function(require, exports, module) {
         	console.dir(JSON.parse(evt.data));
         };
 		Calibur.webSocket.addEventListener('close',function(e){
-			if(Calibur.Status == "restart"){
-				Calibur.Status = "started";
+			if(Calibur.Status === "restart"){
+				$('#load_screen').show();
 				Calibur.webSocket.reConnection(function(){
 					Calibur.RestartSchema();
 					Fiddler.RestartRequest();
 					Fiddler.RestartResponse();
+					Calibur.Status = "started";
+					$('#load_screen').hide();
 				});
 			}else if(!e.target.FailedConnected){
 				$.statusbar('WebSocket connection has closed.','warning');
@@ -214,7 +216,7 @@ define(function(require, exports, module) {
 
 		var showSocketError = function(socket){
 			var socket = Calibur.webSocket;
-			if(socket.getReadyState() === 3){
+			if(socket.getReadyState() === 3&&Calibur.Status === "started"){
 				$.notifybar('WebSocket connection to '+socket.getUrl()+' failed:If you have not Calibur.exe, <a href="'+config.ServerPakage+'">click here</a> to download.',
 					'danger',
 					'downloadclient',

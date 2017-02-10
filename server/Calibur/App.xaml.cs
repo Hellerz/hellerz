@@ -54,7 +54,11 @@ namespace Calibur
                         int id;
                         if (opt.Length == 2 && int.TryParse(opt[1],out id))
                         {
-                            Process.GetProcessById(id).Kill();
+                            var processes = Process.GetProcesses();
+                            if (processes.Any(process => process.Id == id))
+                            {
+                                Process.GetProcessById(id).Kill();
+                            }
                         }
                     }
                     if (arg.StartsWith("del"))

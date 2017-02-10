@@ -53,7 +53,7 @@ define(function(require, exports, module) {
     },
     reConnection:function(callback){
       var self = this;
-      var timer = window.setTimeout(function(){
+      var timer = window.setInterval(function(){
         var oldSocket = self.__webSocket;
         self.__webSocket = new window.WebSocket(__url);
         //重新绑定事件
@@ -66,8 +66,13 @@ define(function(require, exports, module) {
           }
         }
         oldSocket = null;
-        callback && self.__webSocket.addEventListener('open', callback.bind(self.__webSocket));
-      },1500);
+        var onceOpenCallback = function(){
+          window.clearInterval(timer);
+          self.__webSocket.removeEventListener('open', onceOpenCallback)
+          callback();
+        };
+        callback && self.__webSocket.addEventListener('open', onceOpenCallback);
+      },1000);
     },
     getReadyState:function(){
       if(this.__webSocket){
