@@ -5,7 +5,7 @@ requirejs.config({
 	baseUrl: '../scripts',
 	paths: {
 		config: 'config',
-		common: '../mock/scripts/common',
+		common: '../Mock/scripts/common',
 
 		jquery: 'lib/jquery-2.1.4',
 		bootstrap: 'lib/bootstrap',
