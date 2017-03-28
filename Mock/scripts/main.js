@@ -92,10 +92,9 @@ define(function(require, exports, module) {
 		var $replace_cid = $('#replace_cid');
 
 
-		var fws_pre = 'http://gateway.m.fws.qa.nt.ctripcorp.com/restapi/soa2/10124/';
-  		var uat_pre = 'http://gateway.m.uat.qa.nt.ctripcorp.com/restapi/soa2/10124/';
-		//var fws_pre = localStorage['fws'];
-		//var uat_pre = localStorage['uat'];
+		
+		var fws_pre = localStorage['fws'];
+		var uat_pre = localStorage['uat'];
 
 		var formatEditer=function(editor,mode){
 			var body = editor.getValue();
