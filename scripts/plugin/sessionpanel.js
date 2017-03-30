@@ -156,6 +156,7 @@ define(function(require, exports, module) {
 		$('#mmg-filter [data-filter]:first').trigger('click');
 	}).on('rowInserted', function(e, item, index, $tr) {
 		$tr.addClass('filter-all '+ sessionfilter.getFilterType(item));
+		triggerRow($tr,$('#filter-search').val());
 	}).on('rowUpdated', function(e, oldItem, newItem, index, $tr) {
 		var klass = $tr.attr('class');
 		klass = klass.replace(/\bfilter-.+?\b/g,'');
@@ -227,7 +228,7 @@ define(function(require, exports, module) {
 	Calibur.SyncTimer(function(clear){
 		Storage.Get&&Storage.Get("MaxLines",function(maxLines){
 			maxLines =parseInt(maxLines);
-			var $tbody = $ssnpanel.$body.find('tbody');
+			var $tbody = $ssnpanel.$body.find('tbody'),
 				delPos=0,dels=[];
 			if(maxLines>0){
 				delPos = $tbody.children().length-maxLines;
@@ -256,11 +257,37 @@ define(function(require, exports, module) {
     		}
     	});
 	});
+
+    var filterSearch = function(){
+    	var query = $('#filter-search').val();
+		var $tbody = $ssnpanel.$body.find('tbody');
+		if(!query){
+			$tbody.children().removeClass('hidden');
+			return;
+		}
+		$.each($tbody.children(),function(key,tr){
+			triggerRow($(tr),query);
+		});	
+    };
+
+    var triggerRow = function($tr,text){
+    	var ssn = $tr.data('item');
+    	if(!text||!ssn.FullUrl) return;
+		if(ssn.FullUrl.toLowerCase().indexOf(text.toLowerCase())===-1){
+			$tr.addClass('hidden');
+		}else{
+			$tr.removeClass('hidden');
+		}
+    }
+
+	$('#filter-search').on('input',function(e){
+		filterSearch();
+	});
 	var clearssn = $('#clearssn').on('click',function(e){
 		$ssnpanel.removeRow();
 		//Fiddler.ClearAllSession();
 		System.GetWorkingSet(function(size){
-			if(size>128*1024*1024){
+			if(size>512*1024*1024){
 				Calibur.Status = "restart";
 				System.ReStart();
 			}

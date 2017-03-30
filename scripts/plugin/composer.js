@@ -41,14 +41,8 @@ define(function(require, exports, module) {
 		editor.commands.addCommand(command);
 		return editor;
     };
-    
-    var setParsed = function(item){
-    	ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
-	    		settings.push(item);
-		    	ConfigKeyHelper.setStorageValueByKey('ComposerParsed',settings,function (){
-	    	});
-    	});
-    };
+   
+
     var parsed_guid = '';
     var raw_guid = '';
 
@@ -72,13 +66,21 @@ define(function(require, exports, module) {
     		var body = cmpsr_reqbd.getValue();
     		cmpsr_resbd.setValue('');
     		Fiddler.Inject(url,method,contenttype,header,body,function(guid){
-    			setParsed({
+    			var item = {
     				url:url,
     				method:method,
     				requesttype:contenttype,
     				requestheader:header,
     				requestbody:body
-    			});
+    			};
+    			ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
+    				if(settings&&settings.length){
+    					settings.push(item);
+    					ConfigKeyHelper.setStorageValueByKey('ComposerParsed',settings);
+    				}else{
+    					ConfigKeyHelper.setStorageValueByKey('ComposerParsed',[item]);
+    				}
+		    	});
     			parsed_guid = guid;
     		});
     	}
@@ -100,7 +102,9 @@ define(function(require, exports, module) {
 	
    $url.typeahead({
 		source: function(query, process) {
-			process(getParsed());
+			ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
+	    		settings&&process(settings);
+	    	});
 		},
 		
 		filter:function(item){
