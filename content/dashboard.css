@@ -603,3 +603,9 @@ iframe{
 #defaulturl{
   width: 250px;
 }
+
+#resweb>iframe{
+  margin-bottom: -5px;
+  padding: 5px;
+  padding-left: 40px;
+}
