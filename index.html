@@ -96,290 +96,273 @@
       <div class="col-md-5 sidebar ssnview"> 
         <table id="mmg" class="mmg" data-toggle="context" data-target="#context-menu"></table> 
       </div> 
-      <div class="tab-content">
-        <div id="inspectors" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <div class="container-fluid gold-y0" > 
-            <nav> 
-              <ul id="req-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
-                <li><a href="#statistics" data-toggle="tab">Statistics</a></li>
-                <li><a href="#reqheader" data-toggle="tab">Headers</a></li> 
-                <li><a href="#reqtext" data-toggle="tab">TextView</a></li> 
-                <li><a href="#reqhex" data-toggle="tab">HexView</a></li> 
-                <li><a href="#reqform" data-toggle="tab">FormsView</a></li> 
-                <li><a href="#reqraw" data-toggle="tab">Raw</a></li> 
-                <li><a href="#reqformat" data-toggle="tab">Format</a></li> 
-                <li><a href="#urlqrcode" data-toggle="tab">QRCode</a></li> 
-              </ul> 
-            </nav> 
-            <div class="panel-body panel-body-xs"> 
-              <div class="tab-content full-body-div"> 
-                <div class="tab-pane fade in" id="statistics"></div> 
-                <div class="tab-pane fade in" id="reqheader"></div> 
-                <div class="tab-pane fade in" id="reqtext"></div> 
-                <div class="tab-pane fade in" id="reqhex"></div> 
-                <div class="tab-pane fade in" id="reqform"></div> 
-                <div class="tab-pane fade in" id="reqraw"></div> 
-                <div class="tab-pane fade in" id="reqformat"></div> 
-                <div class="tab-pane fade in" no-ace="true" id="urlqrcode"></div> 
-              </div> 
-            </div> 
-          </div> 
-          <div class="container-fluid gold-y1"> 
-            <nav> 
-              <ul id="res-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
-                <li><a href="#resheader" data-toggle="tab">Headers</a></li> 
-                <li><a href="#restext" data-toggle="tab">TextView</a></li> 
-                <li><a href="#reshex" data-toggle="tab">HexView</a></li> 
-                <li><a href="#resweb" data-toggle="tab">WebView</a></li> 
-                <li><a href="#resraw" data-toggle="tab">Raw</a></li> 
-                <li><a href="#resformat" data-toggle="tab">Format</a></li> 
-              </ul> 
-            </nav> 
-            <div class="panel-body panel-body-xs"> 
-              <div class="tab-content full-body-div"> 
-                <div class="tab-pane fade in active" id="resheader"></div> 
-                <div class="tab-pane fade in " id="restext"></div> 
-                <div class="tab-pane fade in" id="reshex"></div> 
-                <div class="tab-pane fade in" no-ace="true" id="resweb"></div> 
-                <div class="tab-pane fade in " id="resraw"></div> 
-                <div class="tab-pane fade in" id="resformat"></div> 
-              </div> 
-            </div> 
-          </div> 
-        </div> 
-        <div id="autoResponder" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <nav> 
-            <ul id="autoresponder-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
-              <li><a href="#auto-nor" data-toggle="tab">Normal</a></li>
-              <li><a href="#auto-adv" data-toggle="tab">Advanced</a></li> 
-            </ul> 
-          </nav> 
-          <div class="tab-content">
-
-            <div id="auto-nor" class="tab-pane fade in rest-body">
-              <div class="auto-indicate"></div>
-              <div class="input-group">
-                <button type="button" id="addRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Add Rule</button>
-                <button type="button" id="importRule" title="Add" class="btn btn-xs btn-info margin10-x" tabIndex="-1">Import Rules</button>
-                <button type="button" id="exportRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Export Rules</button>
-                 <div ></div>
-              </div>
-              <div class="rest-body auto-grid-wrap">
-                <table id="auto-grid" class="mmg"></table> 
-              </div>
-              <div class="rest-body auto-url-map grid-border disabled dropup">
-                <div class="input-group input-group-sm margin10 ">
-                   <input type="text" id="auto-description" class="form-control" placeholder="Description" tabIndex="-1" spellcheck="false"/>
-                   <span class="input-group-addon"></span>
-                </div>
-                <div class="input-group input-group-sm margin10 ">
-                  <input id="auto-cur-uid" type="hidden" tabIndex="-1" spellcheck="false"/>
-                  <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern" tabIndex="-1" spellcheck="false"/>
-                  <div class="input-group-btn dropup">
-                    <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right auto-request-list">
-                      <li><a href="javascript:void(0)">url:/(http|https):\/\/.+/ig</a></li>
-                      <li><a href="javascript:void(0)">url:http://www.calibur.com</a></li>
-                      <li><a href="javascript:void(0)">method:/GET|OPTIONS/</a></li>
-                      <li><a href="javascript:void(0)">method:GET</a></li>
-                      <li><a href="javascript:void(0)">head:/content-type:application\/json/ig</a></li>
-                      <li><a href="javascript:void(0)">head:application/json</a></li>
-                      <li><a href="javascript:void(0)">body:/\d{5,10}/</a></li>
-                      <li><a href="javascript:void(0)">body:1234567</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="input-group input-group-sm margin10">
-                  <input type="text" id="auto-respond" class="form-control" placeholder="Local file to return or *Action to execute" tabIndex="-1" spellcheck="false"/>
-                  <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right auto-respond-list">
-<!--                       <li><a href="javascript:void(0)">200_FiddlerGif.dat</a></li>
-                      <li><a href="javascript:void(0)">200_SimpleHTML.dat</a></li>
-                      <li><a href="javascript:void(0)">200_TransPixel.dat</a></li>
-                      <li><a href="javascript:void(0)">204_NoContent.dat</a></li>
-                      <li><a href="javascript:void(0)">302_Redirect.dat</a></li>
-                      <li><a href="javascript:void(0)">303_RedirectWithGet.dat</a></li>
-                      <li><a href="javascript:void(0)">304_NoModified.dat</a></li>
-                      <li><a href="javascript:void(0)">307_RedirectWithMethod.dat</a></li>
-                      <li><a href="javascript:void(0)">401_AuthBasic.dat</a></li>
-                      <li><a href="javascript:void(0)">401_AuthDigest.dat</a></li>
-                      <li><a href="javascript:void(0)">403_AuthDeny.dat</a></li>
-                      <li><a href="javascript:void(0)">404_Plain.dat</a></li>
-                      <li><a href="javascript:void(0)">407_ProxyAuthBasic</a></li>
-                      <li><a href="javascript:void(0)">502_Unreachable.dat</a></li>
-                      <li class="divider"></li>
-                      <li><a href="javascript:void(0)">*script:scriptFunctionName</a></li>
-                      <li class="divider"></li> -->
-                      <li><a href="javascript:void(0)" oprate="create">Create New Response</a></li>
-                      <li><a href="javascript:void(0)" oprate="find">Find a file...</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="input-group input-group-sm pull-right">
-                  <button type="button" id="editRule" title="Edit" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Edit</button>
-                  <button type="button" id="saveRule" title="Save" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Save</button>
-                  <button type="button" id="deleteRule" title="Delete" class="btn btn-sm btn-danger margin10-x" tabIndex="-1">Delete</button>
-                </div>
-                <div class="rest-body disabled-overview"></div>
-              </div>
-              <div class="rest-body auto-file-crt grid-border">
-                <div class="rest-body full-body-div auto-file-crt-container"> 
-                  <div id="crteditor"></div> 
+      <div id="lr_splitter" class="sidebar col-md-offset-5"></div>
+      <div class="tab-content sidebar col-md-7 col-md-offset-5">
+          <div id="inspectors" class="tab-pane fade in full-body"> 
+            <div class="container-fluid gold-y0" > 
+              <nav> 
+                <ul id="req-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+                  <li><a href="#statistics" data-toggle="tab">Statistics</a></li>
+                  <li><a href="#reqheader" data-toggle="tab">Headers</a></li> 
+                  <li><a href="#reqtext" data-toggle="tab">TextView</a></li> 
+                  <li><a href="#reqhex" data-toggle="tab">HexView</a></li> 
+                  <li><a href="#reqform" data-toggle="tab">FormsView</a></li> 
+                  <li><a href="#reqraw" data-toggle="tab">Raw</a></li> 
+                  <li><a href="#reqformat" data-toggle="tab">Format</a></li> 
+                  <li><a href="#urlqrcode" data-toggle="tab">QRCode</a></li> 
+                </ul> 
+              </nav> 
+              <div class="panel-body panel-body-xs"> 
+                <div class="tab-content full-body-div"> 
+                  <div class="tab-pane fade in" id="statistics"></div> 
+                  <div class="tab-pane fade in" id="reqheader"></div> 
+                  <div class="tab-pane fade in" id="reqtext"></div> 
+                  <div class="tab-pane fade in" id="reqhex"></div> 
+                  <div class="tab-pane fade in" id="reqform"></div> 
+                  <div class="tab-pane fade in" id="reqraw"></div> 
+                  <div class="tab-pane fade in" id="reqformat"></div> 
+                  <div class="tab-pane fade in" no-ace="true" id="urlqrcode"></div> 
                 </div> 
-                <div class="input-group input-group-sm auto-file-crt-btn">
-                  <button type="button" id="saveascrt" title="Save As" class="btn btn-sm btn-primary margin10-x">Save As</button>
-                  <button type="button" id="savecrt" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
-                  <button type="button" id="closecrt" title="Close" class="btn btn-sm btn-danger margin10-x">Close</button>
-                </div>
-              </div>
-            </div>
-            <div id ="auto-adv" class="tab-pane fade in rest-body">
-              <div class="auto-indicate"></div>
-              <div class="container-fluid full-y overflow-y col-md-4">   
-                  <ul id="autoResponserTree" class="ztree "></ul>
               </div> 
-              <div class="container-fluid full-y col-md-8 padding0">   
-                  <div class="container-fluid full-body-div gold-y0"> 
-                    <div id="requester"></div> 
-                  </div> 
-                  <div class="container-fluid full-body-div gold-y1">
-                    <div id="responser"></div> 
-                  </div> 
-              </div> 
-            </div>
-          </div>
-        </div> 
-        <div id="composer" class="col-md-7 col-md-offset-5 sidebar tab-pane fade in"> 
-          <nav> 
-            <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
-              <li><a href="#parsed" data-toggle="tab">Parsed</a></li>
-              <li><a href="#composerraw" data-toggle="tab">Raw</a></li> 
-            </ul> 
-          </nav> 
-          <div class="composer-content rest-body"> 
-            <div class="tab-content full-body-div"> 
-              <div class="tab-pane fade in" id="parsed">
-                <div class="parsed-title rest-body">
-                  <div class="col-md-1 padding0">
-                    <select id="cmpsr_method" name="type" class="selectpicker">
-                      <option>GET</option>
-                      <option>POST</option>
-                      <option>OPTIONS</option>
-                      <option>PUT</option>
-                      <option>DELETE</option>
-                      <option>COPY</option>
-                      <option>HEAD</option>
-                      <option>LINK</option>
-                      <option>UNLINK</option>
-                      <option>LOCK</option>
-                      <option>UNLOCK</option>
-                      <option>PROPFIND</option>
-                      <option>VIEW</option>
-                    </select>
-                  </div>
-                  <div class="col-md-8 paddingx5">
-                    <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://" spellcheck="false">
-                  </div>
-                  <div class="col-md-2 padding0">
-                    <select id="cmpsr_type" name="type" class="selectpicker">
-                      <option value="text/plain" mode="text">Text</option>
-                      <option value="application/json" mode="json">JSON</option>
-                      <option value="application/javascript" mode="javascript">Javascript</option>
-                      <option value="application/xml" mode="xml">XML</option>
-                      <option value="text/html" mode="html">HTML</option>
-                    </select>
-                  </div>
-                  <div class="col-md-1 padding0">
-                    <span type="button" class="exeInject nor-exeInject label label-btn label-info">Run</span>
-                  </div>
-                </div>
-                <div class="parsed-content rest-body">
-                  <div id ="cmpsr_reqhd" class ="full-body row-1 hidden"></div>
-                  <div id ="cmpsr_reqbd" class ="full-body gold-y0"></div>
-                  <div id ="cmpsr_resbd" class ="full-body gold-y1"></div>
-                </div>
-              </div> 
-              <div class="tab-pane fade in" id="composerraw">
-                <button type="button" title="Ctrl+R" class="exeInject raw-exeInject btn btn-sm btn-primary ">Run</button>
-                <div id ="cmpsr_reqraw" class ="full-body gold-y0"></div>
-                <div id ="cmpsr_resraw" class ="full-body gold-y1"></div>
+            </div> 
+            <div class="container-fluid gold-y1"> 
+              <nav> 
+                <ul id="res-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+                  <li><a href="#resheader" data-toggle="tab">Headers</a></li> 
+                  <li><a href="#restext" data-toggle="tab">TextView</a></li> 
+                  <li><a href="#reshex" data-toggle="tab">HexView</a></li> 
+                  <li><a href="#resweb" data-toggle="tab">WebView</a></li> 
+                  <li><a href="#resraw" data-toggle="tab">Raw</a></li> 
+                  <li><a href="#resformat" data-toggle="tab">Format</a></li> 
+                </ul> 
+              </nav> 
+              <div class="panel-body panel-body-xs"> 
+                <div class="tab-content full-body-div"> 
+                  <div class="tab-pane fade in active" id="resheader"></div> 
+                  <div class="tab-pane fade in " id="restext"></div> 
+                  <div class="tab-pane fade in" id="reshex"></div> 
+                  <div class="tab-pane fade in" no-ace="true" id="resweb"></div> 
+                  <div class="tab-pane fade in " id="resraw"></div> 
+                  <div class="tab-pane fade in" id="resformat"></div> 
+                </div> 
               </div> 
             </div> 
           </div> 
-        </div>   
-        <div id="setting" class="padding10 col-md-7 col-md-offset-5 sidebar tab-pane fade in">
-          <div id="updateserver">
-            <h4>You have new Version.</h4>
-              <div class="input-group input-group-sm">
-                <a class="btn btn-sm btn-success" id="updateserverhref">Update</a>
+          <div id="autoResponder" class="tab-pane fade in"> 
+            <nav> 
+              <ul id="autoresponder-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+                <li><a href="#auto-nor" data-toggle="tab">Normal</a></li>
+                <li><a href="#auto-adv" data-toggle="tab">Advanced</a></li> 
+              </ul> 
+            </nav> 
+            <div class="tab-content">
+              <div id="auto-nor" class="tab-pane fade in rest-body">
+                <div class="auto-indicate"></div>
+                <div class="input-group">
+                  <button type="button" id="addRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Add Rule</button>
+                  <button type="button" id="importRule" title="Add" class="btn btn-xs btn-info margin10-x" tabIndex="-1">Import Rules</button>
+                  <button type="button" id="exportRule" title="Add" class="btn btn-xs btn-info" tabIndex="-1">Export Rules</button>
+                   <div ></div>
+                </div>
+                <div class="rest-body auto-grid-wrap">
+                  <table id="auto-grid" class="mmg"></table> 
+                </div>
+                <div class="rest-body auto-url-map grid-border disabled dropup">
+                  <div class="input-group input-group-sm margin10 ">
+                     <input type="text" id="auto-description" class="form-control" placeholder="Description" tabIndex="-1" spellcheck="false"/>
+                     <span class="input-group-addon"></span>
+                  </div>
+                  <div class="input-group input-group-sm margin10 ">
+                    <input id="auto-cur-uid" type="hidden" tabIndex="-1" spellcheck="false"/>
+                    <input type="text" id="auto-request" class="form-control" placeholder="Request URL Pattern" tabIndex="-1" spellcheck="false"/>
+                    <div class="input-group-btn dropup">
+                      <button type="button" class="btn btn-default dropdown-toggle border-radius0" data-toggle="dropdown" tabindex="-1">
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu pull-right auto-request-list">
+                        <li><a href="javascript:void(0)">url:/(http|https):\/\/.+/ig</a></li>
+                        <li><a href="javascript:void(0)">url:http://www.calibur.com</a></li>
+                        <li><a href="javascript:void(0)">method:/GET|OPTIONS/</a></li>
+                        <li><a href="javascript:void(0)">method:GET</a></li>
+                        <li><a href="javascript:void(0)">head:/content-type:application\/json/ig</a></li>
+                        <li><a href="javascript:void(0)">head:application/json</a></li>
+                        <li><a href="javascript:void(0)">body:/\d{5,10}/</a></li>
+                        <li><a href="javascript:void(0)">body:1234567</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="input-group input-group-sm margin10">
+                    <input type="text" id="auto-respond" class="form-control" placeholder="Local file to return or *Action to execute" tabIndex="-1" spellcheck="false"/>
+                    <div class="input-group-btn">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu pull-right auto-respond-list">
+                        <li><a href="javascript:void(0)" oprate="create">Create New Response</a></li>
+                        <li><a href="javascript:void(0)" oprate="find">Find a file...</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="input-group input-group-sm pull-right">
+                    <button type="button" id="editRule" title="Edit" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Edit</button>
+                    <button type="button" id="saveRule" title="Save" class="btn btn-sm btn-primary margin10-x" tabIndex="-1">Save</button>
+                    <button type="button" id="deleteRule" title="Delete" class="btn btn-sm btn-danger margin10-x" tabIndex="-1">Delete</button>
+                  </div>
+                  <div class="rest-body disabled-overview"></div>
+                </div>
+                <div class="rest-body auto-file-crt grid-border">
+                  <div class="rest-body full-body-div auto-file-crt-container"> 
+                    <div id="crteditor"></div> 
+                  </div> 
+                  <div class="input-group input-group-sm auto-file-crt-btn">
+                    <button type="button" id="saveascrt" title="Save As" class="btn btn-sm btn-primary margin10-x">Save As</button>
+                    <button type="button" id="savecrt" title="Save" class="btn btn-sm btn-primary margin10-x">Save</button>
+                    <button type="button" id="closecrt" title="Close" class="btn btn-sm btn-danger margin10-x">Close</button>
+                  </div>
+                </div>
               </div>
-              <hr>
-          </div>
+              <div id ="auto-adv" class="tab-pane fade in rest-body">
+                <div class="auto-indicate"></div>
+                <div class="container-fluid full-y overflow-y col-md-4">   
+                    <ul id="autoResponserTree" class="ztree "></ul>
+                </div> 
+                <div class="container-fluid full-y col-md-8 padding0">   
+                    <div class="container-fluid full-body-div gold-y0"> 
+                      <div id="requester"></div> 
+                    </div> 
+                    <div class="container-fluid full-body-div gold-y1">
+                      <div id="responser"></div> 
+                    </div> 
+                </div> 
+              </div>
+            </div>
+          </div> 
+          <div id="composer" class="tab-pane fade in"> 
+            <nav> 
+              <ul id="composer-nav" class="nav nav-pills nav-xs navbar-nav nav-tabs"> 
+                <li><a href="#parsed" data-toggle="tab">Parsed</a></li>
+                <li><a href="#composerraw" data-toggle="tab">Raw</a></li> 
+              </ul> 
+            </nav> 
+            <div class="composer-content rest-body"> 
+              <div class="tab-content full-body-div"> 
+                <div class="tab-pane fade in" id="parsed">
+                  <div class="parsed-title rest-body">
+                    <div class="col-md-1 padding0">
+                      <select id="cmpsr_method" name="type" class="selectpicker">
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>OPTIONS</option>
+                        <option>PUT</option>
+                        <option>DELETE</option>
+                        <option>COPY</option>
+                        <option>HEAD</option>
+                        <option>LINK</option>
+                        <option>UNLINK</option>
+                        <option>LOCK</option>
+                        <option>UNLOCK</option>
+                        <option>PROPFIND</option>
+                        <option>VIEW</option>
+                      </select>
+                    </div>
+                    <div class="col-md-8 paddingx5">
+                      <input id="cmpsr_requrl" type="text" class="form-control input-sm" placeholder="http(s)://" spellcheck="false">
+                    </div>
+                    <div class="col-md-2 padding0">
+                      <select id="cmpsr_type" name="type" class="selectpicker">
+                        <option value="text/plain" mode="text">Text</option>
+                        <option value="application/json" mode="json">JSON</option>
+                        <option value="application/javascript" mode="javascript">Javascript</option>
+                        <option value="application/xml" mode="xml">XML</option>
+                        <option value="text/html" mode="html">HTML</option>
+                      </select>
+                    </div>
+                    <div class="col-md-1 padding0">
+                      <span type="button" class="exeInject nor-exeInject label label-btn label-info">Run</span>
+                    </div>
+                  </div>
+                  <div class="parsed-content rest-body">
+                    <div id ="cmpsr_reqhd" class ="full-body row-1 hidden"></div>
+                    <div id ="cmpsr_reqbd" class ="full-body gold-y0"></div>
+                    <div id ="cmpsr_resbd" class ="full-body gold-y1"></div>
+                  </div>
+                </div> 
+                <div class="tab-pane fade in" id="composerraw">
+                  <button type="button" title="Ctrl+R" class="exeInject raw-exeInject btn btn-sm btn-primary ">Run</button>
+                  <div id ="cmpsr_reqraw" class ="full-body gold-y0"></div>
+                  <div id ="cmpsr_resraw" class ="full-body gold-y1"></div>
+                </div> 
+              </div> 
+            </div> 
+          </div>   
+          <div id="setting" class="padding10 tab-pane fade in">
+            <div id="updateserver">
+              <h4>You have new Version.</h4>
+                <div class="input-group input-group-sm">
+                  <a class="btn btn-sm btn-success" id="updateserverhref">Update</a>
+                </div>
+                <hr>
+            </div>
 
-          <h4>Reset HTTPS/SSL</h4>
-            <div id="status" type="button" class="btn btn-sm btn-primary">Reset your Root Certificate</div>
-            <a type="button" href="http://www.calibur.com/root.cer" target="_blank" class="btn btn-sm btn-primary">Download Root Certificates</a>
-          <hr>
-          <h4>HTTPS/SSL</h4>
-            <div id="certManager" type="button" class="btn btn-sm btn-primary">Certificates Manager</div>
-          <hr>
-          <h4>Network</h4>
-            <div id="proxyoption" type="button" class="btn btn-sm btn-primary">Change Network Proxy Settings</div>
-          <hr>
-          <h4>Open IIS</h4>
-            <div id="inetmgr" type="button" class="btn btn-sm btn-primary">Open IIS</div>
-          <hr>
-          <h4>Calculator</h4>
-            <div id="calc" type="button" class="btn btn-sm btn-primary">Calculator</div>
-          <hr>
-          <h4>Proxy Port</h4>
-            IP:<label id="ipaddress"></label>
-            <div class="input-group input-group-sm">
-              <input id="portno" type="text" class="form-control" placeholder="port">
+            <h4>Reset HTTPS/SSL</h4>
+              <div id="status" type="button" class="btn btn-sm btn-primary">Reset your Root Certificate</div>
+              <a type="button" href="http://www.calibur.com/root.cer" target="_blank" class="btn btn-sm btn-primary">Download Root Certificates</a>
+            <hr>
+            <h4>HTTPS/SSL</h4>
+              <div id="certManager" type="button" class="btn btn-sm btn-primary">Certificates Manager</div>
+            <hr>
+            <h4>Network</h4>
+              <div id="proxyoption" type="button" class="btn btn-sm btn-primary">Change Network Proxy Settings</div>
+            <hr>
+            <h4>Open IIS</h4>
+              <div id="inetmgr" type="button" class="btn btn-sm btn-primary">Open IIS</div>
+            <hr>
+            <h4>Calculator</h4>
+              <div id="calc" type="button" class="btn btn-sm btn-primary">Calculator</div>
+            <hr>
+            <h4>Proxy Port</h4>
+              IP:<label id="ipaddress"></label>
+              <div class="input-group input-group-sm">
+                <input id="portno" type="text" class="form-control" placeholder="port">
+                <span class="input-group-btn">
+                  <div id="setport" type="button" class="btn btn-primary">OK</div>
+                </span>
+              </div>
+            <hr>
+            <h4>Clear Session Strategy</h4>
+            Max Remain Lines:
+            <div class="input-group input-group-sm margin10">
+              <input id="ssnMaxLines" type="text" class="form-control" placeholder="number">
               <span class="input-group-btn">
-                <div id="setport" type="button" class="btn btn-primary">OK</div>
+                  <div id="setMaxLines" type="button" class="btn btn-primary">OK</div>
               </span>
             </div>
-          <hr>
-          <h4>Clear Session Strategy</h4>
-          Max Remain Lines:
-          <div class="input-group input-group-sm margin10">
-            <input id="ssnMaxLines" type="text" class="form-control" placeholder="number">
-            <span class="input-group-btn">
-                <div id="setMaxLines" type="button" class="btn btn-primary">OK</div>
-            </span>
+            <!-- Max Remain TimeSpan(s):
+            <div class="input-group input-group-sm margin10">
+              <input id="ssnMaxSpan" type="text" class="form-control" placeholder="in sec">
+              <span class="input-group-btn">
+                  <div id="setMaxSpan" type="button" class="btn btn-primary">OK</div>
+              </span>
+            </div> -->
+            <hr>
+            <h4>If Support Auto Force Proxy?</h4>
+              <div class="input-group input-group-sm">
+                <input id="setForceProxys" type="checkbox" checked>
+              </div>
+            <hr>
+            <h4>HTTPS Proxy?</h4>
+              <div class="input-group input-group-sm">
+                <input id="sethttps" type="checkbox" checked>
+              </div>
+            <hr>
+            <h4>Set up url</h4>
+            <div class="input-group input-group-sm">
+                <input id="defaulturl" type="text" class="form-control" placeholder="port">
+                <span class="input-group-btn">
+                  <div id="setdefaulturl" type="button" class="btn btn-primary">OK</div>
+                </span>
+              </div>
           </div>
-          <!-- Max Remain TimeSpan(s):
-          <div class="input-group input-group-sm margin10">
-            <input id="ssnMaxSpan" type="text" class="form-control" placeholder="in sec">
-            <span class="input-group-btn">
-                <div id="setMaxSpan" type="button" class="btn btn-primary">OK</div>
-            </span>
-          </div> -->
-          <hr>
-          <h4>If Support Auto Force Proxy?</h4>
-            <div class="input-group input-group-sm">
-              <input id="setForceProxys" type="checkbox" checked>
-            </div>
-          <hr>
-          <h4>HTTPS Proxy?</h4>
-            <div class="input-group input-group-sm">
-              <input id="sethttps" type="checkbox" checked>
-            </div>
-          <hr>
-          <h4>Set up url</h4>
-          <div class="input-group input-group-sm">
-              <input id="defaulturl" type="text" class="form-control" placeholder="port">
-              <span class="input-group-btn">
-                <div id="setdefaulturl" type="button" class="btn btn-primary">OK</div>
-              </span>
-            </div>
-        </div>
       </div>
     </div>  
     <div id="statusbar" class="statusbar navbar navbar-fixed-bottom"></div>

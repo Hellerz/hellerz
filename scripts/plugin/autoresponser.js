@@ -599,7 +599,6 @@ define(function(require, exports, module) {
 	});
 	
     var setAutoResponserSettings = function(){
-    	//localStorage['AutoResponserSettings'] = JSON.stringify(zTree.getNodes());
     	ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zTree.getNodes(),function(){
     		$.statusbar("AutoResponserSettings设置成功");
     	})
@@ -628,4 +627,28 @@ define(function(require, exports, module) {
 	    readOnly: false 
 	});
 	$('#autoresponder-nav a:first').tab('show');
+
+	var isSplitter =false;
+	var adjustSplitter = function(x){
+		var winx = $('body').width();
+		x = Math.max(635,x);
+		x = Math.min(winx - 750,x);
+		var $splitter = $('#lr_splitter');
+		$splitter.css({'margin-left':x});
+		$splitter.prev().css({'width':x});
+		$('#mmg-filter').css({'width':x});
+		$splitter.next().css({'margin-left':x,'width':winx - x});
+	};
+	$('#lr_splitter').on('mousedown',function(e){
+		isSplitter = true;
+	});
+	$(window).on('mousemove',function(e){
+		if(isSplitter){
+			adjustSplitter(e.clientX);
+		}
+	}).on('mouseup',function(e){
+		isSplitter = false;
+	}).on('resize',function(){
+		adjustSplitter($('#lr_splitter').offset().left);
+	});
 });

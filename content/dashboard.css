@@ -97,6 +97,14 @@ textarea{
 
 .ssnview{
   top: 60px;
+  padding-right: 3px;
+}
+
+#lr_splitter{
+    width: 3px;
+    left: -3px;
+    cursor: ew-resize;
+    background-color: #5bc0de;
 }
 
 /*
@@ -561,9 +569,10 @@ iframe{
 
 #filter-search{
     display: inline;
-    width: 20%;
+    width: 15%;
     height: 18px;
     margin-top: 4px;
+    margin-right: 4px;
     padding: 0 4px;
     font-size: 12px;
 }
