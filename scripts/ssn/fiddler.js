@@ -39,7 +39,7 @@ define(["calibur",'eventtarget','session'], function(Calibur,EventTarget,Session
 		Calibur.webSocket.addEvent("BeforeResponse", _responseFun);
 	};
 
-
+	
 	Fiddler.addRequest = function() {
 		if (!_events.hasEventListener("Request")) {
 			Calibur.webSocket.addEvent("BeforeRequest", _requestFun);

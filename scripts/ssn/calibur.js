@@ -8,6 +8,7 @@ define(["config",'websocket'], function(config,WebSocketEx) {
   Calibur.IsType = function(o, typeName) {
     return type.call(o) === '[object ' + typeName + ']';
   };
+  //转utf-8
   Calibur.UTF16to8 = function (str) {  
     var out, i, len, c;  
     out = "";  
@@ -27,6 +28,7 @@ define(["config",'websocket'], function(config,WebSocketEx) {
     }  
     return out;  
   };
+  //当对象存在再执行，延时执行
   Calibur.SyncTimer = function(action,timer){
     var timer = window.setInterval(function(){
       action(function(){
