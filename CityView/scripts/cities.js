@@ -5771,5 +5771,5 @@ function() {
             }]
         }]
     };
-    return n
+    return n.pySort;
 });

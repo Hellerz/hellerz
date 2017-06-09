@@ -1,14 +1,29 @@
 requirejs.config({
 	paths: {
-		cities: "cities"
+		cities: "cities",
+		cities0: "cities0",
+		map: "map",
+		around_distance: "around-distance"
 	},
 	shim: {
-
+		'cities0': {
+			deps: ['cities'],
+		},
+		'around_distance': {
+			deps: ['map'],
+		},
 	}
 });
 
 define(function(require, exports, module) {
-	var cities = require("cities");
+	var cities = require("cities0");
+	var map = require("map");
+
+
+	var autocomplateControl = require("autocomplate");
+
+
+	var calculateAroundDistance = require("around_distance");
 
 	// 百度地图API功能
 	var map = new BMap.Map("allmap"); // 创建Map实例
@@ -16,9 +31,10 @@ define(function(require, exports, module) {
 	//map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
 	//map.setCurrentCity("中国");          // 设置地图显示的城市 此项是必须设置的
 	map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+	map.setDefaultCursor("crosshair");
 	var cityMapping = [];
-	for (var i = 0; i < cities.pySort.length; i++) {
-		var curinfo = cities.pySort[i];
+	for (var i = 0; i < cities.length; i++) {
+		var curinfo = cities[i];
 		cityMapping[curinfo.id] = curinfo;
 	}
 
@@ -33,7 +49,8 @@ define(function(require, exports, module) {
 			fontSize: "12px",
 			height: "20px",
 			lineHeight: "20px",
-			fontFamily: "微软雅黑"
+			fontFamily: "微软雅黑",
+			cursor:"pointer"
 		});
 		return label;
 	}
@@ -43,8 +60,8 @@ define(function(require, exports, module) {
 	    var distance = Infinity;
 	    var flag = true;
 	    
-	    for (var i = 0; i < cities.pySort.length; i++) {
-	        var saleCity = cities.pySort[i];
+	    for (var i = 0; i < cities.length; i++) {
+	        var saleCity = cities[i];
 	        switch(status){
 		        case "1":
 		        	flag = !saleCity.parentCity;
@@ -82,8 +99,18 @@ define(function(require, exports, module) {
 
 	var renderCityPoint = function(map,city,color){
 		var cityPoint = new BMap.Point(city.location.long, city.location.lat);
+		var title = "lat:"+cityPoint.lat+"\nlong:"+cityPoint.lng; 
 		map.addOverlay(createMarker(cityPoint, color));
-		map.addOverlay(createLabel(cityPoint, city.name, color));
+		var label = createLabel(cityPoint, city.name, color);
+		label.setTitle(title);
+		label.addEventListener('click',function(e){
+			var latInput = document.getElementById('ilat');
+			var longInput = document.getElementById('ilong');
+			latInput.value = cityPoint.lat;
+			longInput.value = cityPoint.lng;
+			e.domEvent.stopPropagation();
+		});
+		map.addOverlay(label);
 	}
 	var renderSubCity = function(map,city,parentCity,isSub){
 		var cityPoint = new BMap.Point(city.location.long, city.location.lat);
@@ -103,8 +130,8 @@ define(function(require, exports, module) {
 
 	
 
-	for (var i = 0; i < cities.pySort.length; i++) {
-		var curinfo = cities.pySort[i];
+	for (var i = 0; i < cities.length; i++) {
+		var curinfo = cities[i];
 		if (curinfo.location) {
 			if (curinfo.parentCity) {
 				var parentCityInfo = cityMapping[curinfo.parentCity];
@@ -132,10 +159,12 @@ define(function(require, exports, module) {
 	// 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
 	// 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
 	CityNearControl.prototype.initialize = function(map) {
-		// 创建一个DOM元素
+		var self =this;
+
 		var div = document.createElement("div");
 
 		var slction = document.createElement('select');
+		slction.style.height = "22px";
 		var op1 = document.createElement('option');
 		op1.value = "0";
 		op1.text = "全部";
@@ -150,13 +179,16 @@ define(function(require, exports, module) {
 		slction.appendChild(op3);
 
 		var llat = document.createElement('label');
+
 		llat.innerHTML = 'lat';
 		var ilat = document.createElement('input');
+		ilat.id="ilat";
 		ilat.type = 'text';
 		ilat.value = '29.8';
 		var llong = document.createElement('label');
 		llong.innerHTML = 'long';
 		var ilong = document.createElement('input');
+		ilong.id="ilong";
 		ilong.type = 'text';
 		ilong.value = '121.5';
 
@@ -170,6 +202,11 @@ define(function(require, exports, module) {
 		div.appendChild(llong);
 		div.appendChild(ilong);
 		div.appendChild(button);
+
+		this.slction = slction;
+		this.inputLat = ilat;
+		this.inputLong = ilong;
+
 		// 设置样式
 		div.style.cursor = "pointer";
 		div.style.backgroundColor = "white";
@@ -183,12 +220,17 @@ define(function(require, exports, module) {
                     lat: parseFloat(ilat.value)
                 }
             };
+            var center = new BMap.Point(curinfo.location.long, curinfo.location.lat);
 			renderSubCity(map,curinfo,findNear(curinfo,slction.selectedOptions[0].value),true);
-			map.centerAndZoom(new BMap.Point(curinfo.location.long, curinfo.location.lat), 10);
+			map.centerAndZoom(center, 10);
 		}
 			// 添加DOM元素到地图中
 		map.getContainer().appendChild(div);
 
+		map.addEventListener('click',function(e){
+			ilat.value = e.point.lat;
+			ilong.value = e.point.lng;
+		});
 		// 将DOM元素返回
 		return div;
 	}
@@ -197,4 +239,15 @@ define(function(require, exports, module) {
 	var cityNearControl = new CityNearControl();
 	// 添加到地图当中
 	map.addControl(cityNearControl);
+
+	var autocomplate = new autocomplateControl();
+	autocomplate.onSearchComplete = function(results){
+		var point = results.getPoi(0).point;    
+		cityNearControl.inputLat.value = point.lat;
+		cityNearControl.inputLong.value = point.lng;
+	};
+	map.addControl(autocomplate);
+
+	//计算两点距离集合
+	//calculateAroundDistance(map,BMap);
 });
