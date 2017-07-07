@@ -73,14 +73,15 @@ define(function(require, exports, module) {
     				requestheader:header,
     				requestbody:body
     			};
-    			ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
-    				if(settings&&settings.length){
-    					settings.push(item);
-    					ConfigKeyHelper.setStorageValueByKey('ComposerParsed',settings);
-    				}else{
-    					ConfigKeyHelper.setStorageValueByKey('ComposerParsed',[item]);
-    				}
-		    	});
+    			ConfigKeyHelper.setStorageValueByKey('ComposerParsed',{});
+    			// ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
+    			// 	if(settings&&settings.length){
+    			// 		settings.push(item);
+    			// 		ConfigKeyHelper.setStorageValueByKey('ComposerParsed',settings);
+    			// 	}else{
+    			// 		ConfigKeyHelper.setStorageValueByKey('ComposerParsed',[item]);
+    			// 	}
+		    	// });
     			parsed_guid = guid;
     		});
     	}
@@ -100,26 +101,26 @@ define(function(require, exports, module) {
       setTimeout(function () { that.hide() }, 250);
    };
 	
-   $url.typeahead({
-		source: function(query, process) {
-			ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
-	    		settings&&process(settings);
-	    	});
-		},
+  //  $url.typeahead({
+		// source: function(query, process) {
+		// 	ConfigKeyHelper.getStorageValueByKey('ComposerParsed',function(settings){
+	 //    		settings&&process(settings);
+	 //    	});
+		// },
 		
-		filter:function(item){
-			return item.url;
-		},
+		// filter:function(item){
+		// 	return item.url;
+		// },
 
-        updater: function (item) {
-        	cmpsr_reqbd.setValue(item.requestbody);
-        	cmpsr_reqhd.setValue(item.requestheader);
-        	$cmpsr_method.selectpicker('val',item.method);
-        	$cmpsr_type.selectpicker('val',item.requesttype);
-        	cmpsr_resbd.setValue('');
-            return item.url;
-        }
-   });
+  //       updater: function (item) {
+  //       	cmpsr_reqbd.setValue(item.requestbody);
+  //       	cmpsr_reqhd.setValue(item.requestheader);
+  //       	$cmpsr_method.selectpicker('val',item.method);
+  //       	$cmpsr_type.selectpicker('val',item.requesttype);
+  //       	cmpsr_resbd.setValue('');
+  //           return item.url;
+  //       }
+  //  });
 	$cmpsr_type.on('change',function(e){
 		var mode = $(e.target).find('option:selected').attr('mode');
 		cmpsr_reqbd.getSession().setMode("ace/mode/"+mode||'text');

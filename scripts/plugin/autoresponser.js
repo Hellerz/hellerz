@@ -205,8 +205,15 @@ define(function(require, exports, module) {
 	
 	//NORMAL
 	var setAutoNormalSetting = function(){
-		//localStorage['autoNormalSetting'] =JSON.stringify($autopanel.rows());
-		ConfigKeyHelper.setStorageValueByKey('autoNormalSetting',$autopanel.rows(),function(){
+		Fiddler.IsPauseSession(function(isPause){
+			!isPause&&$autoIndicate.trigger('click');
+		});
+		
+		var rows = $autopanel.rows();
+		for (var i = rows.length - 1; i >= 0; i--) {
+			rows[i].data = null;
+		}
+		ConfigKeyHelper.setStorageValueByKey('autoNormalSetting',rows,function(){
 			//回调函数
 			$.statusbar("autoNormalSetting设置成功!!");
 		})
@@ -332,7 +339,6 @@ define(function(require, exports, module) {
 		var curItem = findNormalSetting(uid);
 		curItem&&(curItem.checked = $checkbox.prop('checked'));
 		setAutoNormalSetting();
-		var ss =$autopanel.rows();
         e.stopPropagation();
 	});
 	$autopanel.on('cellAfterSelected',function(){
@@ -394,10 +400,11 @@ define(function(require, exports, module) {
 	});
 	$saveRule.on('click',function(e){
 		var uid =$('#auto-cur-uid').val();
-		var item =findNormalSetting(uid);
+		var item = findNormalSetting(uid);
 		item.description=$autoDescription.val();
 		item.request=$autoRequest.val();
 		item.response=$autoRespond.val();
+		item.data = "";
 		var $curTr = $autopanel.find('[uid="'+uid+'"]').parents('tr');
 		$autopanel.updateRow(item,$curTr);
 	});
@@ -599,6 +606,9 @@ define(function(require, exports, module) {
 	});
 	
     var setAutoResponserSettings = function(){
+    	Fiddler.IsPauseSession(function(isPause){
+			!isPause&&$autoIndicate.trigger('click');
+		});
     	ConfigKeyHelper.setStorageValueByKey("AutoResponserSettings",zTree.getNodes(),function(){
     		$.statusbar("AutoResponserSettings设置成功");
     	})
