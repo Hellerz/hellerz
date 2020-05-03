@@ -195,7 +195,7 @@ define(function(require, exports, module) {
 				"halfCheck": false,
 				"check_Child_State": -1,
 				"check_Focus": false,
-				"responseScript": "var session = context.session;\r\nvar contentType = session.ResponseHeaders['Content-Type'];\r\nif (contentType && contentType.indexOf('text/html') > -1 && (session.Host.indexOf('ctrip.com') > -1 || session.Host.indexOf('ctripcorp.com') > -1)) {\r\n\tvar abTestingMapping = {\r\n\t\t\"151123_vag_LTHY\": \"B\",\r\n\t\t\"151123_vag_PSHY\": \"B\",\r\n\t\t\"151125_dya_SPDH5\": \"B\",\r\n\t\t\"151216_dya_PSH5\": \"B\"\r\n\t};\r\n\r\n\tif (abTestingMapping) {\r\n\t\tsession.GetResponseBodyAsString(function(ssn) {\r\n\t\t\tvar html = ssn.Return;\r\n\t\t\tvar re_abTesting = /value=\\\"((M:.+?;)*)\\\"/;\r\n\t\t\tvar splitData = html.split(re_abTesting);\r\n\t\t\tif (splitData) {\r\n\t\t\t\tabData = splitData[1];\r\n\t\t\t\tfor (var abKey in abTestingMapping) {\r\n\t\t\t\t\tif (abData.indexOf(abKey) > -1) {\r\n\t\t\t\t\t\tabData = abData.replace(\r\n\t\t\t\t\t\t\tnew RegExp('(' + abKey + ':)(.)'),\r\n\t\t\t\t\t\t\t'$1' + abTestingMapping[abKey]\r\n\t\t\t\t\t\t);\r\n\t\t\t\t\t} else {\r\n\t\t\t\t\t\tabData += 'M:32,' + abKey + ':' + abTestingMapping[abKey] + ';';\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t}\r\n\t\t\t\thtml = splitData[0] + 'value=\"' + abData + '\"' + splitData[3];\r\n\t\t\t}\r\n\t\t\treturn html;\r\n\t\t}).UtilSetResponseBody({\r\n\t\t\t'inc': null,\r\n\t\t\t'met': function(ssn,msg) {\r\n\t\t\t\treturn [msg.LastReturn];\r\n\t\t\t}\r\n\t\t});\r\n\t}\r\n}",
+				"responseScript": "var session = context.session;\r\nvar contentType = session.ResponseHeaders['Content-Type'];\r\nif (contentType && contentType.indexOf('text/html') > -1 && (session.Host.indexOf('xxxx.com') > -1 || session.Host.indexOf('xxxxXxxx.com') > -1)) {\r\n\tvar abTestingMapping = {\r\n\t\t\"151123_vag_LTHY\": \"B\",\r\n\t\t\"151123_vag_PSHY\": \"B\",\r\n\t\t\"151125_dya_SPDH5\": \"B\",\r\n\t\t\"151216_dya_PSH5\": \"B\"\r\n\t};\r\n\r\n\tif (abTestingMapping) {\r\n\t\tsession.GetResponseBodyAsString(function(ssn) {\r\n\t\t\tvar html = ssn.Return;\r\n\t\t\tvar re_abTesting = /value=\\\"((M:.+?;)*)\\\"/;\r\n\t\t\tvar splitData = html.split(re_abTesting);\r\n\t\t\tif (splitData) {\r\n\t\t\t\tabData = splitData[1];\r\n\t\t\t\tfor (var abKey in abTestingMapping) {\r\n\t\t\t\t\tif (abData.indexOf(abKey) > -1) {\r\n\t\t\t\t\t\tabData = abData.replace(\r\n\t\t\t\t\t\t\tnew RegExp('(' + abKey + ':)(.)'),\r\n\t\t\t\t\t\t\t'$1' + abTestingMapping[abKey]\r\n\t\t\t\t\t\t);\r\n\t\t\t\t\t} else {\r\n\t\t\t\t\t\tabData += 'M:32,' + abKey + ':' + abTestingMapping[abKey] + ';';\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t}\r\n\t\t\t\thtml = splitData[0] + 'value=\"' + abData + '\"' + splitData[3];\r\n\t\t\t}\r\n\t\t\treturn html;\r\n\t\t}).UtilSetResponseBody({\r\n\t\t\t'inc': null,\r\n\t\t\t'met': function(ssn,msg) {\r\n\t\t\t\treturn [msg.LastReturn];\r\n\t\t\t}\r\n\t\t});\r\n\t}\r\n}",
 				"requestScript": ""
 			}],
 			"level": 1,
@@ -284,29 +284,6 @@ define(function(require, exports, module) {
 				"editNameFlag": false,
 				"responseScript": "",
 				"requestScript": "var session = context.session;\r\nif(session.FullUrl.indexOf('calibur.com/root.cer')>-1)\r\n{\r\n    session.manual=true;\r\n    Fiddler.GetBase64RootCertificate(function(base64){\r\n        session.SetBypassGateway(true)\r\n\t\t   .UtilCreateResponseAndBypassServer()\r\n\t\t   .SetResponseBodyAsBase64(base64)\r\n\t\t   .UtilChunkResponse(1)\r\n\t\t   .Resume();\r\n    });\r\n}"
-			}, {
-				"id": 101,
-				"pId": 101,
-				"name": "跳板机",
-				"level": 2,
-				"tId": "autoResponserTree_14",
-				"parentTId": "autoResponserTree_11",
-				"open": false,
-				"isParent": false,
-				"zAsync": true,
-				"isFirstNode": false,
-				"isLastNode": true,
-				"isAjaxing": false,
-				"checked": false,
-				"checkedOld": false,
-				"nocheck": false,
-				"chkDisabled": false,
-				"halfCheck": false,
-				"check_Child_State": -1,
-				"check_Focus": false,
-				"isHover": false,
-				"editNameFlag": false,
-				"requestScript": "var session = context.session;\r\nif(session.FullUrl.indexOf('.ctripcorp.com/')>-1&&\r\n    session.FullUrl.indexOf('.uat.')==-1&&\r\n    session.FullUrl.indexOf('.fat')==-1)\r\n{\r\n    session.ProxySelfSocksV5('http://coreproxysite.ctripcorp.com:8080', true,\r\n        \";10.32.*|;192.168.*|;*.qa.nt.ctripcorp.com\");\r\n}"
 			}]
 		}],
 		"level": 0,
